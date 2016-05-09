@@ -26,11 +26,11 @@ int main()
 	ptr = malloc((numlines+1) * sizeof(char*));
 	numrecs = fill_db(ptr,filename);
 	formlist = malloc((numrecs+1) * sizeof(char*));
-	*(formlist+numrecs) = NULL;
-	format_recs(ptr,formstring,formlist);
-/*	for (i = 0; i < count_lines_file(filename); ++i) {
+//	*(formlist+numrecs) = NULL;
+//	format_recs(ptr,formstring,formlist);
+	for (i = 0; i < count_lines_file(filename); ++i) {
 		printf("%s",*(ptr+i));
-	} */
+	}
 	free_db(ptr,numlines);
 	free(ptr);
 	free(formlist);
