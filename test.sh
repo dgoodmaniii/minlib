@@ -1,5 +1,5 @@
 #!/bin/sh
 # +AMDG
 
-gcc -o minlib main.c;
+make;
 valgrind -v --leak-check=full --track-origins=yes ./minlib
