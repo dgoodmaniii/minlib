@@ -15,9 +15,9 @@ int main()
 	numlines = count_lines_file(filename);
 	ptr = malloc(numlines * sizeof(char*));
 	numrecs = fill_db(ptr,filename);
-//	for (i = 0; i < count_lines_file(filename); ++i) {
-//		printf("%s",*(ptr+i));
-//	}
+	for (i = 0; i < count_lines_file(filename); ++i) {
+		printf("%s",*(ptr+i));
+	}
 	free_db(ptr,numlines);
 	free(ptr);
 	printf("%d\n",numrecs);
@@ -35,15 +35,17 @@ int fill_db(char **ptr, char *filename)
 
 	fp = fopen(filename,"r");
 	while ((read = getline(&line,&len,fp)) != -1) {
-/*		if (strstr(line,"%%")) {
+		if (strstr(line,"%%")) {
 			numrecs++;
+			*(ptr+numlines) = malloc((read+1+num_digs(numrecs)) 
+				* sizeof(char));
+			sprintf(numstr,"%d",numrecs); strcpy(*(ptr+numlines),numstr);
+			strcat(*(ptr+numlines),line); ++numlines;
 			continue;
-		}*/
-		*(ptr+numlines) = malloc((read+1+num_digs(numrecs)) * sizeof(char));
-		sprintf(numstr,"%d",numrecs);
-		strcpy(*(ptr+numlines),numstr);
-		strcat(*(ptr+numlines),line);
-		++numlines; ++numrecs;
+		}
+		*(ptr+numlines) = malloc((read+1) * sizeof(char));
+		strcpy(*(ptr+numlines),line);
+		++numlines;
 		numstr[0] = '\0';
 	}
 	fclose(fp);
@@ -71,14 +73,9 @@ int count_lines_file(char *s)
 	int recsep = 0;
 
 	fp = fopen(s,"r");
-	while ((c = fgetc(fp)) != EOF) {
-		if (c == '\n') {
+	while ((c = fgetc(fp)) != EOF)
+		if (c == '\n')
 			++numlines;
-//			if (prevchar == '%')
-//				--numlines;
-		}
-		prevchar = c;
-	}
 	fclose(fp);
 	return numlines;
 }
