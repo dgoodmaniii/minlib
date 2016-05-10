@@ -23,15 +23,15 @@ int main()
 	char formstring[] = "%20t%20a%20y";
 
 	numlines = count_lines_file(filename);
-	ptr = malloc((numlines+1) * sizeof(char*));
+	ptr = malloc(((numlines+1)*2-count_recs_file(filename)) * sizeof(char*));
 	numrecs = fill_db(ptr,filename);
 	formlist = malloc((numrecs+1) * sizeof(char*));
 //	*(formlist+numrecs) = NULL;
 //	format_recs(ptr,formstring,formlist);
-	for (i = 0; i < count_lines_file(filename); ++i) {
+	for (i = 0; i < ((numlines)*2-count_recs_file(filename)); ++i) {
 		printf("%s",*(ptr+i));
 	}
-	free_db(ptr,numlines);
+	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	free(formlist);
 	return 0;

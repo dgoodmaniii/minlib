@@ -1,0 +1,85 @@
+/*
+ * +AMDG
+ */
+/*
+ * This document was begun on 9 May 1200, the feast of St.
+ * Gregory Nazianzen, ECD, and it is humbly dedicated to
+ * him, to St.  Wulfric of Haselbury, and to the Immaculate
+ * Heart of Mary for their prayers, and to the Sacred Heart
+ * of Jesus for His mercy.
+*/
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+/* number of digits in integer */
+int num_digs(int num)
+{
+	int test  = 1;
+	int digits = 0;
+	while (num >= test) {
+		++digits;
+		test *= 10;
+	}
+	return digits+1;
+}
+
+/* count the lines in a file, including record seperator */
+int count_lines_file(char *s)
+{
+	int numlines = 0;
+	char c;
+	FILE *fp;
+	char prevchar = ' ';
+	int recsep = 0;
+
+	fp = fopen(s,"r");
+	while ((c = fgetc(fp)) != EOF)
+		if (c == '\n')
+			++numlines;
+	fclose(fp);
+	return numlines;
+}
+
+/* count the number of records in a file */
+int count_recs_file(char *s)
+{
+	int numlines = 0;
+	char *line = NULL;
+	ssize_t read; size_t len = 0;
+	FILE *fp;
+
+	fp = fopen(s,"r");
+	while ((read = getline(&line,&len,fp)) != -1) {
+		if (strstr(line,"%%"))
+			++numlines;
+	}
+	fclose(fp);
+	free(line);
+	return numlines;
+}
+
+int front_chomp(char *s)
+{
+	int len, i;
+	len = strlen(s) + 1;
+	for (i = 0; isspace(*(s+i)); ++i);
+	memmove(s,s+i,strlen(s+i)+1);
+	return 0;
+}
+
+int new_strsep(char *s, char *t, char c)
+{
+	int i; int len;
+	for (i = 0; *(s+i) != '\0'; ++i) {
+		*(t+i) = *(s+i);
+		if (*(s+i) == c) {
+			break;
+		}
+	}
+	*(t+i) = '\0';
+	memmove(s,s+i+1,strlen(s+i)+1);
+	front_chomp(s);
+	return 0;
+}
