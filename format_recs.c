@@ -17,7 +17,16 @@
 #include<stdlib.h>
 #include<string.h>
 
-int format_recs(char **ptr, char *formstring, char **formed)
+struct fields {
+	char c;
+	char s[12];
+} fields[] = { 
+	't',"TITLE",
+	'a',"AUTHOR",
+	's',"SUBJECT"
+};
+
+int format_recs(char **ptr, char *formstring, char **formed, int linenums)
 {
 	int i;
 	int j = -1;
@@ -25,8 +34,12 @@ int format_recs(char **ptr, char *formstring, char **formed)
 	int lastrec = 0;
 	int currrec = 0;
 
+	for (i = 0; i < linenums; ++i) {
+		*(formed+i) = malloc(75 * sizeof(char));
+		*(*(formed+i+0)) = '\0';
+	}
 	j = make_string(ptr,formed,formstring);
-	for (i=0; i <= j; ++i)
+	for (i=0; i <= linenums; ++i)
 		free(*(formed+i));
 	return 0;
 }
@@ -34,48 +47,26 @@ int format_recs(char **ptr, char *formstring, char **formed)
 /* allocate memory for the formatted strings and fill them */
 int make_string(char **raw, char **format, char *formstring)
 {
-	int i, currrec, lastrec, k = 0;
-	int j = -1;
+	int i, j = 0;
+	int recnum;
+	int subrec = 0;
+	int lastrec = 0;
+	char s[12];
 
 	for (i = 0; *(raw+i) != NULL; ++i) {
-		if ((currrec = atoi(*(raw+i))) != 0) {
-			lastrec = currrec;
+		if (strstr(*(raw+i),"%%")) {
+			recnum = atoi(*(raw+i)) - 1;
+			lastrec = recnum;
 			++j;
-			*(format+j) = malloc(75 * sizeof(char));
-		} else if (lastrec != currrec) { /*FIXME*/
-			get_text(raw,formstring,lastrec);
-			new_strcpy(*(format+j),*(raw+i),5);
-			printf("%s\n",*(format+j));
+			continue;
 		}
-	}
-	return j;
-}
-
-/* gets the text for a given field */
-int get_text(char **raw, char **format, char *s, int recnum)
-{ /*FIXME*/
-	char *t = "%20t";
-	int i = 0; int j = 0;
-	int recstart = 0;
-	int numchars;
-
-	numchars = split_form(t);
-/*	for (i = 0; *(raw+i) != NULL; ++i) {
-		if (atoi(*(raw+i)) == recnum) {
-			recstart = i;
-			break;
-		}
-	}
-	printf("%d\n",recnum);
-	while ((*(raw+i) != NULL) && ((j = atoi(*(raw+i))) == recnum)) {
-		if (strstr("TITLE:\t",*(raw+i))) {
-			printf("HERE");
-		}
-		++i;
-	}*/
+		new_strcat(*(format+recnum),*(raw+i),5);
+	} /* FIXME */
+	for (i = 0; i <= recnum; ++i)
+		printf("%d:  %s\n",i,*(format+i));
 	return 0;
 }
-
+				
 int split_form(char *s)
 {
 	int i, j = 0;
@@ -87,14 +78,4 @@ int split_form(char *s)
 	}
 	t[j] = '\0';
 	return atoi(t);
-}
-
-int new_strcpy(char *s, char *t, int num)
-{
-	int i;
-
-	for (i = 0; i < num; ++i)
-		*(s+i) = *(t+i);
-	*(s+i) = '\0';
-	return 0;
 }

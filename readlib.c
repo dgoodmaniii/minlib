@@ -36,8 +36,10 @@ int fill_db(char **ptr, char *filename)
 			new_strsep(line,token,':');
 		}
 		*(ptr+numlines) = malloc((strlen(token)+1) * sizeof(char));
+		chomp(token);
 		strcpy(*(ptr+(numlines++)),token);
 		*(ptr+numlines) = malloc((strlen(line)+1) * sizeof(char));
+		chomp(line);
 		strcpy(*(ptr+numlines),line);
 		numstr[0] = '\0';
 		++numlines;

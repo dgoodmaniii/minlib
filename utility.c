@@ -60,6 +60,15 @@ int count_recs_file(char *s)
 	return numlines;
 }
 
+int chomp(char *s)
+{
+	int i;
+	for (i = 0; *(s+i) != '\n' && *(s+i) != '\0'; ++i);
+	if (*(s+i) == '\n')
+		*(s+i) = '\0';
+	return 0;
+}
+
 int front_chomp(char *s)
 {
 	int len, i;
@@ -81,5 +90,26 @@ int new_strsep(char *s, char *t, char c)
 	*(t+i) = '\0';
 	memmove(s,s+i+1,strlen(s+i)+1);
 	front_chomp(s);
+	return 0;
+}
+
+int new_strcpy(char *s, char *t, int num)
+{
+	int i;
+
+	for (i = 0; (*(t+i) != '\0') && (i < num); ++i)
+		*(s+i) = *(t+i);
+	*(s+i) = '\0';
+	return 0;
+}
+
+int new_strcat(char *s, char *t, int num)
+{
+	int i, j;
+
+	for (j = 0; *(s+j) != '\0'; ++j);
+	for (i = 0; (*(t+i) != '\0') && (i < num); ++i, ++j)
+		*(s+j) = *(t+i);
+	*(s+j) = '\0';
 	return 0;
 }
