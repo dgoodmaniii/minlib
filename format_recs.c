@@ -47,7 +47,7 @@ int format_recs(char **ptr, char *formstring, char **formed, int linenums)
 /* allocate memory for the formatted strings and fill them */
 int make_string(char **raw, char **format, char *formstring)
 {
-	int i, j = 0;
+	int i, j, k, l = 0;
 	int recnum;
 	int subrec = 0;
 	int lastrec = 0;
@@ -61,6 +61,15 @@ int make_string(char **raw, char **format, char *formstring)
 			continue;
 		}
 		new_strcat(*(format+recnum),*(raw+i),5);
+//		--i;
+		/* scroll through the format string, copy over
+		 * non-format chars verbatim; when hit a percent, skip
+		 * it and read the number; then read the char; then
+		 * scroll through this record for a field matching the
+		 * char; if there isn't one, write spaces, otherwise,
+		 * write that number to the field; continue with
+		 * format string; truncate at 75 chars
+		*/
 	} /* FIXME */
 	for (i = 0; i <= recnum; ++i)
 		printf("%d:  %s\n",i,*(format+i));
