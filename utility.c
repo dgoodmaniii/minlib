@@ -110,6 +110,8 @@ int new_strcat(char *s, char *t, int num)
 	for (j = 0; *(s+j) != '\0'; ++j);
 	for (i = 0; (*(t+i) != '\0') && (i < num); ++i, ++j)
 		*(s+j) = *(t+i);
+	for (i = i; i < num; ++i, ++j)
+		*(s+j) = ' ';
 	*(s+j) = '\0';
 	return 0;
 }
