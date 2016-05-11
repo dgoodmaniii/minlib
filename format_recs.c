@@ -17,6 +17,8 @@
 #include<stdlib.h>
 #include<string.h>
 
+int populate(char **raw, int stind, char letter);
+
 struct fields {
 	char c;
 	char s[12];
@@ -49,30 +51,51 @@ int make_string(char **raw, char **format, char *formstring)
 {
 	int i, j, k, l = 0;
 	int recnum;
-	int subrec = 0;
+	int num = 0;
 	int lastrec = 0;
-	char s[12];
+	int corrrec = 0;
+	char buf[12];
 
 	for (i = 0; *(raw+i) != NULL; ++i) {
 		if (strstr(*(raw+i),"%%")) {
 			recnum = atoi(*(raw+i)) - 1;
 			lastrec = recnum;
 			++j;
-			continue;
+			for (k = 0; *(formstring+k) != '\0'; ++k) { /* FIXME */
+				if (*(formstring+k) == '%') {
+					while (isdigit(*(formstring+(++k))))
+						buf[l++] = *(formstring+k);
+					buf[l] = '\0';
+					num = atoi(buf);
+					corrrec = populate(raw,i+1,*(formstring+k));
+//					printf("CORRREC:  %d, %s, %s\n",corrrec,*(raw+corrrec),buf);
+					new_strcat(*(format+recnum),*(raw+corrrec),num);
+					l = 0;
+				} else {
+					new_strcat(*(format+recnum),formstring+k,1);
+				}
+			}
 		}
-		new_strcat(*(format+recnum),*(raw+i),5);
-//		--i;
-		/* scroll through the format string, copy over
-		 * non-format chars verbatim; when hit a percent, skip
-		 * it and read the number; then read the char; then
-		 * scroll through this record for a field matching the
-		 * char; if there isn't one, write spaces, otherwise,
-		 * write that number to the field; continue with
-		 * format string; truncate at 75 chars
-		*/
-	} /* FIXME */
+	}
 	for (i = 0; i <= recnum; ++i)
 		printf("%d:  %s\n",i,*(format+i));
+	return 0;
+}
+
+int populate(char **raw, int stind, char letter)
+{
+	for (stind=stind;(*(raw+stind)!=NULL)&&(atoi(*(raw+stind))==0);++stind) {
+		if (letter == 't') {
+			if (!strcmp(*(raw+stind),"TITLE"))
+				return stind+1;
+		} else if (letter == 'a') {
+			if (!strcmp(*(raw+stind),"AUTHOR"))
+				return stind+1;
+		} else if (letter == 'y') {
+			if (!strcmp(*(raw+stind),"YEAR"))
+				return stind+1;
+		}
+	}
 	return 0;
 }
 				

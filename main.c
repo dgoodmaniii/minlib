@@ -20,7 +20,7 @@ int main()
 	int numrecs = 0;
 	int i = 0;
 	char filename[] = "short";
-	char formstring[] = "%20t | %20a | %20y";
+	char formstring[] = "%20t | %15a | %10y";
 
 	numlines = count_lines_file(filename);
 	ptr = malloc(((numlines+1)*2-count_recs_file(filename)) * sizeof(char*));
