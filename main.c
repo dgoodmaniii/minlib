@@ -33,6 +33,7 @@ int main()
 /*	for (i = 0; i < ((numlines)*2-count_recs_file(filename)); ++i) {
 		printf("%s",*(ptr+i));
 	}*/
+	load_gui(ptr,formlist,recnums,numrecs);
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	free(formlist);

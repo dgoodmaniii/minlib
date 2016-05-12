@@ -6,11 +6,14 @@
 #Heart of Mary for their prayers, and to the Sacred Heart
 #of Jesus for His mercy.
 
-minlib :	main.c utility.o readlib.o format_recs.o
-	gcc -o minlib main.c utility.o readlib.o format_recs.o
+minlib :	main.c utility.o readlib.o format_recs.o gui.o
+	gcc -o minlib main.c utility.o readlib.o format_recs.o gui.o
 
-format_recs.o : format_recs.c
-	gcc -c format_recs.c
+gui.o : gui.c
+	gcc -c gui.c -lform -lmenu -lncurses
+
+format_recs.o : format_recs.c utility.c
+	gcc -c format_recs.c utility.c
 
 readlib.o : readlib.c utility.c
 	gcc -c readlib.c utility.c
