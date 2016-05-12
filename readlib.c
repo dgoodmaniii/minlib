@@ -12,6 +12,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<errno.h>
+#include"errcodes.h"
 
 /* fills the db from the file; allocates memory */
 int fill_db(char **ptr, char *filename)
@@ -22,23 +24,46 @@ int fill_db(char **ptr, char *filename)
 	char numstr[12];
 	char *token;
 
-	token = malloc(12 * sizeof(char));
-	fp = fopen(filename,"r");
+	if ((token = malloc(12 * sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory for an"
+		"internal function\n");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
+	if ((fp = fopen(filename,"r")) == NULL) {
+		fprintf(stderr,"minlib:  error opening file %s, "
+		"with error number %d; see \"man (3) open\" for "
+		"details\n",filename,errno);
+			exit(BAD_FILE);
+	}
 	while ((read = getline(&line,&len,fp)) != -1) {
 		if (strstr(line,"%%")) {
 			numrecs++;
-			*(ptr+numlines) = malloc((read+1+num_digs(numrecs)) 
-				* sizeof(char));
+			if ((*(ptr+numlines) = malloc((read+1+num_digs(numrecs)) * 
+			sizeof(char))) == NULL) {
+				fprintf(stderr,"minlib:  insufficient memory to"
+				"load all formatted records\n");
+				exit(INSUFF_MEMORY_FORMAT);
+			}
 			sprintf(numstr,"%d",numrecs); strcpy(*(ptr+numlines),numstr);
 			strcat(*(ptr+numlines),line); ++numlines;
 			continue;
 		} else {
 			new_strsep(line,token,':');
 		}
-		*(ptr+numlines) = malloc((strlen(token)+1) * sizeof(char));
+		if ((*(ptr+numlines) = malloc((strlen(token)+1) *
+		sizeof(char))) == NULL) {
+			fprintf(stderr,"minlib:  insufficient memory to"
+			"load all formatted records\n");
+			exit(INSUFF_MEMORY_FORMAT);
+		}
 		chomp(token);
 		strcpy(*(ptr+(numlines++)),token);
-		*(ptr+numlines) = malloc((strlen(line)+1) * sizeof(char));
+		if ((*(ptr+numlines) = malloc((strlen(line)+1) * 
+		sizeof(char))) == NULL) {
+			fprintf(stderr,"minlib:  insufficient memory to"
+			"load all formatted records\n");
+			exit(INSUFF_MEMORY_FORMAT);
+		}
 		chomp(line);
 		strcpy(*(ptr+numlines),line);
 		numstr[0] = '\0';

@@ -12,6 +12,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<errno.h>
+#include"errcodes.h"
 
 /* number of digits in integer */
 int num_digs(int num)
@@ -34,7 +36,12 @@ int count_lines_file(char *s)
 	char prevchar = ' ';
 	int recsep = 0;
 
-	fp = fopen(s,"r");
+	if ((fp = fopen(s,"r")) == NULL) {
+		fprintf(stderr,"minlib:  error opening file %s, "
+		"with error number %d; see \"man (3) open\" for "
+		"details\n",s,errno);
+			exit(BAD_FILE);
+	}
 	while ((c = fgetc(fp)) != EOF)
 		if (c == '\n')
 			++numlines;
@@ -50,7 +57,12 @@ int count_recs_file(char *s)
 	ssize_t read; size_t len = 0;
 	FILE *fp;
 
-	fp = fopen(s,"r");
+	if ((fp = fopen(s,"r")) == NULL) {
+		fprintf(stderr,"minlib:  error opening file %s, "
+		"with error number %d; see \"man (3) open\" for "
+		"details\n",s,errno);
+			exit(BAD_FILE);
+	}
 	while ((read = getline(&line,&len,fp)) != -1) {
 		if (strstr(line,"%%"))
 			++numlines;
