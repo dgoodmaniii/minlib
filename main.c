@@ -15,7 +15,7 @@
 
 int main()
 {
-	char **ptr; char **formlist;
+	char **ptr; char **formlist; int *recnums;
 	int numlines = 0;
 	int numrecs = 0;
 	int i = 0;
@@ -27,12 +27,24 @@ int main()
 	numrecs = fill_db(ptr,filename);
 	formlist = malloc((numrecs+1) * sizeof(char*));
 	*(formlist+numrecs) = NULL;
-	format_recs(ptr,formstring,formlist,numrecs);
+	recnums = malloc((numrecs+1) * sizeof(int));
+	populate_recnums(recnums,numrecs+1);
+	format_recs(ptr,formstring,formlist,numrecs,recnums);
 /*	for (i = 0; i < ((numlines)*2-count_recs_file(filename)); ++i) {
 		printf("%s",*(ptr+i));
 	}*/
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	free(formlist);
+	free(recnums);
+	return 0;
+}
+
+int populate_recnums(int *recnums, int len)
+{
+	int i;
+	
+	for (i = 0; i < len; ++i)
+		*(recnums+i) = i;
 	return 0;
 }

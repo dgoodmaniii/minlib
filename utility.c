@@ -115,3 +115,42 @@ int new_strcat(char *s, char *t, int num)
 	*(s+j) = '\0';
 	return 0;
 }
+
+/* following two functions are modified from a Stack
+ * Overflow answer by WhozCraig, on question 19612152. */
+int quicksort(char **formrecs, int *recnums, int len)
+{
+	int i, pvt = 0;
+
+	if (len <= 1)
+		return 0;
+	for (i = 0; i < len - 1; ++i) {
+		if (strcmp(*(formrecs+i),*(formrecs+len-1)) < 0) {
+			swap_str_ptrs(formrecs+i,formrecs+pvt++);
+			swap_int_ptrs(recnums+i,recnums+pvt);
+		}
+	}
+	swap_str_ptrs(formrecs+pvt,formrecs+len-1);
+	swap_int_ptrs(recnums+pvt,recnums+len-1);
+	quicksort(formrecs,recnums,pvt++);
+	quicksort(formrecs+pvt,recnums,len-pvt);
+	return 0;
+}
+
+int swap_str_ptrs(char const **arg1, char const **arg2)
+{
+	const char *tmp = *arg1;
+	*arg1 = *arg2;
+	*arg2 = tmp;
+	return 0;
+}
+
+/* swaps integers values in the recnums records, to match
+ * with the sorted strings */
+int swap_int_ptrs(int *int1, int *int2)
+{
+	int tmp = *int1;
+	*int1 = *int2;
+	*int2 = tmp;
+	return 0;
+}

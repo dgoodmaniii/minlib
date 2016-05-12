@@ -19,16 +19,7 @@
 
 int populate(char **raw, int stind, char letter);
 
-struct fields {
-	char c;
-	char s[12];
-} fields[] = { 
-	't',"TITLE",
-	'a',"AUTHOR",
-	's',"SUBJECT"
-};
-
-int format_recs(char **ptr, char *formstring, char **formed, int linenums)
+int format_recs(char **ptr, char *formstring, char **formed, int linenums, int *recnums)
 {
 	int i;
 	int j = -1;
@@ -41,6 +32,9 @@ int format_recs(char **ptr, char *formstring, char **formed, int linenums)
 		*(*(formed+i+0)) = '\0';
 	}
 	j = make_string(ptr,formed,formstring);
+	quicksort(formed,recnums,j);
+	for (i = 0; i <= j; ++i) /* FIXME */
+		printf("%d:  %s\n",*(recnums+i),*(formed+i));
 	for (i=0; i <= linenums; ++i)
 		free(*(formed+i));
 	return 0;
@@ -61,7 +55,7 @@ int make_string(char **raw, char **format, char *formstring)
 			recnum = atoi(*(raw+i)) - 1;
 			lastrec = recnum;
 			++j;
-			for (k = 0; *(formstring+k) != '\0'; ++k) { /* FIXME */
+			for (k = 0; *(formstring+k) != '\0'; ++k) {
 				if (*(formstring+k) == '%') {
 					while (isdigit(*(formstring+(++k))))
 						buf[l++] = *(formstring+k);
@@ -79,9 +73,7 @@ int make_string(char **raw, char **format, char *formstring)
 			}
 		}
 	}
-	for (i = 0; i <= recnum; ++i)
-		printf("%d:  %s\n",i,*(format+i));
-	return 0;
+	return recnum;
 }
 
 int populate(char **raw, int stind, char letter)
