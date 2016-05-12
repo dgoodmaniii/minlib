@@ -19,8 +19,8 @@ int main()
 	int numlines = 0;
 	int numrecs = 0;
 	int i = 0;
-	char filename[] = "short";
-	char formstring[] = "%20t | %15a | %10y";
+	char filename[] = "text";
+	char formstring[] = "%20t | %15a | %10y | %10q |";
 
 	numlines = count_lines_file(filename);
 	ptr = malloc(((numlines+1)*2-count_recs_file(filename)) * sizeof(char*));

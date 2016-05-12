@@ -37,7 +37,7 @@ int format_recs(char **ptr, char *formstring, char **formed, int linenums)
 	int currrec = 0;
 
 	for (i = 0; i < linenums; ++i) {
-		*(formed+i) = malloc(75 * sizeof(char));
+		*(formed+i) = malloc(80 * sizeof(char));
 		*(*(formed+i+0)) = '\0';
 	}
 	j = make_string(ptr,formed,formstring);
@@ -68,8 +68,10 @@ int make_string(char **raw, char **format, char *formstring)
 					buf[l] = '\0';
 					num = atoi(buf);
 					corrrec = populate(raw,i+1,*(formstring+k));
-//					printf("CORRREC:  %d, %s, %s\n",corrrec,*(raw+corrrec),buf);
-					new_strcat(*(format+recnum),*(raw+corrrec),num);
+					if (corrrec != 0)
+						new_strcat(*(format+recnum),*(raw+corrrec),num);
+					else
+						new_strcat(*(format+recnum)," ",num);
 					l = 0;
 				} else {
 					new_strcat(*(format+recnum),formstring+k,1);
@@ -93,6 +95,15 @@ int populate(char **raw, int stind, char letter)
 				return stind+1;
 		} else if (letter == 'y') {
 			if (!strcmp(*(raw+stind),"YEAR"))
+				return stind+1;
+		} else if (letter == 'l') {
+			if (!strcmp(*(raw+stind),"LANG"))
+				return stind+1;
+		} else if (letter == 'g') { /* "g"enre */
+			if (!strcmp(*(raw+stind),"TYPE"))
+				return stind+1;
+		} else if (letter == 'p') {
+			if (!strcmp(*(raw+stind),"PUBLISHER"))
 				return stind+1;
 		}
 	}
