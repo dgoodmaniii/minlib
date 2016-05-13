@@ -27,16 +27,8 @@ int format_recs(char **ptr, char *formstring, char **formed, int linenums, int *
 	int lastrec = 0;
 	int currrec = 0;
 
-	for (i = 0; i < linenums; ++i) {
-		*(formed+i) = malloc(81 * sizeof(char));
-		*(*(formed+i+0)) = '\0';
-	}
 	j = make_string(ptr,formed,formstring);
 	quicksort(formed,recnums,j);
-	for (i = 0; i <= j; ++i) /* FIXME */
-		printf("%3d:  %s\n",*(recnums+i),*(formed+i));
-	for (i=0; i <= linenums; ++i)
-		free(*(formed+i));
 	return 0;
 }
 

@@ -69,13 +69,21 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_TRACK);
 	}
 	populate_recnums(recnums,numrecs+1);
+	for (i = 0; i < numrecs; ++i) {
+		*(formlist+i) = malloc(81 * sizeof(char));
+		*(*(formlist+i+0)) = '\0';
+	}
 	format_recs(ptr,formstring,formlist,numrecs,recnums);
 /*	for (i = 0; i < ((numlines)*2-count_recs_file(filename)); ++i) {
 		printf("%s",*(ptr+i));
 	}*/
+	for (i = 0; i < numrecs; ++i)
+		printf("%3d: %s\n",*(recnums+i),*(formlist+i));
 	load_gui(ptr,formlist,recnums,numrecs);
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
+	for (i=0; i <= numrecs; ++i)
+		free(*(formlist+i));
 	free(formlist);
 	free(recnums);
 	return 0;

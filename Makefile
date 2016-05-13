@@ -6,17 +6,41 @@
 #Heart of Mary for their prayers, and to the Sacred Heart
 #of Jesus for His mercy.
 
-minlib :	main.c utility.o readlib.o format_recs.o gui.o errcodes.h
-	gcc -o minlib main.c utility.o readlib.o format_recs.o gui.o
+SHELL=/bin/sh
+.SUFFIXES:
+.SUFFIXES: .c .o .h
+CC=gcc
+CFLAGS=-I -Wall
+OBJ=utility.o readlib.o format_recs.o gui.o
+SRCDIR=./
+CURSLIB=-lform -lmenu -lncurses
+prefix=/usr/local
+exec_prefix=$(prefix)
+bindir=$(prefix)/bin
+includedir=$(prefix)/include
+datarootdir=$(prefix)/share
+datadir=$(datarootdir)
+docdir=$(datarootdir)/doc/minlib
+htmldir=$(docdir)
+mandir=$(datarootdir)/man
+
+all : minlib
+
+minlib :	main.c $(OBJ) errcodes.h
+	$(CC) $(CFLAGS) -o minlib main.c $(OBJ) $(CURSLIB)
 
 gui.o : gui.c errcodes.h
-	gcc -c gui.c -lform -lmenu -lncurses
+	$(CC) $(CFLAGS) -c gui.c $(CURSLIB)
 
 format_recs.o : format_recs.c utility.c errcodes.h
-	gcc -c format_recs.c utility.c
+	$(CC) $(CFLAGS) -c format_recs.c utility.c
 
 readlib.o : readlib.c utility.c errcodes.h
-	gcc -c readlib.c utility.c
+	$(CC) $(CFLAGS) -c readlib.c utility.c
 
 utility.o : utility.c errcodes.h
-	gcc -c utility.c
+	$(CC) $(CFLAGS) -c utility.c
+
+.PHONY : clean
+clean :
+	rm $(OBJ) minlib
