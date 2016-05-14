@@ -19,17 +19,19 @@
 
 int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 {
-	int i; int c;
+	int i, j; int c; int d;
 	ITEM **lib_list;
 	ITEM *cur_item;
 	MENU *lib_menu;
 	WINDOW *lib_menu_win;
+	WINDOW *sel_item_win;
 	int row, col;
 	char buf[12];
+	int sel_rec;
 
 	initscr(); cbreak(); noecho(); keypad(stdscr,TRUE); curs_set(0);
 	getmaxyx(stdscr,row,col);
-	frame_screen(numrecs, row, col);
+	frame_main_screen(numrecs, row, col);
 	lib_list = (ITEM **)calloc(numrecs+1, sizeof(ITEM *));
 	for (i = 0; i < numrecs; ++i)
 		lib_list[i] = new_item(*(formlist+i),"");
@@ -76,6 +78,15 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			set_pattern_buffer(buf,row,col);
 			set_menu_pattern(lib_menu,buf);
 			break;
+		case 10: /* enter */
+			sel_rec = item_index(current_item(lib_menu));
+			unpost_menu(lib_menu);
+			display_details(ptr,recnums,sel_rec,row,col);
+			frame_main_screen(numrecs, row, col);
+			post_menu(lib_menu);
+			wrefresh(lib_menu_win);
+			refresh();
+			break;
 		}
 		wrefresh(lib_menu_win);
 	}
@@ -85,6 +96,28 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 		free_item(lib_list[i]);
 	free(lib_list);
 	endwin();
+	return 0;
+}
+
+int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
+{
+	WINDOW *sel_item_win;
+	int i; int j;
+	int d;
+
+	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
+	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
+	sel_item_win = newwin(row-3,col,1,0);
+	keypad(sel_item_win,TRUE);
+	box(sel_item_win,0,0);
+	for (i = i+1, j=2; *(ptr+i) != NULL && atoi(*(ptr+i)) == 0; ++i, ++j) {
+		mvwprintw(sel_item_win,j,2,"%s",*(ptr+i));
+		wrefresh(sel_item_win);
+	}
+	while ((d = wgetch(sel_item_win)) != 'q');
+	werase(sel_item_win);
+	wrefresh(sel_item_win);
+	delwin(sel_item_win);
 	return 0;
 }
 
@@ -119,10 +152,45 @@ int set_pattern_buffer(char *s, int row, int col)
 	return 0;
 }
 
-int frame_screen(int numrecs, int row, int col)
+int frame_detail_screen(int row, int col, int recordnum)
+{
+	print_top_details(stdscr,row,col,recordnum);
+	print_bot_details(stdscr,row,col);
+	return 0;
+}
+
+int frame_main_screen(int numrecs, int row, int col)
 {
 	print_top_line(stdscr, row, col, numrecs);
 	print_bot_line(stdscr, row, col);
+	return 0;
+}
+
+int print_top_details(WINDOW *win, int row, int col, int recordnum)
+{
+	char *heading; char *buffer;
+	int numdigs, i;
+
+	highlight_line(win,0,col);
+	numdigs = recordnum % 10;
+	heading = malloc((numdigs + 2 + 9) * sizeof(char));
+	sprintf(heading,"(Record %d)",recordnum);
+	attron(A_REVERSE | A_BOLD);
+	mvwprintw(win,0,0,"--minlib, v0.9");
+	print_center(win,0,heading);
+	print_right(win,0,"Detailed View--");
+	wmove(win,row,col-1);
+	attroff(A_REVERSE | A_BOLD);
+	free(heading);
+	return 0;
+}
+
+int print_bot_details(WINDOW *win, int row, int col)
+{
+	highlight_line(win,row-2,col);
+	attron(A_REVERSE | A_BOLD);
+	mvwprintw(win,row-2,0,"q:back  o:open");
+	attroff(A_REVERSE | A_BOLD);
 	return 0;
 }
 
@@ -170,7 +238,7 @@ int print_right(WINDOW *win, int row, char *s)
 
 	len = strlen(s);
 	getmaxyx(win,y,col);
-	mvwprintw(win,row,col-len,"%s\n",s);
+	mvwprintw(win,row,col-len,"%s",s);
 	return 0;
 }
 
