@@ -18,7 +18,7 @@
 /* number of digits in integer */
 int num_digs(int num)
 {
-	int test  = 1;
+	int test = 1;
 	int digits = 0;
 	while (num >= test) {
 		++digits;

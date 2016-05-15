@@ -23,9 +23,16 @@ int main(int argc, char **argv)
 	int i = 0;
 	char c;
 	char filename[] = "text";
-	char formstring[] = "%30t | %19a | %4l | %10q |";
+	char defform[] = "%30t | %20a | %4l | %10q";
+	char *formstring;
 
 	opterr = 0;
+	if ((formstring = malloc((strlen(defform)+1)*sizeof(char)))==NULL) {
+		fprintf(stderr,"minlib:  insufficient memory for "
+		"default format string\n");
+		exit(INSUFF_MEMORY_FORMSTRING);
+	}
+	strcpy(formstring,defform);
 	while ((c = getopt(argc,argv,"vf:r:")) != -1) {
 		switch (c) {
 		case 'v':
@@ -36,7 +43,20 @@ int main(int argc, char **argv)
 			printf("This is free software:  you are free "
 			"to change and redistribute it.  There is NO "
 			"WARRANTY, to the extent permitted by law.\n");
-			return ALLGOOD;
+			exit(ALLGOOD);
+			break;
+		case 'r':
+			if (strlen(optarg) > strlen(formstring)) {
+				if ((formstring = realloc(formstring,
+				(strlen(optarg)+1)*sizeof(char)))==NULL) {
+					fprintf(stderr,"minlib:  insufficient memory for "
+					"format string specified with -r\n");
+					exit(INSUFF_MEMORY_FORMSTRING);
+				}
+			}
+			strcpy(formstring,optarg);
+			break;
+		case 'f':
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r')) {
@@ -86,6 +106,7 @@ int main(int argc, char **argv)
 		free(*(formlist+i));
 	free(formlist);
 	free(recnums);
+	free(formstring);
 	return 0;
 }
 

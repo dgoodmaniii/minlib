@@ -172,8 +172,8 @@ int print_top_details(WINDOW *win, int row, int col, int recordnum)
 	int numdigs, i;
 
 	highlight_line(win,0,col);
-	numdigs = recordnum % 10;
-	heading = malloc((numdigs + 2 + 9) * sizeof(char));
+	numdigs = num_digs(recordnum);
+	heading = malloc((numdigs + 2 + 10) * sizeof(char));
 	sprintf(heading,"(Record %d)",recordnum);
 	attron(A_REVERSE | A_BOLD);
 	mvwprintw(win,0,0,"--minlib, v0.9");
@@ -200,7 +200,7 @@ int print_top_line(WINDOW *win, int row, int col, int numrecs)
 	int numdigs, i;
 
 	highlight_line(win,0,col);
-	numdigs = numrecs % 10;
+	numdigs = num_digs(numrecs);
 	heading = malloc((numdigs + 2 + 9) * sizeof(char));
 	sprintf(heading,"(%d records)",numrecs);
 	attron(A_REVERSE | A_BOLD);
