@@ -140,6 +140,8 @@ int main(int argc, char **argv)
 	free(recnums);
 	free(formstring);
 	free(filename);
+	if (!strstr(template,"XXXXXX"))
+		unlink(template);
 	return 0;
 }
 
