@@ -110,7 +110,7 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	sel_item_win = newwin(row-3,col,1,0);
 	keypad(sel_item_win,TRUE);
 	box(sel_item_win,0,0);
-	for (i = i+1, j=2; *(ptr+i) != NULL && atoi(*(ptr+i)) == 0; ++i, ++j) {
+	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,++j) {
 		mvwprintw(sel_item_win,j,2,"%s",*(ptr+i));
 		wrefresh(sel_item_win);
 	}

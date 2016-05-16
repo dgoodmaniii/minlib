@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 	}*/
 	for (i = 0; i < numrecs; ++i)
 		printf("%3d: %s\n",*(recnums+i),*(formlist+i));
-//	load_gui(ptr,formlist,recnums,numrecs);
+	load_gui(ptr,formlist,recnums,numrecs);
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	for (i=0; i <= numrecs; ++i)
