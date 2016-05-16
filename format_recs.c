@@ -70,7 +70,8 @@ int make_string(char **raw, char **format, char *formstring)
 
 int populate(char **raw, int stind, char letter)
 {
-	for (stind=stind;(*(raw+stind)!=NULL)&&(atoi(*(raw+stind))==0);++stind) {
+	for (stind = stind; (*(raw+stind) != NULL) && 
+	(!strstr(*(raw+stind),"%%"));++stind) {
 		if (letter == 't') {
 			if (!strcmp(*(raw+stind),"TITLE"))
 				return stind+1;
