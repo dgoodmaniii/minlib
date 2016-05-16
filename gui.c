@@ -16,6 +16,7 @@
 #include<string.h>
 #include<ncurses.h>
 #include<menu.h>
+#include"errcodes.h"
 
 int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 {
@@ -26,9 +27,18 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	WINDOW *lib_menu_win;
 	WINDOW *sel_item_win;
 	int row, col;
-	char buf[12];
+	char buf[12] = "";
+	char pattern[MAX_REGEXP_LEN];
 	int sel_rec;
+	char regexperror[MAX_ERR_LENGTH];
+	int regexperrnum;
+	int *matched;
 
+	if ((matched = malloc(1 * sizeof(int))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory to store "
+		"the array of matched strings in a full search");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
 	initscr(); cbreak(); noecho(); keypad(stdscr,TRUE); curs_set(0);
 	getmaxyx(stdscr,row,col);
 	frame_main_screen(numrecs, row, col);
@@ -67,16 +77,24 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			menu_driver(lib_menu, REQ_LAST_ITEM);
 			break;
 		case 'n':
-			set_bot_line_search(row,col,buf);
-			menu_driver(lib_menu, REQ_NEXT_MATCH);
+			if (strcmp(buf,"")) {
+				set_bot_line_search(lib_menu,row,col,buf);
+				menu_driver(lib_menu, REQ_NEXT_MATCH);
+			}
 			break;
 		case 'N':
-			set_bot_line_search(row,col,buf);
-			menu_driver(lib_menu, REQ_PREV_MATCH);
+			if (strcmp(buf,"")) {
+				set_bot_line_search(lib_menu,row,col,buf);
+				menu_driver(lib_menu, REQ_PREV_MATCH);
+			}
+			break;
+		case 'm':
+			set_pattern_buffer(lib_menu,buf,row,col);
+			set_menu_pattern(lib_menu,buf);
 			break;
 		case '/':
-			set_pattern_buffer(buf,row,col);
-			set_menu_pattern(lib_menu,buf);
+			set_fullsearch_buffer(lib_menu,pattern,row,col);
+			regexperrnum = full_search(ptr,matched,pattern,regexperror);
 			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
@@ -95,6 +113,7 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	for (i = 0; i <= numrecs; ++i)
 		free_item(lib_list[i]);
 	free(lib_list);
+	free(matched);
 	endwin();
 	return 0;
 }
@@ -124,30 +143,51 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 int clean_bottom_line(int row, int col)
 {
 	int i;
-	for (i = 0; i < col; ++i)
+	for (i = 0; i < col; ++i) {
 		mvprintw(row-1,i," ");
-	refresh();
+		refresh();
+	}
 	return 0;
 }
 
-int set_bot_line_search(int row, int col, char *s)
+int set_bot_line_search(MENU *lib_menu, int row, int col, char *s)
 {
-	clean_bottom_line(row,col);
-	mvwprintw(stdscr,row-1,0,"/%s",s);
+	clean_bottom_line(row,col); refresh();
+	mvwprintw(stdscr,row-1,0,"m/%s",s);
+	if (set_menu_pattern(lib_menu,s) == E_NO_MATCH) {
+		attron(A_BOLD);
+		mvwprintw(stdscr,row-1,strlen(s)+4,"(not found)");
+		attroff(A_BOLD);
+	}
 	refresh();
 	return 0;
 }
 
-int set_pattern_buffer(char *s, int row, int col)
+int set_fullsearch_buffer(MENU *lib_menu,char*s,int row, int col)
 {
 	s[0] = '\0';
 	echo();
+	clean_bottom_line(row,col); refresh();
+	char searchstr[] = "Search for:  ";
+	mvprintw(row-1,0,"%s",searchstr);
+	mvscanw(row-1,strlen(searchstr),"%s",s);
+	clean_bottom_line(row,col); refresh();
+	noecho();
+	refresh();
+	return 0;
+}
+
+int set_pattern_buffer(MENU *lib_menu,char *s, int row, int col)
+{
+	s[0] = '\0';
+	echo();
+	clean_bottom_line(row,col); refresh();
 	char searchstr[] = "Search for:  ";
 	mvprintw(row-1,0,"%s",searchstr);
 	mvscanw(row-1,strlen(searchstr),"%11s",s);
-	clean_bottom_line(row,col);
+	clean_bottom_line(row,col); refresh();
 	noecho();
-	set_bot_line_search(row,col,s);
+	set_bot_line_search(lib_menu,row,col,s);
 	refresh();
 	return 0;
 }
@@ -217,7 +257,7 @@ int print_bot_line(WINDOW *win, int row, int col)
 {
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
-	mvwprintw(win,row-2,0,"q:quit  /:search  o:open");
+	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open");
 	attroff(A_REVERSE | A_BOLD);
 	return 0;
 }

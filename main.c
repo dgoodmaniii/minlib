@@ -89,6 +89,7 @@ int main(int argc, char **argv)
 				}
 				strcpy(filename,optarg);
 			}
+			fdval = 1;
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r')) {

@@ -31,3 +31,14 @@
 #define BAD_INPUT_FILE 8
 /* insufficient memory for filename */
 #define INSUFF_MEMORY_FILENAME 9
+/* invalid regexp for full search */
+#define INVALID_REGEXP 10
+
+
+/* define non-error constants */
+#define MAX_ERR_LENGTH 67
+#define MAX_REGEXP_LEN 432
+
+#define IS_INDEXABLE(arg) (sizeof(arg[0]))
+#define IS_ARRAY(arg) (IS_INDEXABLE(arg) && (((void *) &arg) == ((void *) arg)))
+#define ARRAYSIZE(arr) (IS_ARRAY(arr) ? (sizeof(arr) / sizeof(arr[0])) : 0)
