@@ -22,20 +22,29 @@ int main(int argc, char **argv)
 	int numrecs = 0;
 	int i = 0;
 	char c;
-	char filename[] = "text";
+	char deffile[] = "libtext";
 	char defform[] = "%30t | %20a | %4l | %10q";
 	char *formstring;
+	char *filename;
+	char template[] = "mlibtmpXXXXXX";
+	int fdval;
 
 	opterr = 0;
+	if ((filename = malloc((strlen(deffile)+1)*sizeof(char)))==NULL) {
+		fprintf(stderr,"minlib:  insufficient memory for "
+		"default filename string\n");
+		exit(INSUFF_MEMORY_FILENAME);
+	}
+	strcpy(filename,deffile);
 	if ((formstring = malloc((strlen(defform)+1)*sizeof(char)))==NULL) {
 		fprintf(stderr,"minlib:  insufficient memory for "
 		"default format string\n");
 		exit(INSUFF_MEMORY_FORMSTRING);
 	}
 	strcpy(formstring,defform);
-	while ((c = getopt(argc,argv,"vf:r:")) != -1) {
+	while ((c = getopt(argc,argv,"Vf:r:")) != -1) {
 		switch (c) {
-		case 'v':
+		case 'V':
 			printf("minlib v0.9\n");
 			printf("Copyright (C) 2014  Donald P. Goodman III\n");
 			printf("License GPLv3+:  GNU GPL version 3 or "
@@ -57,6 +66,29 @@ int main(int argc, char **argv)
 			strcpy(formstring,optarg);
 			break;
 		case 'f':
+			if (strstr(optarg,",")) {
+				fdval = mkstemp(template);// unlink(template);
+				readfile(ptr,optarg,filename,fdval);
+				if (strlen(template) > strlen(filename)) {
+					if ((filename = realloc(filename,
+					(strlen(template)+1)*sizeof(char)))==NULL) {
+						fprintf(stderr,"minlib:  insufficient memory for "
+						"filename\n");
+						exit(INSUFF_MEMORY_FILENAME);
+					}
+				}
+				strcpy(filename,template);
+			} else {
+				if (strlen(optarg) > strlen(filename)) {
+					if ((filename = realloc(filename,
+					(strlen(optarg)+1)*sizeof(char)))==NULL) {
+						fprintf(stderr,"minlib:  insufficient memory for "
+						"filename specified with -f\n");
+						exit(INSUFF_MEMORY_FILENAME);
+					}
+				}
+				strcpy(filename,optarg);
+			}
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r')) {
@@ -107,6 +139,7 @@ int main(int argc, char **argv)
 	free(formlist);
 	free(recnums);
 	free(formstring);
+	free(filename);
 	return 0;
 }
 

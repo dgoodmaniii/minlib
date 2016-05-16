@@ -27,5 +27,7 @@
 #define INSUFF_MEMORY_FORMSTRING 6
 /* insufficient memory for various internal deals */
 #define INSUFF_INTERNAL_MEMORY 7
-/* file errors */
-#define BAD_FILE 8
+/* error with the input file (data file) */
+#define BAD_INPUT_FILE 8
+/* insufficient memory for filename */
+#define INSUFF_MEMORY_FILENAME 9

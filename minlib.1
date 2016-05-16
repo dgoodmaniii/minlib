@@ -1,34 +1,135 @@
 ." +AMDG
 ." Process with:
 ." groff -man -Tascii minlib.1
-.TH minlib 1 "May 2016" Linux "User Manuals"
+.TH minlib 1 "June 2016" dgoodmaniii minlib
 .SH NAME
 minlib \- a text-based library management program
 .SH SYNOPSIS
-.B minlib [OPTIONS]
+.B minlib
+[\fB\-r\fR \fIformatstring\fR]
+[\fB\-f\fR \fIinputfile[,...]\fR]
 .SH DESCRIPTION
 .B minlib
 A text-based library management program, designed to do one
 thing---manage your library, physical and digital---and do
 it well. Customizable formatting, usable with books, files,
-movies, music; filtering, searching, and more, all focused
-on that one task.
+movies, music or any other media.  Features include
+filtering, searching, and more.
 .SH OPTIONS
-.IP -v
+.TP
+.BR \-V
 Print version and licensing information, then exit
 successfully.
-.IP "-f filename"
-Use
-.I filename
-
-.SH SLOTS
-
-.SH ROULETTE
-
-.SH CRAPS
-
-
+.TP
+.BR "\-f \fIfilename\fR"
+Use \fIfilename\fR as the source of library records.  You
+can supply a comma-separated list of source files in this
+argument, and \fBminlib\fR will do the right thing and use
+them all, by dumping them all into a temporary file and then
+inputting that.
+.TP
+.BR "\-r \fIrecord-format\fR"
+Use \fIrecord-format\fR as the format for each individual
+record outputted by \fBminlib\fR.  By default, this is
+\fB%29t | %20L | %10F | %4l | %4g\fR, which the astute
+reader will see adds to precisely the default terminal width
+of 80 characters.  The format is similar to that of C's
+printf, in that we use a percent sign, followed by a number,
+followed by a single character which specifies what to fill
+in, but it is quite different from that of C's printf in
+that it requires that each formatting character be
+accompanied by a number of characters.  Given the extreme
+variability of field lengths, and the extreme limitation of
+most terminals, this restriction seems reasonable.
+.RS
+.HP
+Interpreted sequences are:
+.TP 
+%t
+The title; matched with field heading TITLE.
+.TP
+%L
+The author's last name; matched with field heading AUTHLAST.
+.TP
+%M
+The author's middle name; matched with field heading
+AUTHMID.
+.TP
+%F
+The author's first name; matched with field heading
+AUTHFIRST.
+.TP
+%l
+The language of the work; matched with field heading LANG.
+.TP
+%g
+The genre, or type, of the work; matched with field headings
+TYPE or GENRE.
+.TP
+%y
+The year of the work; matched with field heading YEAR.
+.PP
+An unknown sequence won't bother \fBminlib\fR; it will just fill
+up that field with spaces.
+.RE
+.SH FILES
+\fBminlib\fR uses two files primarily:  the data, or library
+file, which has the actual library information in it, and a
+run-control, or config file, which contains simple lines to
+control \fBminlib\fR's behavior.
+.SS The Data File
+The data file, or library file, is a pretty simple "cookie
+jar" format, consisting of multi-line records separated by
+lines containing two percentage marks, or (\fB%%\fR).
+.SS Run-Control File
+The run-control file ("rc" or "config" file) contains the
+configurable options for \fBminlib\fR to use.  Note that
+when options specified on the command line conflict with
+those in the config file, the options on the command line
+will take precedence.
+.SH EXIT STATUS
+\fBminlib\fR returns 0 if successful, non-zero if it fails
+for some reason.  See the \fBERRORS\fR section for possible
+failure exit statuses.
+.SH ERRORS
+\fBminlib\fR can, like all programs, go wrong in a huge
+number of ways; but fortunately, most of those are extremely
+unlikely.  Still, \fBminlib\fR tries hard to give precise
+failure information, even for those situations that
+basically never happen.
+.PP
+So upon failure, \fBminlib\fR prints both an error message
+to \fIstderr\fR and exits with a particular status.  Error
+codes are as follows:
+.TP
+.BR 1
+You gave \fBminlib\fR an option that it doesn't recognize.
+.TP
+.BR 2
+You supplied \fBminlib\fR an option which requires an
+argument, but didn't send it an argument.  E.g., you said
+\fB\-r\fR, but didn't say what you wanted the formatting
+string to be.
+.TP
+.BR 3, 4, 5, 6, 7, 9
+Insufficient memory errors; this are only thrown when the
+operating system can't provide enough memory for
+\fBminlib\fR to do its thing.  Since \fBminlib\fR doesn't
+require much memory, these errors are exceedingly unlikely.
+\fB3\fR means it couldn't load the data file; \fB4\fR means
+means that it couldn't load the data file into formatted
+lines; \fB5\fR means that it couldn't load the array used to
+track the formatted lines; \fB6\fR means that it couldn't
+get enough memory for the format string; \fB7\fR
+indicates insufficient memory for a variety of minor
+internal tasks; \fB9\fR means there is insufficient memory
+for the filename string.
+.TP
+.BR 8
+A problem opening the data file.
 .SH BUGS
 None known at this time.
 .SH AUTHOR
 Donald P. Goodman III <dgoodmaniii at gmail dot com>
+.SH SEE ALSO
+pdfinfo

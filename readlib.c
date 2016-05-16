@@ -33,7 +33,7 @@ int fill_db(char **ptr, char *filename)
 		fprintf(stderr,"minlib:  error opening file %s, "
 		"with error number %d; see \"man (3) open\" for "
 		"details\n",filename,errno);
-			exit(BAD_FILE);
+			exit(BAD_INPUT_FILE);
 	}
 	while ((read = getline(&line,&len,fp)) != -1) {
 		if (strstr(line,"%%")) {

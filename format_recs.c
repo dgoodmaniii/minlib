@@ -84,10 +84,19 @@ int populate(char **raw, int stind, char letter)
 			if (!strcmp(*(raw+stind),"LANG"))
 				return stind+1;
 		} else if (letter == 'g') { /* "g"enre */
-			if (!strcmp(*(raw+stind),"TYPE"))
+			if((!strcmp(*(raw+stind),"TYPE"))||(!strcmp(*(raw+stind),"GENRE")))
 				return stind+1;
 		} else if (letter == 'p') {
 			if (!strcmp(*(raw+stind),"PUBLISHER"))
+				return stind+1;
+		} else if (letter == 'L') {
+			if (!strcmp(*(raw+stind),"AUTHLAST"))
+				return stind+1;
+		} else if (letter == 'M') {
+			if (!strcmp(*(raw+stind),"AUTHMID"))
+				return stind+1;
+		} else if (letter == 'F') {
+			if (!strcmp(*(raw+stind),"AUTHFIRST"))
 				return stind+1;
 		}
 	}
