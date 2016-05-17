@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 			break;
 		case 'f':
 			if (strstr(optarg,",")) {
-				fdval = mkstemp(template);// unlink(template);
+				fdval = mkstemp(template);
 				readfile(ptr,optarg,filename,fdval);
 				if (strlen(template) > strlen(filename)) {
 					if ((filename = realloc(filename,
