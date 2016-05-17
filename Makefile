@@ -33,7 +33,7 @@ gui.o : gui.c errcodes.h
 	$(CC) $(CFLAGS) -c gui.c $(CURSLIB)
 
 full_search.o : full_search.c errcodes.h
-	$(CC) $(CFLAGS) -c full_search.c
+	$(CC) $(CFLAGS) -c full_search.c $(CURSLIB)
 
 format_recs.o : format_recs.c utility.c errcodes.h
 	$(CC) $(CFLAGS) -c format_recs.c utility.c

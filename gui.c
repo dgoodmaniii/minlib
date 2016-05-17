@@ -31,7 +31,8 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	char pattern[MAX_REGEXP_LEN+1];
 	int sel_rec;
 	char regexperror[MAX_ERR_LENGTH+1];
-	int regexperrnum;
+	int matchnum;
+	int currmatch = 0;
 	int *matched;
 
 	if ((matched = malloc(1 * sizeof(int))) == NULL) {
@@ -76,15 +77,15 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 		case KEY_END:
 			menu_driver(lib_menu, REQ_LAST_ITEM);
 			break;
-		case 'n':
+		case 'p':
 			if (strcmp(buf,"")) {
-				set_bot_line_search(lib_menu,row,col,buf);
+				set_bot_line_match(lib_menu,row,col,buf);
 				menu_driver(lib_menu, REQ_NEXT_MATCH);
 			}
 			break;
-		case 'N':
+		case 'P':
 			if (strcmp(buf,"")) {
-				set_bot_line_search(lib_menu,row,col,buf);
+				set_bot_line_match(lib_menu,row,col,buf);
 				menu_driver(lib_menu, REQ_PREV_MATCH);
 			}
 			break;
@@ -99,8 +100,8 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 				exit(INSUFF_INTERNAL_MEMORY);
 			}
 			set_fullsearch_buffer(lib_menu,pattern,row,col);
-			regexperrnum = full_search(ptr,&matched,pattern,regexperror);
-			/* insert getting of next menu function here */
+			matchnum = full_search(ptr,&matched,pattern,regexperror);
+			proc_fullsearch(lib_menu,matchnum,lib_list,matched,recnums);
 			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
@@ -156,7 +157,7 @@ int clean_bottom_line(int row, int col)
 	return 0;
 }
 
-int set_bot_line_search(MENU *lib_menu, int row, int col, char *s)
+int set_bot_line_match(MENU *lib_menu, int row, int col, char *s)
 {
 	clean_bottom_line(row,col); refresh();
 	mvwprintw(stdscr,row-1,0,"m/%s",s);
@@ -193,7 +194,7 @@ int set_pattern_buffer(MENU *lib_menu,char *s, int row, int col)
 	mvscanw(row-1,strlen(searchstr),"%11s",s);
 	clean_bottom_line(row,col); refresh();
 	noecho();
-	set_bot_line_search(lib_menu,row,col,s);
+	set_bot_line_match(lib_menu,row,col,s);
 	refresh();
 	return 0;
 }

@@ -170,3 +170,22 @@ int get_size(char **ptr)
 	for (i = 0; *(ptr+i) != NULL; ++i);
 	return i;
 }
+
+/* takes the database and line number, then backs up to find
+ * the record number */
+int get_record_num(char **ptr, int matchedrec)
+{
+	int i;
+	int recnum = -1;
+
+	for (i = matchedrec; i >= 0; --i) {
+		if (strstr(*(ptr+i),"%%")) {
+			recnum = atoi(*(ptr+i));
+			break;
+		}
+	}
+	if (recnum >= 0)
+		return recnum;
+	else
+		return -1;
+}

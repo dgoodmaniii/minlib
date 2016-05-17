@@ -11,7 +11,12 @@
 #include<regex.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include<ncurses.h>
+#include<menu.h>
 #include"errcodes.h"
+
+/* stores our position in search results */
+int ind = 0;
 
 /* handles the full-text search functions, accessed by
  * gui.c; alters an array of ints containing the record
@@ -26,7 +31,10 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 	int result;
 	int i; int j = 0;
 	int arrsize;
+	int lastnum = -1;
+	int currnum = -2;
 
+	*matched = realloc(*matched,1 * sizeof(int));
 	if ((errornum = regcomp(&comppat,pattern,REG_EXTENDED)) != 0) {
 //		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
 		return 2;
@@ -37,11 +45,30 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 		if (result != 0) {
 			regerror(result,&comppat,err,MAX_ERR_LENGTH);
 		} else {
-			*matched = realloc(*matched,(j+1) * sizeof(int));
-			*(*matched+(j++)) = i;
+			currnum = get_record_num(ptr,i) - 1;
+			if (currnum != lastnum) {
+				fprintf(stderr,"matched %s at record %d\n",pattern,currnum);
+				*matched = realloc(*matched,(j+1) * sizeof(int));
+				*(*matched+(j++)) = currnum;
+				lastnum = currnum;
+			}
 		}
 	}
 	regfree(&comppat);
+	return j;
+}
+/* NOTE:  array *matched is free()d in gui.c if necessary,
+ * because it's originally allocated there */
+
+int proc_fullsearch(MENU *menu, int matchnum, ITEM **lib_list, 
+	int *matched, int *recnums)
+{
+	int i;
+	int curr;
+
+/*FIXME*/ /* use ind to track our location in search result */
+	curr = item_index(current_item(menu));
+	for (i = 0; *(recnums+i) != *(matched+0); ++i);
+	set_current_item(menu,lib_list[i]);
 	return 0;
 }
-/* NOTE:  array *matched is free()d in gui.c if necessary */
