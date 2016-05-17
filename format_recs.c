@@ -28,7 +28,7 @@ int format_recs(char **ptr, char *formstring, char **formed, int linenums, int *
 	int currrec = 0;
 
 	j = make_string(ptr,formed,formstring);
-	quicksort(formed,recnums,j);
+	quicksort(formed,recnums,j+1);
 	return 0;
 }
 

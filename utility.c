@@ -162,3 +162,11 @@ int swap_str_ptrs(int *int1,int *int2,char const **arg1,char const **arg2)
 	*int2 = temp;
 	return 0;
 }
+
+int get_size(char **ptr)
+{
+	int i = 0;
+
+	for (i = 0; *(ptr+i) != NULL; ++i);
+	return i;
+}

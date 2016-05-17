@@ -19,36 +19,28 @@
  * made, 1 if not, 2 if the regexp didn't compile.  Takes
  * the full database; the array for matches; and the regexp
  * string. */
-int full_search(char **ptr, int *matched, char *pattern, char *err) {
+int full_search(char **ptr, int **matched, char *pattern, char *err) {
 	
 	regex_t comppat;
 	int errornum = 0;
 	int result;
 	int i; int j = 0;
+	int arrsize;
 
 	if ((errornum = regcomp(&comppat,pattern,REG_EXTENDED)) != 0) {
-		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
+//		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
 		return 2;
 	}
-/*	for (i = 0; i < ARRAYSIZE(ptr); ++i) {
-		result = regexec(comppat,*(ptr+i),0,NULL,0);
+	arrsize = get_size(ptr) - 1;
+	for (i = 0; i < arrsize; ++i) {
+		result = regexec(&comppat,*(ptr+i),0,NULL,0);
 		if (result != 0) {
-			regerror(result,comppat,err,MAX_ERR_LENGTH);
-			return 2;
+			regerror(result,&comppat,err,MAX_ERR_LENGTH);
 		} else {
-			*(matched+(j++)) = i;
-			if ((matched=realloc(matched,sizeof(matched)+sizeof(int)))==NULL){
-				fprintf(stderr,"minlib:  insufficient memory to store "
-				"the array of matched strings in a full search");
-				exit(INSUFF_INTERNAL_MEMORY);
-			}
+			*matched = realloc(*matched,(j+1) * sizeof(int));
+			*(*matched+(j++)) = i;
 		}
 	}
-	if ((matched=realloc(matched,sizeof(matched)-sizeof(int)))==NULL){
-		fprintf(stderr,"minlib:  insufficient memory to store "
-		"the array of matched strings in a full search");
-		exit(INSUFF_INTERNAL_MEMORY);
-	}*/
 	regfree(&comppat);
 	return 0;
 }

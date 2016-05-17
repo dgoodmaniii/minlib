@@ -28,9 +28,9 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	WINDOW *sel_item_win;
 	int row, col;
 	char buf[12] = "";
-	char pattern[MAX_REGEXP_LEN];
+	char pattern[MAX_REGEXP_LEN+1];
 	int sel_rec;
-	char regexperror[MAX_ERR_LENGTH];
+	char regexperror[MAX_ERR_LENGTH+1];
 	int regexperrnum;
 	int *matched;
 
@@ -93,8 +93,14 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			set_menu_pattern(lib_menu,buf);
 			break;
 		case '/':
+			if ((matched = realloc(matched,(1 * sizeof(int)))) == NULL) {
+				fprintf(stderr,"minlib:  insufficient memory to store "
+				"the array of matched strings in a full search");
+				exit(INSUFF_INTERNAL_MEMORY);
+			}
 			set_fullsearch_buffer(lib_menu,pattern,row,col);
-			regexperrnum = full_search(ptr,matched,pattern,regexperror);
+			regexperrnum = full_search(ptr,&matched,pattern,regexperror);
+			/* insert getting of next menu function here */
 			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
