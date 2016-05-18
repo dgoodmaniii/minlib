@@ -59,10 +59,10 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	wrefresh(lib_menu_win);
 	while ((c = wgetch(lib_menu_win)) != 'q') {
 		switch (c) {
-		case KEY_DOWN:
+		case KEY_DOWN: case 'j':
 			menu_driver(lib_menu, REQ_DOWN_ITEM);
 			break;
-		case KEY_UP:
+		case KEY_UP: case 'k':
 			menu_driver(lib_menu, REQ_UP_ITEM);
 			break;
 		case KEY_PPAGE:
@@ -93,6 +93,20 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			set_pattern_buffer(lib_menu,buf,row,col);
 			set_menu_pattern(lib_menu,buf);
 			break;
+		case 'n':
+			if (matchnum > 0) {
+				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
+					numrecs,'n');
+//				set_search_line(*lib_menu, row, col, pattern, matchnum);
+			}
+			break;
+		case 'N':
+			if (matchnum > 0) {
+				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
+					numrecs,'N');
+//				set_search_line(*lib_menu, row, col, pattern, matchnum);
+			}
+			break;
 		case '/':
 			if ((matched = realloc(matched,(1 * sizeof(int)))) == NULL) {
 				fprintf(stderr,"minlib:  insufficient memory to store "
@@ -101,7 +115,11 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			}
 			set_fullsearch_buffer(lib_menu,pattern,row,col);
 			matchnum = full_search(ptr,&matched,pattern,regexperror);
-			proc_fullsearch(lib_menu,matchnum,lib_list,matched,recnums);
+			if (matchnum != 0) {
+				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
+					numrecs,'f');
+			}
+			set_search_line(row, col, pattern, matchnum);
 			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
@@ -154,6 +172,23 @@ int clean_bottom_line(int row, int col)
 		mvprintw(row-1,i," ");
 		refresh();
 	}
+	return 0;
+}
+
+int set_search_line(int row, int col, char *s, int matchnum)
+{
+	clean_bottom_line(row,col); refresh();
+	mvwprintw(stdscr,row-1,0,"/%s",s);
+	if (matchnum == 0) {
+		attron(A_BOLD);
+		mvwprintw(stdscr,row-1,strlen(s)+4,"(not found)");
+		attroff(A_BOLD);
+	} else {
+		attron(A_BOLD);
+		mvwprintw(stdscr,row-1,strlen(s)+4,"(%d) matches",matchnum);
+		attroff(A_BOLD);
+	}
+	refresh();
 	return 0;
 }
 

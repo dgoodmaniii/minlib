@@ -47,7 +47,6 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 		} else {
 			currnum = get_record_num(ptr,i) - 1;
 			if (currnum != lastnum) {
-				fprintf(stderr,"matched %s at record %d\n",pattern,currnum);
 				*matched = realloc(*matched,(j+1) * sizeof(int));
 				*(*matched+(j++)) = currnum;
 				lastnum = currnum;
@@ -60,15 +59,32 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 /* NOTE:  array *matched is free()d in gui.c if necessary,
  * because it's originally allocated there */
 
-int proc_fullsearch(MENU *menu, int matchnum, ITEM **lib_list, 
-	int *matched, int *recnums)
+int proc_fsearch(MENU *menu, int matchnum, ITEM **lib_list, 
+	int *matched, int *recnums, int numrecs, char action)
 {
-	int i;
+	int i = 0;
 	int curr;
 
-/*FIXME*/ /* use ind to track our location in search result */
 	curr = item_index(current_item(menu));
-	for (i = 0; *(recnums+i) != *(matched+0); ++i);
+	if (action == 'n') {
+		if (ind < (matchnum-1)) {
+			ind += 1;
+		} else {
+			ind = 0;
+		}
+	} else if (action == 'N') {
+		if (ind > 0) {
+			ind -= 1;
+		} else {
+			ind = matchnum - 1;
+		}
+	} else if (action == 'f') {
+		ind = 0;
+	}
+	for (i = curr; (*(recnums+i) != *(matched+ind)); ++i) {
+		if (i == numrecs)
+			i = -1;
+	}
 	set_current_item(menu,lib_list[i]);
 	return 0;
 }
