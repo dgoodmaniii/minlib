@@ -68,6 +68,10 @@ TYPE or GENRE.
 .TP
 %y
 The year of the work; matched with field heading YEAR.
+.TP
+%m
+Media of the work; e.g., book, film, etc.  Matched with
+field heading MEDIA.
 .PP
 An unknown sequence won't bother \fBminlib\fR; it will just fill
 up that field with spaces.
@@ -80,7 +84,63 @@ control \fBminlib\fR's behavior.
 .SS The Data File
 The data file, or library file, is a pretty simple "cookie
 jar" format, consisting of multi-line records separated by
-lines containing two percentage marks, or (\fB%%\fR).
+lines containing two percentage marks, or (\fB%%\fR).  No
+line can contain the text "\fB%%\fR" except record
+separating lines; \fBminlib\fR will always consider such
+lines to be starting a new record.
+.PP
+\fBPlease note that every record requires a %% to begin it,
+including the first in a file.\fR
+.PP
+Between each record-separating line are the individual
+fields of the record.  These consist of a field name in all
+capital letters, a colon, and then the text of the field.
+After the colon, whitespace can be inserted or deleted at
+will, with no change in how \fBminlib\fR reads the line.
+Each field must be contained entirely on one line, however.
+.PP
+An example record:
+.RS
+%%
+.br
+TITLE:  My Very Favorite Book
+.br
+AUTHLAST:  Publick
+.br
+AUTHMID: Q
+.br
+AUTHFIRST:  John
+.br
+GENRE:  Scifi
+.br
+LANGUAGE:  English
+.br
+YEAR:	1998
+.br
+MEDIA:  book
+.RE
+You then repeat this as many times as you need to to build
+your library database.
+.PP
+Because \fBminlib\fR accepts multiple files at the same
+time, you can divide your library files however you wish,
+and \fBminlib\fR will accept whichever files you specify,
+sort them all together, and display them to you.  So you can
+have one file with your books, one with your movies, one
+with your music, and one with your vintage 8-tracks of
+original Swedish ABBA and still get them all at once if you
+want.
+.PP
+There are no artificial limits on the fields you can
+include; if you particular library database requires "FOO"
+as a field, just put it in there.  \fBminlib\fR will not be
+able to sort your records by fields it doesn't know;
+however, it will be able to search for such fields, and it
+will be able to display such fields in its detail view, when
+you select a record.
+.PP
+For fields that \fBminlib\fR knows, see the section on the
+\fB\-r\fR option above.
 .SS Run-Control File
 The run-control file ("rc" or "config" file) contains the
 configurable options for \fBminlib\fR to use.  Note that
