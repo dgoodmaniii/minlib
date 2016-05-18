@@ -36,8 +36,8 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 
 	*matched = realloc(*matched,1 * sizeof(int));
 	if ((errornum = regcomp(&comppat,pattern,REG_EXTENDED)) != 0) {
-//		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
-		return 2;
+		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
+		return -1;
 	}
 	arrsize = get_size(ptr) - 1;
 	for (i = 0; i < arrsize; ++i) {
