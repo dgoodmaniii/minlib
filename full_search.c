@@ -34,7 +34,11 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 	int lastnum = -1;
 	int currnum = -2;
 
-	*matched = realloc(*matched,1 * sizeof(int));
+	if ((*matched = realloc(*matched,1 * sizeof(int))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory for storing "
+		"the numbers of matched records");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
 	if ((errornum = regcomp(&comppat,pattern,REG_EXTENDED)) != 0) {
 		regerror(errornum,&comppat,err,MAX_ERR_LENGTH);
 		return -1;
@@ -47,7 +51,11 @@ int full_search(char **ptr, int **matched, char *pattern, char *err) {
 		} else {
 			currnum = get_record_num(ptr,i) - 1;
 			if (currnum != lastnum) {
-				*matched = realloc(*matched,(j+1) * sizeof(int));
+				if ((*matched = realloc(*matched,(j+1)*sizeof(int)))==NULL) {
+					fprintf(stderr,"minlib:  insufficient memory for storing "
+					"the numbers of matched records");
+					exit(INSUFF_INTERNAL_MEMORY);
+				}
 				*(*matched+(j++)) = currnum;
 				lastnum = currnum;
 			}
