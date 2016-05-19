@@ -33,7 +33,8 @@
 #define INSUFF_MEMORY_FILENAME 9
 /* bad config file */
 #define BAD_CONFIG_FILE 10
-
+/* no data file specified */
+#define NO_DATA_FILE 11
 
 /* define length constants */
 #define MAX_ERR_LENGTH 67

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	int numrecs = 0;
 	int i = 0;
 	char c;
-	char deffile[] = "libtext";
+	char deffile[] = "";
 	char defform[] = "%30t | %20a | %4l | %10q";
 	char *formstring;
 	char *filename;
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 			fdval = 1;
 			break;
 		case 'c':
-			didconfigfile = read_optfile(filename,formstring,optarg);
+			didconfigfile = read_optfile(&filename,&formstring,optarg);
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r')) {
@@ -118,8 +118,13 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
-	if (didconfigfile == 1)
-		read_optfile(filename,formstring,NULL);
+	if (didconfigfile == 1) {
+		read_optfile(&filename,&formstring,NULL);
+		if (!strcmp(filename,"")) {
+			fprintf(stderr,"minlib:  no input file specified\n");
+			exit(NO_DATA_FILE);
+		}
+	}
 	numlines = count_lines_file(filename);
 	if ((ptr = malloc(((numlines+1)*2-count_recs_file(filename)) 
 		* sizeof(char*))) == NULL) {

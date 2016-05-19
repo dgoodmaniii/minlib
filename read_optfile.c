@@ -17,48 +17,84 @@
 
 extern struct options globopts;
 
-int read_optfile(char *filename, char *formstring, char *configname)
+int read_optfile(char **filename, char *formstring, char *configname)
 {
 	FILE *fp;
+	char *line = NULL;
+	ssize_t read; size_t len = 0;
+	char *ptr;
+	char *newconfname;
+
+	if (configname == NULL) {
+		get_configname(&newconfname);
+	} else {
+		if ((newconfname=malloc((strlen(configname)+1)*sizeof(char)))==NULL) {
+			fprintf(stderr,"minlib:  insufficient memory to store "
+			"the configuration file name\n");
+			exit(INSUFF_INTERNAL_MEMORY);
+		}
+		strcpy(newconfname,configname);
+	}
+	if ((fp = fopen(newconfname,"r")) == NULL) {
+		fprintf(stderr,"minlib:  error opening file %s, "
+		"with the following error:\n\t%d: %s\n",newconfname,
+		errno,strerror(errno));
+		return 1;
+	}
+	while ((read = getline(&line,&len,fp)) != -1) {
+		if (strstr(line,"DATAFILE:")) {
+			ptr = line+9;
+			while (isspace(*ptr)) ++ptr;
+			if ((*filename = realloc(*filename,(strlen(ptr)+1) * 
+			sizeof(char))) == NULL) {
+				fprintf(stderr,"minlib:  insufficient memory to "
+				"store datafile specified in config file\n");
+				exit(INSUFF_MEMORY_FILENAME);
+			}
+			strcpy(*filename,ptr);
+			chomp(*filename);
+		}
+		if (strstr(line,"RECORDFORM:") && !strcmp(formstring,"")) {
+			ptr = line+12;
+			while (isspace(*ptr)) ++ptr;
+			if ((formstring = malloc((strlen(ptr)+1)*sizeof(char))) == NULL) {
+				fprintf(stderr,"minlib:  insufficient memory to "
+				"store recordform string specified in config file\n");
+				exit(INSUFF_MEMORY_FORMSTRING);
+			}
+			strcpy(formstring,ptr);
+			fprintf(stderr,"RECORDFORM:  %s\n",formstring);
+		}
+	}
+	free(newconfname);
+	free(line);
+	return 0;
+}
+
+int get_configname(char **newconfname)
+{
 	char *home;
 	char cwd[3] = "./";
 	int preflen;
 	char *defconfname = "/.minlibrc";
-	char *line = NULL;
-	ssize_t read; size_t len = 0;
 
-	if (configname == NULL) {
-		home = getenv("HOME");
-		if (home == NULL) {
-			preflen = 2;
-		} else {
-			preflen = strlen(home);
-		}
-		if ((configname = malloc((preflen+strlen(defconfname) + 1) * 
-		sizeof(char))) == NULL) {
-			fprintf(stderr,"minlib:  insufficient memory to "
-			"store the name of the config file\n");
-			exit(INSUFF_INTERNAL_MEMORY);
-		}
-		if (home == NULL) {
-			strcpy(configname,cwd); strcpy(configname,defconfname);
-		} else {
-			strcpy(configname,home); strcpy(configname,defconfname);
-		}
+	home = getenv("HOME");
+	if (home == NULL) {
+		preflen = 2;
+	} else {
+		preflen = strlen(home) + 1;
 	}
-	fprintf(stderr,"HOME:  %s\n",home);
-	if ((fp = fopen(configname,"r")) == NULL) {
-		fprintf(stderr,"minlib:  error opening file %s, "
-		"with error number %d; see \"man (3) open\" for "
-		"details\n",configname,errno);
-			exit(BAD_CONFIG_FILE);
+	if ((*newconfname = malloc((preflen+strlen(defconfname) + 1) * 
+	sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory to "
+		"store the name of the config file\n");
+		exit(INSUFF_INTERNAL_MEMORY);
 	}
-	while ((read = getline(&line,&len,fp)) != -1) {
-		if (strstr(line,"DATAFILE:") && (filename == NULL)) {
-			
-		}
-		if (strstr(line,"RECORDFORM:") && (formstring == NULL)) {
-		}
+	**newconfname = '\0';
+	if (home == NULL) {
+		strcat(*newconfname,cwd); strcat(*newconfname,defconfname);
+	} else {
+		strcat(*newconfname,home); strcat(*newconfname,defconfname);
 	}
 	return 0;
 }

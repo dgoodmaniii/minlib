@@ -10,7 +10,7 @@ SHELL=/bin/sh
 .SUFFIXES:
 .SUFFIXES: .c .o .h
 CC=gcc
-CFLAGS=-I -Wall
+CFLAGS=-I -Wall -g
 OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
 	gui.o full_search.o
 SRCDIR=./
