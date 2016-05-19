@@ -31,10 +31,18 @@
 #define BAD_INPUT_FILE 8
 /* insufficient memory for filename */
 #define INSUFF_MEMORY_FILENAME 9
-/* invalid regexp for full search */
-#define INVALID_REGEXP 10
+/* bad config file */
+#define BAD_CONFIG_FILE 10
 
 
-/* define non-error constants */
+/* define length constants */
 #define MAX_ERR_LENGTH 67
 #define MAX_REGEXP_LEN 432
+
+/* define option identifiers */
+#define COL_TOPBAR_FORE 0
+#define COL_TOPBAR_BACK 1
+#define COL_BOTBAR_FORE 2
+#define COL_BOTBAR_BACK 3
+#define COL_TEXT_FORE 4
+#define COL_TEXT_BACK 5

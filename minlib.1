@@ -71,7 +71,21 @@ The year of the work; matched with field heading YEAR.
 .TP
 %m
 Media of the work; e.g., book, film, etc.  Matched with
-field heading MEDIA.
+field heading MEDIUM.
+.TP
+%P
+Place or location of the work; e.g., shelf, storage, etc.
+Matched with field heading PLACE or LOCATION.
+.TP
+%e
+Editor of the work; matched with field heading EDITOR.
+.TP
+%T
+Translator of the work; matched with field heading
+TRANSLATOR.
+.TP
+%d
+Director of the work; matched with field heading DIRECTOR.
 .PP
 An unknown sequence won't bother \fBminlib\fR; it will just fill
 up that field with spaces.
@@ -186,7 +200,12 @@ internal tasks; \fB9\fR means there is insufficient memory
 for the filename string.
 .TP
 .BR 8
-A problem opening the data file.
+A problem opening the data file.  A message printed to
+stderr will give the name of the file and the error number.
+.TP
+.BR 10
+A problem opening the config file.  A message printed to
+stderr will give the name of the file and the error number.
 .SH BUGS
 None known at this time.
 .SH AUTHOR

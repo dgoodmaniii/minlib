@@ -82,7 +82,11 @@ int populate(char **raw, int stind, char letter)
 			if (!strcmp(*(raw+stind),"YEAR"))
 				return stind+1;
 		} else if (letter == 'l') {
-			if (!strcmp(*(raw+stind),"LANG"))
+			if ((!strcmp(*(raw+stind),"LANG")) ||
+			(!strcmp(*(raw+stind),"LANGONE")))
+				return stind+1;
+		} else if (letter == 's') { /* secondary language */
+			if (!strcmp(*(raw+stind),"LANGTWO"))
 				return stind+1;
 		} else if (letter == 'g') { /* "g"enre */
 			if((!strcmp(*(raw+stind),"TYPE"))||(!strcmp(*(raw+stind),"GENRE")))
@@ -98,6 +102,22 @@ int populate(char **raw, int stind, char letter)
 				return stind+1;
 		} else if (letter == 'F') {
 			if (!strcmp(*(raw+stind),"AUTHFIRST"))
+				return stind+1;
+		} else if (letter == 'm') {
+			if (!strcmp(*(raw+stind),"MEDIUM"))
+				return stind+1;
+		} else if (letter == 'P') {
+			if ((!strcmp(*(raw+stind),"PLACE")) || 
+			(!strcmp(*(raw+stind),"LOCATION")))
+				return stind+1;
+		} else if (letter == 'e') {
+			if (!strcmp(*(raw+stind),"EDITOR"))
+				return stind+1;
+		} else if (letter == 'T') {
+			if (!strcmp(*(raw+stind),"TRANSLATOR"))
+				return stind+1;
+		} else if (letter == 'd') {
+			if (!strcmp(*(raw+stind),"DIRECTOR"))
 				return stind+1;
 		}
 	}

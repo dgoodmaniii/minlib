@@ -11,7 +11,8 @@ SHELL=/bin/sh
 .SUFFIXES: .c .o .h
 CC=gcc
 CFLAGS=-I -Wall
-OBJ=utility.o readfile.o readlib.o format_recs.o gui.o full_search.o
+OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
+	gui.o full_search.o
 SRCDIR=./
 CURSLIB=-lform -lmenu -lncurses
 prefix=/usr/local
@@ -43,6 +44,9 @@ readlib.o : readlib.c utility.c errcodes.h
 
 readfile.o : readfile.c errcodes.h utility.c
 	$(CC) $(CFLAGS) -c readfile.c utility.c
+
+read_optfile.o : read_optfile.c errcodes.h utility.c
+	$(CC) $(CFLAGS) -c read_optfile.c utility.c
 
 utility.o : utility.c errcodes.h
 	$(CC) $(CFLAGS) -c utility.c

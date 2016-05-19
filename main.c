@@ -15,6 +15,18 @@
 #include<unistd.h>
 #include"errcodes.h"
 
+struct options {
+	int optcode;
+	char *optval;
+} globopts[] = {
+	COL_TOPBAR_FORE, "",
+	COL_TOPBAR_BACK, "",
+	COL_BOTBAR_FORE, "",
+	COL_BOTBAR_BACK, "",
+	COL_TEXT_FORE, "",
+	COL_TEXT_BACK, "",
+};
+
 int main(int argc, char **argv)
 {
 	char **ptr; char **formlist; int *recnums;
@@ -28,6 +40,7 @@ int main(int argc, char **argv)
 	char *filename;
 	char template[] = "mlibtmpXXXXXX";
 	int fdval;
+	int didconfigfile = 1;
 
 	opterr = 0;
 	if ((filename = malloc((strlen(deffile)+1)*sizeof(char)))==NULL) {
@@ -42,7 +55,7 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_FORMSTRING);
 	}
 	strcpy(formstring,defform);
-	while ((c = getopt(argc,argv,"Vf:r:")) != -1) {
+	while ((c = getopt(argc,argv,"Vf:r:c:")) != -1) {
 		switch (c) {
 		case 'V':
 			printf("minlib v0.9\n");
@@ -91,6 +104,9 @@ int main(int argc, char **argv)
 			}
 			fdval = 1;
 			break;
+		case 'c':
+			didconfigfile = read_optfile(filename,formstring,optarg);
+			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r')) {
 				fprintf(stderr,"minlib:  option \"%c\" requires "
@@ -102,6 +118,8 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
+	if (didconfigfile == 1)
+		read_optfile(filename,formstring,NULL);
 	numlines = count_lines_file(filename);
 	if ((ptr = malloc(((numlines+1)*2-count_recs_file(filename)) 
 		* sizeof(char*))) == NULL) {
