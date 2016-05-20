@@ -146,7 +146,7 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 {
 	WINDOW *sel_item_win;
-	int i; int j;
+	int i; int j; int k = 0;
 	int d;
 
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
@@ -154,8 +154,14 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	sel_item_win = newwin(row-3,col,1,0);
 	keypad(sel_item_win,TRUE);
 	box(sel_item_win,0,0);
-	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,++j) {
-		mvwprintw(sel_item_win,j,2,"%s",*(ptr+i));
+	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,j) {
+		if (k == 0) {
+			++k;
+			mvwprintw(sel_item_win,j,2,"%s:",*(ptr+i));
+		} else {
+			mvwprintw(sel_item_win,j++,12,"%s",*(ptr+i));
+			k = 0;
+		}
 		wrefresh(sel_item_win);
 	}
 	while ((d = wgetch(sel_item_win)) != 'q');
