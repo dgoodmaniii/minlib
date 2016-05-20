@@ -14,16 +14,17 @@
 #include<string.h>
 #include<errno.h>
 #include"errcodes.h"
+#include"options.h"
 
-extern struct options globopts;
-
-int read_optfile(char **filename, char **formstring, char *configname)
+int read_optfile(char **filename, char **formstring, char *configname,
+struct options **globopts)
 {
 	FILE *fp;
 	char *line = NULL;
 	ssize_t read; size_t len = 0;
 	char *ptr;
 	char *newconfname;
+	int optlen;
 
 	if (configname == NULL) {
 		get_configname(&newconfname);
@@ -66,10 +67,56 @@ int read_optfile(char **filename, char **formstring, char *configname)
 			chomp(*formstring);
 			fprintf(stderr,"RECORDFORM:  |%s|\n",*formstring);
 		}
+		if (strstr(line,"TOP_FORE_COLOR:")) {
+			get_color(line,TOP_FORE_COLOR,globopts);
+		} if (strstr(line,"TOP_BACK_COLOR:")) {
+			get_color(line,TOP_BACK_COLOR,globopts);
+		} if (strstr(line,"BOT_FORE_COLOR:")) {
+			get_color(line,BOT_FORE_COLOR,globopts);
+		} if (strstr(line,"BOT_BACK_COLOR:")) {
+			get_color(line,BOT_BACK_COLOR,globopts);
+		} if (strstr(line,"MEN_FORE_COLOR:")) {
+			get_color(line,MEN_FORE_COLOR,globopts);
+		} if (strstr(line,"MEN_BACK_COLOR:")) {
+			get_color(line,MEN_BACK_COLOR,globopts);
+		} if (strstr(line,"DET_FIELD_FORE_COLOR:")) {
+			get_color(line,DET_FIELD_FORE_COLOR,globopts);
+		} if (strstr(line,"DET_FIELD_BACK_COLOR:")) {
+			get_color(line,DET_FIELD_BACK_COLOR,globopts);
+		} if (strstr(line,"DET_TXT_FORE_COLOR:")) {
+			get_color(line,DET_TXT_FORE_COLOR,globopts);
+		} if (strstr(line,"DET_TXT_BACK_COLOR:")) {
+			get_color(line,DET_TXT_BACK_COLOR,globopts);
+		}
 	}
 	free(newconfname);
 	free(line);
 	return 0;
+}
+
+int get_color(char *s, int ind,struct options **globopts)
+{
+	char *ptr;
+	int optlen;
+
+	ptr = strchr(s,':'); ++ptr;
+	while (isspace(*ptr)) ++ptr;
+	optlen = strlen(ptr);
+	if (!is_color(ptr)) {
+		fprintf(stderr,"minlib:  bad color definition "
+		"\"%s\"; see the manual for acceptable "
+		"colors\n",ptr);
+	} else {
+		if (((*globopts+ind)->optval = malloc((optlen+1) *
+		sizeof(char))) == NULL) {
+			fprintf(stderr,"minlib:  insufficient memory "
+			"to store requested custom color name\n");
+		} else {
+			strcpy((*globopts+ind)->optval,ptr);
+			chomp((*globopts+ind)->optval);
+			fprintf(stderr,"COLOR: %s\n",(*globopts+ind)->optval);
+		}
+	}
 }
 
 int get_configname(char **newconfname)
@@ -98,4 +145,15 @@ int get_configname(char **newconfname)
 		strcat(*newconfname,home); strcat(*newconfname,defconfname);
 	}
 	return 0;
+}
+
+int is_color(char *s)
+{
+	if (strcmp(s,"COLOR_BLACK") || strcmp(s,"COLOR_RED") ||
+	strcmp(s,"COLOR_GREEN") || strcmp(s,"COLOR_YELLOW") ||
+	strcmp(s,"COLOR_BLUE") || strcmp(s,"COLOR_MAGENTA") ||
+	strcmp(s,"COLOR_CYAN") || strcmp(s,"COLOR_WHITE"))
+		return 1;
+	else
+		return 0;
 }

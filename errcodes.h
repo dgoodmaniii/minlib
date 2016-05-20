@@ -43,9 +43,18 @@
 #define MAX_REGEXP_LEN 432
 
 /* define option identifiers */
-#define COL_TOPBAR_FORE 0
-#define COL_TOPBAR_BACK 1
-#define COL_BOTBAR_FORE 2
-#define COL_BOTBAR_BACK 3
-#define COL_TEXT_FORE 4
-#define COL_TEXT_BACK 5
+#define TOP_FORE_COLOR 0
+#define TOP_BACK_COLOR 1
+#define BOT_FORE_COLOR 2
+#define BOT_BACK_COLOR 3
+#define MEN_FORE_COLOR 4
+#define MEN_BACK_COLOR 5
+#define DET_FIELD_FORE_COLOR 6
+#define DET_FIELD_BACK_COLOR 7
+#define DET_TXT_FORE_COLOR 8
+#define DET_TXT_BACK_COLOR 9
+#define PDF_VIEWER 10
+#define HTML_VIEWER 11
+#define EPUB_VIEWER 12
+#define OGT_VIEWER 13
+#define OGV_VIEWER 14

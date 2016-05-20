@@ -27,7 +27,7 @@ mandir=$(datarootdir)/man
 
 all : minlib
 
-minlib :	main.c $(OBJ) errcodes.h
+minlib :	main.c $(OBJ) errcodes.h options.h
 	$(CC) $(CFLAGS) -o minlib main.c $(OBJ) $(CURSLIB)
 
 gui.o : gui.c errcodes.h
@@ -45,7 +45,7 @@ readlib.o : readlib.c utility.c errcodes.h
 readfile.o : readfile.c errcodes.h utility.c
 	$(CC) $(CFLAGS) -c readfile.c utility.c
 
-read_optfile.o : read_optfile.c errcodes.h utility.c
+read_optfile.o : read_optfile.c errcodes.h utility.c options.h
 	$(CC) $(CFLAGS) -c read_optfile.c utility.c
 
 utility.o : utility.c errcodes.h

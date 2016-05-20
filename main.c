@@ -14,21 +14,23 @@
 #include<string.h>
 #include<unistd.h>
 #include"errcodes.h"
+#include"options.h"
 
-struct options {
-	int optcode;
-	char *optval;
-} globopts[] = {
-	COL_TOPBAR_FORE, "",
-	COL_TOPBAR_BACK, "",
-	COL_BOTBAR_FORE, "",
-	COL_BOTBAR_BACK, "",
-	COL_TEXT_FORE, "",
-	COL_TEXT_BACK, "",
-};
+struct options *globopts;
 
 int main(int argc, char **argv)
 {
+	globopts = malloc(10 * sizeof(struct options));
+	assign_to_opts(TOP_FORE_COLOR);
+	assign_to_opts(TOP_BACK_COLOR);
+	assign_to_opts(BOT_FORE_COLOR);
+	assign_to_opts(BOT_BACK_COLOR);
+	assign_to_opts(MEN_FORE_COLOR);
+	assign_to_opts(MEN_BACK_COLOR);
+	assign_to_opts(DET_FIELD_FORE_COLOR);
+	assign_to_opts(DET_FIELD_BACK_COLOR);
+	assign_to_opts(DET_TXT_FORE_COLOR);
+	assign_to_opts(DET_TXT_BACK_COLOR);
 	char **ptr; char **formlist; int *recnums;
 	int numlines = 0;
 	int numrecs = 0;
@@ -79,7 +81,7 @@ int main(int argc, char **argv)
 			fdval = 1;
 			break;
 		case 'c':
-			didconfigfile = read_optfile(&filename,&formstring,optarg);
+			didconfigfile=read_optfile(&filename,&formstring,optarg,&globopts);
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r') || (optopt == 'c')) {
@@ -93,7 +95,7 @@ int main(int argc, char **argv)
 		}
 	}
 	if (didconfigfile == 1)
-		read_optfile(&filename,&formstring,NULL);
+		read_optfile(&filename,&formstring,NULL,&globopts);
 	if (!strcmp(filename,"")) {
 		fprintf(stderr,"minlib:  no input file specified\n");
 		exit(NO_DATA_FILE);
@@ -138,7 +140,7 @@ int main(int argc, char **argv)
 	}*/
 	for (i = 0; i < numrecs; ++i)
 		printf("%3d: %s\n",*(recnums+i),*(formlist+i));
-	load_gui(ptr,formlist,recnums,numrecs);
+	load_gui(ptr,formlist,recnums,numrecs,globopts);
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	for (i=0; i <= numrecs; ++i)
@@ -147,6 +149,9 @@ int main(int argc, char **argv)
 	free(recnums);
 	free(formstring);
 	free(filename);
+	for (i = 0; i < 10; ++i)
+		free((globopts+i)->optval);
+	free(globopts);
 	if (!strstr(template,"XXXXXX"))
 		unlink(template);
 	return 0;
@@ -188,5 +193,12 @@ char *template)
 		}
 		strcpy(*filename,namestr);
 	}
+	return 0;
+}
+
+int assign_to_opts(int ind)
+{
+	(globopts+ind)->optcode = ind;
+	(globopts+ind)->optval = "";
 	return 0;
 }

@@ -17,8 +17,12 @@
 #include<ncurses.h>
 #include<menu.h>
 #include"errcodes.h"
+#include"options.h"
 
-int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
+extern struct options globopts[];
+
+int load_gui(char **ptr, char **formlist, int *recnums, int numrecs,
+struct options *globopts)
 {
 	int i, j; int c; int d;
 	ITEM **lib_list;
@@ -41,6 +45,7 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 		exit(INSUFF_INTERNAL_MEMORY);
 	}
 	initscr(); cbreak(); noecho(); keypad(stdscr,TRUE); curs_set(0);
+	initialize_colors(globopts);
 	getmaxyx(stdscr,row,col);
 	frame_main_screen(numrecs, row, col);
 	lib_list = (ITEM **)calloc(numrecs+1, sizeof(ITEM *));
@@ -54,6 +59,8 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 	set_menu_sub(lib_menu,derwin(lib_menu_win,0,0,0,0));
 	set_menu_format(lib_menu,row-3,1);
 	set_menu_mark(lib_menu,"");
+	set_menu_fore(lib_menu,COLOR_PAIR(3) | A_REVERSE);
+	set_menu_back(lib_menu,COLOR_PAIR(3));
 	refresh();
 	post_menu(lib_menu);
 	wrefresh(lib_menu_win);
@@ -146,7 +153,8 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 {
 	WINDOW *sel_item_win;
-	int i; int j; int k = 0;
+	int i; int j;
+	int k = 0; /* track whether it's a field title or not */
 	int d;
 	int wrapped = 0;
 
@@ -158,10 +166,13 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,j) {
 		if (k == 0) {
 			++k;
+			wattron(sel_item_win,COLOR_PAIR(4));
 			mvwprintw(sel_item_win,j,2,"%s:",*(ptr+i));
+			wattroff(sel_item_win,COLOR_PAIR(4));
 		} else {
-//			mvwprintw(sel_item_win,j++,12,"%s",*(ptr+i));
+			wattron(sel_item_win,COLOR_PAIR(5));
 			wrapped = wrap_print(sel_item_win,*(ptr+i),col,j);
+			wattroff(sel_item_win,COLOR_PAIR(5));
 			j += (wrapped + 1);
 			k = 0;
 		}
@@ -267,7 +278,10 @@ int print_top_details(WINDOW *win, int row, int col, int recordnum)
 	char *heading; char *buffer;
 	int numdigs, i;
 
+	attron(A_REVERSE | A_BOLD);
+	attron(COLOR_PAIR(1));
 	highlight_line(win,0,col);
+	attroff(A_REVERSE | A_BOLD);
 	numdigs = num_digs(recordnum);
 	heading = malloc((numdigs + 2 + 10) * sizeof(char));
 	sprintf(heading,"(Record %d)",recordnum);
@@ -278,15 +292,19 @@ int print_top_details(WINDOW *win, int row, int col, int recordnum)
 	wmove(win,row,col-1);
 	attroff(A_REVERSE | A_BOLD);
 	free(heading);
+	attroff(COLOR_PAIR(1));
 	return 0;
 }
 
 int print_bot_details(WINDOW *win, int row, int col)
 {
+	attron(COLOR_PAIR(2));
+	attron(A_BOLD);
 	highlight_line(win,row-2,col);
-	attron(A_REVERSE | A_BOLD);
+	attron(A_REVERSE);
 	mvwprintw(win,row-2,0,"q:back  o:open");
 	attroff(A_REVERSE | A_BOLD);
+	attroff(COLOR_PAIR(2));
 	return 0;
 }
 
@@ -295,7 +313,10 @@ int print_top_line(WINDOW *win, int row, int col, int numrecs)
 	char *heading; char *buffer;
 	int numdigs, i;
 
+	attron(COLOR_PAIR(1));
+	attron(A_REVERSE | A_BOLD);
 	highlight_line(win,0,col);
+	attroff(A_REVERSE | A_BOLD);
 	numdigs = num_digs(numrecs);
 	heading = malloc((numdigs + 2 + 9) * sizeof(char));
 	sprintf(heading,"(%d records)",numrecs);
@@ -305,16 +326,20 @@ int print_top_line(WINDOW *win, int row, int col, int numrecs)
 	print_right(win,0,"Menu View--");
 	wmove(win,row,col-1);
 	attroff(A_REVERSE | A_BOLD);
+	attroff(COLOR_PAIR(1));
 	free(heading);
 	return 0;
 }
 
 int print_bot_line(WINDOW *win, int row, int col)
 {
+	attron(COLOR_PAIR(2));
+	attron(A_BOLD);
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
 	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open");
 	attroff(A_REVERSE | A_BOLD);
+	attroff(COLOR_PAIR(2));
 	return 0;
 }
 
@@ -373,4 +398,43 @@ int wrap_print(WINDOW *win,char *s, int cols, int row)
 		}
 		return (int) len / left;
 	}
+}
+
+int initialize_colors(struct options *globopts)
+{
+	start_color();
+	init_pair(1,get_col_int((globopts+TOP_FORE_COLOR)->optval),
+		get_col_int((globopts+TOP_BACK_COLOR)->optval));
+	init_pair(2,get_col_int((globopts+BOT_FORE_COLOR)->optval),
+		get_col_int((globopts+BOT_BACK_COLOR)->optval));
+	init_pair(3,get_col_int((globopts+MEN_FORE_COLOR)->optval),
+		get_col_int((globopts+MEN_BACK_COLOR)->optval));
+	init_pair(4,get_col_int((globopts+DET_FIELD_FORE_COLOR)->optval),
+		get_col_int((globopts+DET_FIELD_BACK_COLOR)->optval));
+	init_pair(5,get_col_int((globopts+DET_TXT_FORE_COLOR)->optval),
+		get_col_int((globopts+DET_TXT_BACK_COLOR)->optval));
+	return 0;
+}
+
+int get_col_int(char *s)
+{
+	int colint;
+
+	if (!strcmp(s,"COLOR_BLACK"))
+		colint = 0;
+	if (!strcmp(s,"COLOR_RED"))
+		colint = 1;
+	if (!strcmp(s,"COLOR_GREEN"))
+		colint = 2;
+	if (!strcmp(s,"COLOR_YELLOW"))
+		colint = 3;
+	if (!strcmp(s,"COLOR_BLUE"))
+		colint = 4;
+	if (!strcmp(s,"COLOR_MAGENTA"))
+		colint = 5;
+	if (!strcmp(s,"COLOR_CYAN"))
+		colint = 6;
+	if (!strcmp(s,"COLOR_WHITE"))
+		colint = 7;
+	return colint;
 }
