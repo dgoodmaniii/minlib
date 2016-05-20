@@ -148,6 +148,7 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	WINDOW *sel_item_win;
 	int i; int j; int k = 0;
 	int d;
+	int wrapped = 0;
 
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
@@ -159,7 +160,9 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			++k;
 			mvwprintw(sel_item_win,j,2,"%s:",*(ptr+i));
 		} else {
-			mvwprintw(sel_item_win,j++,12,"%s",*(ptr+i));
+//			mvwprintw(sel_item_win,j++,12,"%s",*(ptr+i));
+			wrapped = wrap_print(sel_item_win,*(ptr+i),col,j);
+			j += (wrapped + 1);
 			k = 0;
 		}
 		wrefresh(sel_item_win);
@@ -343,4 +346,31 @@ int highlight_line(WINDOW *win, int row, int col)
 		mvwprintw(win,row,i," ");
 	attroff(A_REVERSE);
 	return 0;
+}
+
+/* return number of wrapped lines, 0 if all on one */
+int wrap_print(WINDOW *win,char *s, int cols, int row)
+{
+	int len; int left; int numchars;
+	char t[cols];
+	char *ptr;
+
+	len = strlen(s);
+	left = cols - 12 - 1;
+	if (len < left) {
+		mvwprintw(win,row,12,"%s",s);
+		return 0;
+	}
+	if (len >= left) {
+		numchars = len;
+		ptr = s;
+		while (numchars > 0) {
+			strncpy(t,ptr,left);
+			t[left] = '\0';
+			ptr += left;
+			numchars -= left;
+			mvwprintw(win,row++,12,"%s",t);
+		}
+		return (int) len / left;
+	}
 }
