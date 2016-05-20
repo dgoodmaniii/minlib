@@ -17,7 +17,7 @@
 
 extern struct options globopts;
 
-int read_optfile(char **filename, char *formstring, char *configname)
+int read_optfile(char **filename, char **formstring, char *configname)
 {
 	FILE *fp;
 	char *line = NULL;
@@ -54,16 +54,17 @@ int read_optfile(char **filename, char *formstring, char *configname)
 			strcpy(*filename,ptr);
 			chomp(*filename);
 		}
-		if (strstr(line,"RECORDFORM:") && !strcmp(formstring,"")) {
+		if (strstr(line,"RECORDFORM:")) {
 			ptr = line+12;
 			while (isspace(*ptr)) ++ptr;
-			if ((formstring = malloc((strlen(ptr)+1)*sizeof(char))) == NULL) {
+			if ((*formstring = malloc((strlen(ptr)+1)*sizeof(char))) == NULL) {
 				fprintf(stderr,"minlib:  insufficient memory to "
 				"store recordform string specified in config file\n");
 				exit(INSUFF_MEMORY_FORMSTRING);
 			}
-			strcpy(formstring,ptr);
-			fprintf(stderr,"RECORDFORM:  %s\n",formstring);
+			strcpy(*formstring,ptr);
+			chomp(*formstring);
+			fprintf(stderr,"RECORDFORM:  |%s|\n",*formstring);
 		}
 	}
 	free(newconfname);

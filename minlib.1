@@ -161,6 +161,29 @@ configurable options for \fBminlib\fR to use.  Note that
 when options specified on the command line conflict with
 those in the config file, the options on the command line
 will take precedence.
+.PP
+.BR Locations
+.PP
+\fBminlib\fR will take a config file wherever you want it
+to, provided that you have read access to that file.  If you
+don't provide it a config file, it will attempt to read from
+"\fI$HOME/.minlibrc\fR", which, of course, may not exist.
+If it can't find that, it will give up and assume you don't
+want it to consider a config file.
+.PP
+.BR Options
+.PP
+\fBminlib\fR allows you to set defaults for many different
+configuration options in your config file.  Most
+importantly, these are input files; record format strings;
+and default viewers for digital files.  Like the input file
+we discussed above, the format is simple:  an all-caps
+string which says what option you're trying to set, and then
+the value of that option.  Whitespace on the line is
+ignored.
+.PP
+.BR Colors
+.PP
 .SH EXIT STATUS
 \fBminlib\fR returns 0 if successful, non-zero if it fails
 for some reason.  See the \fBERRORS\fR section for possible
@@ -206,6 +229,17 @@ stderr will give the name of the file and the error number.
 .BR 10
 A problem opening the config file.  A message printed to
 stderr will give the name of the file and the error number.
+.TP
+.BR 11
+\fBminlib\fR has checked in all the usual places (a config
+file and the command line), but hasn't found an input file
+(that is, a database or library file).  As such, it has
+nothing to do and quites.
+.TP
+.BR 12
+\fBminlib\fR uses temporary files to process multiple input
+files.  However, it's been unable to construct such a
+temporary file.  Check your permissions to resolve this.
 .SH BUGS
 None known at this time.
 .SH AUTHOR

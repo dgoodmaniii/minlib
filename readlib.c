@@ -31,9 +31,9 @@ int fill_db(char **ptr, char *filename)
 	}
 	if ((fp = fopen(filename,"r")) == NULL) {
 		fprintf(stderr,"minlib:  error opening file %s, "
-		"with error number %d; see \"man (3) open\" for "
-		"details\n",filename,errno);
-			exit(BAD_INPUT_FILE);
+		"with the following error:\n\t%d:  "
+		"%s\n",filename,errno,strerror(errno));
+		exit(BAD_INPUT_FILE);
 	}
 	while ((read = getline(&line,&len,fp)) != -1) {
 		if (strstr(line,"%%")) {

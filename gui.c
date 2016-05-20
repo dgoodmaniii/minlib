@@ -113,7 +113,7 @@ int load_gui(char **ptr, char **formlist, int *recnums, int numrecs)
 			}
 			set_fullsearch_buffer(lib_menu,pattern,row,col);
 			matchnum = full_search(ptr,&matched,pattern,regexperror);
-			if (matchnum >= 0) {
+			if (matchnum > 0) {
 				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
 					numrecs,'f');
 				set_search_line(row, col, pattern, matchnum);
@@ -179,7 +179,7 @@ int set_search_line(int row, int col, char *s, int matchnum)
 {
 	clean_bottom_line(row,col); refresh();
 	if (matchnum == 0) {
-		mvwprintw(stdscr,row-1,0,"/%s",s);
+		mvwprintw(stdscr,row-1,0,"%s",s);
 		attron(A_BOLD);
 		mvwprintw(stdscr,row-1,strlen(s)+4,"(not found)");
 		attroff(A_BOLD);

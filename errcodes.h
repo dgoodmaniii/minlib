@@ -35,6 +35,8 @@
 #define BAD_CONFIG_FILE 10
 /* no data file specified */
 #define NO_DATA_FILE 11
+/* can't open temp file */
+#define NO_TEMP_FILE 12
 
 /* define length constants */
 #define MAX_ERR_LENGTH 67

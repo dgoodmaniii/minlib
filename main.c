@@ -36,10 +36,11 @@ int main(int argc, char **argv)
 	char c;
 	char deffile[] = "";
 	char defform[] = "%30t | %20a | %4l | %10q";
-	char *formstring;
+	char *formstring = NULL;
 	char *filename;
 	char template[] = "mlibtmpXXXXXX";
-	int fdval;
+	int fdval = 0; /* whether we've done a command-line file */
+	int fsval = 0; /* whether we've done a command-line format */
 	int didconfigfile = 1;
 
 	opterr = 0;
@@ -49,12 +50,6 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_FILENAME);
 	}
 	strcpy(filename,deffile);
-	if ((formstring = malloc((strlen(defform)+1)*sizeof(char)))==NULL) {
-		fprintf(stderr,"minlib:  insufficient memory for "
-		"default format string\n");
-		exit(INSUFF_MEMORY_FORMSTRING);
-	}
-	strcpy(formstring,defform);
 	while ((c = getopt(argc,argv,"Vf:r:c:")) != -1) {
 		switch (c) {
 		case 'V':
@@ -77,38 +72,17 @@ int main(int argc, char **argv)
 				}
 			}
 			strcpy(formstring,optarg);
+			fsval = 1;
 			break;
 		case 'f':
-			if (strstr(optarg,",")) {
-				fdval = mkstemp(template);
-				readfile(ptr,optarg,filename,fdval);
-				if (strlen(template) > strlen(filename)) {
-					if ((filename = realloc(filename,
-					(strlen(template)+1)*sizeof(char)))==NULL) {
-						fprintf(stderr,"minlib:  insufficient memory for "
-						"filename\n");
-						exit(INSUFF_MEMORY_FILENAME);
-					}
-				}
-				strcpy(filename,template);
-			} else {
-				if (strlen(optarg) > strlen(filename)) {
-					if ((filename = realloc(filename,
-					(strlen(optarg)+1)*sizeof(char)))==NULL) {
-						fprintf(stderr,"minlib:  insufficient memory for "
-						"filename specified with -f\n");
-						exit(INSUFF_MEMORY_FILENAME);
-					}
-				}
-				strcpy(filename,optarg);
-			}
+			get_input_filename(ptr,optarg,&filename,template);
 			fdval = 1;
 			break;
 		case 'c':
 			didconfigfile = read_optfile(&filename,&formstring,optarg);
 			break;
 		case '?':
-			if ((optopt == 'f') || (optopt == 'r')) {
+			if ((optopt == 'f') || (optopt == 'r') || (optopt == 'c')) {
 				fprintf(stderr,"minlib:  option \"%c\" requires "
 				"an argument\n",optopt);
 				exit(NEED_ARGUMENT_ARG);
@@ -118,12 +92,21 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
-	if (didconfigfile == 1) {
+	if (didconfigfile == 1)
 		read_optfile(&filename,&formstring,NULL);
-		if (!strcmp(filename,"")) {
-			fprintf(stderr,"minlib:  no input file specified\n");
-			exit(NO_DATA_FILE);
+	if (!strcmp(filename,"")) {
+		fprintf(stderr,"minlib:  no input file specified\n");
+		exit(NO_DATA_FILE);
+	}
+	if (fdval == 0)
+		get_input_filename(ptr,filename,&filename,template);
+	if (formstring == NULL) {
+		if ((formstring = malloc((strlen(defform)+1)*sizeof(char)))==NULL) {
+			fprintf(stderr,"minlib:  insufficient memory for "
+			"default format string\n");
+			exit(INSUFF_MEMORY_FORMSTRING);
 		}
+		strcpy(formstring,defform);
 	}
 	numlines = count_lines_file(filename);
 	if ((ptr = malloc(((numlines+1)*2-count_recs_file(filename)) 
@@ -175,5 +158,35 @@ int populate_recnums(int *recnums, int len)
 	
 	for (i = 0; i < len; ++i)
 		*(recnums+i) = i;
+	return 0;
+}
+
+int get_input_filename(char **ptr,char *namestr,char **filename, 
+char *template)
+{
+	int fdval = 0;
+	if (strstr(namestr,",")) {
+		fdval = mkstemp(template);
+		readfile(ptr,namestr,*filename,fdval);
+		if (strlen(template) > strlen(*filename)) {
+			if ((*filename = realloc(*filename,
+			(strlen(template)+1)*sizeof(char)))==NULL) {
+				fprintf(stderr,"minlib:  insufficient memory for "
+				"*filename\n");
+				exit(INSUFF_MEMORY_FILENAME);
+			}
+		}
+		strcpy(*filename,template);
+	} else {
+		if (strlen(namestr) > strlen(*filename)) {
+			if ((*filename = realloc(*filename,
+			(strlen(namestr)+1)*sizeof(char)))==NULL) {
+				fprintf(stderr,"minlib:  insufficient memory for "
+				"*filename specified with -f\n");
+				exit(INSUFF_MEMORY_FILENAME);
+			}
+		}
+		strcpy(*filename,namestr);
+	}
 	return 0;
 }
