@@ -47,7 +47,7 @@ int fill_db(char **ptr, char *filename)
 			sprintf(numstr,"%d",numrecs); strcpy(*(ptr+numlines),numstr);
 			strcat(*(ptr+numlines),line); ++numlines;
 			continue;
-		} else {
+		} else { /* persuade to ignore badly formatted lines */
 			new_strsep(line,token,':');
 		}
 		if ((*(ptr+numlines) = malloc((strlen(token)+1) *

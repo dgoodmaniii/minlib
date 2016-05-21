@@ -87,10 +87,26 @@ struct options **globopts)
 			get_color(line,DET_TXT_FORE_COLOR,globopts);
 		} if (strstr(line,"DET_TXT_BACK_COLOR:")) {
 			get_color(line,DET_TXT_BACK_COLOR,globopts);
+		} if (strstr(line,"DET_BACK_COLOR:")) {
+			get_color(line,DET_BACK_COLOR,globopts);
 		}
 	}
+	fill_def_colors(globopts);
 	free(newconfname);
 	free(line);
+	return 0;
+}
+
+int fill_def_colors(struct options **globopts)
+{
+	int i;
+
+	for (i = 0; i < NUM_COLORS; ++i)
+	if (!strcmp((*globopts+i)->optval,""))
+		if (((i % 2) == 1) || (i == 10))
+			get_color("DEFAULT:  COLOR_BLACK",i,globopts);
+		else
+			get_color("DEFAULT:  COLOR_WHITE",i,globopts);
 	return 0;
 }
 

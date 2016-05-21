@@ -20,7 +20,7 @@ struct options *globopts;
 
 int main(int argc, char **argv)
 {
-	globopts = malloc(10 * sizeof(struct options));
+	globopts = malloc(NUM_COLORS * sizeof(struct options));
 	assign_to_opts(TOP_FORE_COLOR);
 	assign_to_opts(TOP_BACK_COLOR);
 	assign_to_opts(BOT_FORE_COLOR);
@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 	assign_to_opts(DET_FIELD_BACK_COLOR);
 	assign_to_opts(DET_TXT_FORE_COLOR);
 	assign_to_opts(DET_TXT_BACK_COLOR);
+	assign_to_opts(DET_BACK_COLOR);
 	char **ptr; char **formlist; int *recnums;
 	int numlines = 0;
 	int numrecs = 0;
@@ -149,7 +150,7 @@ int main(int argc, char **argv)
 	free(recnums);
 	free(formstring);
 	free(filename);
-	for (i = 0; i < 10; ++i)
+	for (i = 0; i < NUM_COLORS; ++i)
 		free((globopts+i)->optval);
 	free(globopts);
 	if (!strstr(template,"XXXXXX"))

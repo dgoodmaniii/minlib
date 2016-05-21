@@ -159,7 +159,7 @@ For fields that \fBminlib\fR knows, see the section on the
 It's important to note that options given on the command
 line take precedence over conflicting options in the config
 file.
-.SS Run-Control File
+.SS Run-Control File (Config File)
 The run-control file ("rc" or "config" file) contains the
 configurable options for \fBminlib\fR to use.  Note that
 when options specified on the command line conflict with
@@ -184,10 +184,92 @@ and default viewers for digital files.  Like the input file
 we discussed above, the format is simple:  an all-caps
 string which says what option you're trying to set, and then
 the value of that option.  Whitespace on the line is
-ignored.
+ignored.  So, for example:
 .PP
+.RS
+PDF_VIEWER:  xpdf -cont
+.br
+TOP_FORE_COLOR:  COLOR_BLUE
+.br
+TOP_BACK_COLOR:  COLOR_YELLOW
+.RE
+.PP
+A \fBminlib\fR rc-file is essentially just a list of lines
+of this type.
 .BR Colors
 .PP
+\fBminlib\fR allows you to set the colors for pretty much
+everything in the program.  Normal \fIncurses\fR colors will
+be accepted by \fBminlib\fR.  These are \fBCOLOR_BLACK\fR,
+\fBCOLOR_RED\fR, \fBCOLOR_GREEN\fR, \fBCOLOR_YELLOW\fR,
+\fBCOLOR_BLUE\fR, \fBCOLOR_MAGENTA\fR, \fBCOLOR_CYAN\fR, or
+\fBCOLOR_WHITE\fR.
+.PP
+If you do not set a particular color, \fBminlib\fR will
+select a reasonable default for you.  The algorithm for this
+is simple:  foreground colors will be set to
+\fBCOLOR_WHITE\fR and background colors to
+\fBCOLOR_BLACK\fR.  Be aware that, if you set some
+foreground colors without setting the corresponding
+background colors, these defaults might make your color
+scheme illegible.
+.PP
+The colors that can be set are:
+.TP
+.BR TOP_FORE_COLOR
+The foreground color (that is, the color for the text) in
+the top bar.  This is the top bar in both menu view and
+detail view.
+.TP
+.BR TOP_BACK_COLOR
+The background color (that is, the color for the background
+of the text) in the top bar.  This is the top bar in both
+menu view and detail view.
+.TP
+.BR BOT_FORE_COLOR
+The foreground color (that is, the color for the text) in
+the bottom bar.  This is the bottom bar in both menu view and
+detail view.
+.TP
+.BR BOT_BACK_COLOR
+The background color (that is, the color for the background
+of the text) in the bottom bar.  This is the bottom bar in both
+menu view and detail view.
+.TP
+.BR MEN_FORE_COLOR
+The foreground color (that is, the color for the text) in the 
+menu; this will also be the background color of the
+currently active item on the menu.  That is, inactive items
+(items the cursor is \fInot\fR on) will have this as the
+text color; the active item (the item the cursor \fIis\fR
+on) will have this as the background color.
+.TP
+.BR MEN_BACK_COLOR
+The background color (that is, the color for the background
+of the text) in the menu; this will also be the text color
+of the currently active item on the menu.  That is, inactive
+items (items the cursor is \fInot\fR on) will have this as
+the background color; the active item (the item the cursor
+\fIis\fR on) will have this as the text color.
+.TP
+.BR DET_FIELD_FORE_COLOR
+The foreground color (that is, the color for the text) for
+the field names in detail view.
+.TP
+.BR DET_FIELD_BACK_COLOR
+The background color (that is, the color for the background
+of the text) for the field names in detail view.
+.TP
+.BR DET_TXT_FORE_COLOR
+The foreground color (that is, the color for the text) for
+the field values in detail view.
+.TP
+.BR DET_TXT_BACK_COLOR
+The background color (that is, the color for the background
+of the text) for the field values in detail view.
+.TP
+.BR DET_BACK_COLOR
+The background color for the whole window in detail view.
 .SH EXIT STATUS
 \fBminlib\fR returns 0 if successful, non-zero if it fails
 for some reason.  See the \fBERRORS\fR section for possible

@@ -41,6 +41,7 @@
 /* define length constants */
 #define MAX_ERR_LENGTH 67
 #define MAX_REGEXP_LEN 432
+#define NUM_COLORS 11
 
 /* define option identifiers */
 #define TOP_FORE_COLOR 0
@@ -53,8 +54,9 @@
 #define DET_FIELD_BACK_COLOR 7
 #define DET_TXT_FORE_COLOR 8
 #define DET_TXT_BACK_COLOR 9
-#define PDF_VIEWER 10
-#define HTML_VIEWER 11
-#define EPUB_VIEWER 12
-#define OGT_VIEWER 13
-#define OGV_VIEWER 14
+#define DET_BACK_COLOR 10
+#define PDF_VIEWER 11
+#define HTML_VIEWER 12
+#define EPUB_VIEWER 13
+#define OGT_VIEWER 14
+#define OGV_VIEWER 15
