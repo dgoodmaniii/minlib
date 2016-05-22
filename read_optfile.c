@@ -40,6 +40,8 @@ struct options **globopts)
 		fprintf(stderr,"minlib:  error opening file %s, "
 		"with the following error:\n\t%d: %s\n",newconfname,
 		errno,strerror(errno));
+		free(newconfname);
+		fill_def_colors(globopts);
 		return 1;
 	}
 	while ((read = getline(&line,&len,fp)) != -1) {

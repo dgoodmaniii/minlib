@@ -162,8 +162,8 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
 	sel_item_win = newwin(row-3,col,1,0);
 	keypad(sel_item_win,TRUE);
-	box(sel_item_win,0,0);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
+	box(sel_item_win,0,0);
 	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,j) {
 		if (k == 0) {
 			++k;
