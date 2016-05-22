@@ -35,6 +35,8 @@ int count_lines_file(char *s)
 	FILE *fp;
 	char prevchar = ' ';
 	int recsep = 0;
+	ssize_t read; size_t len = 0;
+	char *line = NULL;
 
 	if ((fp = fopen(s,"r")) == NULL) {
 		fprintf(stderr,"minlib:  error opening file %s, "
@@ -42,9 +44,12 @@ int count_lines_file(char *s)
 		strerror(errno));
 		exit(BAD_INPUT_FILE);
 	}
-	while ((c = fgetc(fp)) != EOF)
-		if (c == '\n')
+	while ((read = getline(&line,&len,fp)) != -1) {
+		if (validate_line(line)) {
 			++numlines;
+		}
+	}
+	free(line);
 	fclose(fp);
 	return numlines;
 }
@@ -188,4 +193,31 @@ int get_record_num(char **ptr, int matchedrec)
 		return recnum;
 	else
 		return -1;
+}
+
+/* returns 1 if valid, 0 if not */
+int validate_line(char *s)
+{
+	int i = 0;
+
+	chomp(s);
+	if (!strcmp(s,"%%"))
+		return 1;
+	while (isupper(s[i]) && (s[i] != '\0'))
+		++i;
+	if (i == 0)
+		return 0;
+	if (s[i] != ':')
+		return 0;
+	return 1;
+}
+
+/* returns 1 if all blank, 0 is not */
+int is_blank_line(char *s)
+{
+	chomp(s);
+	front_chomp(s);
+	if (strlen(s) == 0)
+		return 1;
+	return 0;
 }

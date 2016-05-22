@@ -23,6 +23,7 @@ int fill_db(char **ptr, char *filename)
 	int numlines = 0; int numrecs = 0;
 	char numstr[12];
 	char *token;
+	int lineno = 0;
 
 	if ((token = malloc(12 * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory for an"
@@ -36,6 +37,7 @@ int fill_db(char **ptr, char *filename)
 		exit(BAD_INPUT_FILE);
 	}
 	while ((read = getline(&line,&len,fp)) != -1) {
+		lineno++;
 		if (strstr(line,"%%")) {
 			numrecs++;
 			if ((*(ptr+numlines) = malloc((read+1+num_digs(numrecs)) * 
@@ -48,7 +50,16 @@ int fill_db(char **ptr, char *filename)
 			strcat(*(ptr+numlines),line); ++numlines;
 			continue;
 		} else { /* persuade to ignore badly formatted lines */
-			new_strsep(line,token,':');
+			if (validate_line(line)) {
+				new_strsep(line,token,':');
+			} else if (is_blank_line(line)) {
+				continue;
+			} else {
+				fprintf(stderr,"minlib:  error in input file "
+				"\"%s\" on line %d; proceeding anyway...\n",filename,lineno);
+				fprintf(stderr,"\tproblem line:  \"%s\"",line);
+				continue;
+			}
 		}
 		if ((*(ptr+numlines) = malloc((strlen(token)+1) *
 		sizeof(char))) == NULL) {
