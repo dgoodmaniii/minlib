@@ -34,6 +34,15 @@ it can find.  Very useful for combing your directory tree
 for files that you probably want in your library, but don't
 want to manually enter the information for.  Works for
 \fIpdf\fR and \fIepub\fR files.
+.PP
+.RS
+Be aware that an error on any one file while traveling the
+tree will stop \fBminlib\fR entirely; this is in keeping
+with the "when you must fail, fail as soon and as noisily
+as possible" principle.  You may have to move the
+troublesome file from the tree if you can't resolve the
+issue.
+.RE
 .TP
 .BR "\-f \fIfilename\fR"
 Use \fIfilename\fR as the source of library records.  You
@@ -340,6 +349,26 @@ nothing to do and quites.
 \fBminlib\fR uses temporary files to process multiple input
 files.  However, it's been unable to construct such a
 temporary file.  Check your permissions to resolve this.
+.TP
+.BR 13
+You've asked \fBminlib\fR to print the metadata of a file
+with the "\fB\-a\fR" option; however, it's having some
+trouble getting information about that file.  The
+specific error message printed will tell you more.
+.TP
+.BR 14
+You've asked \fBminlib\fR to print the metadata of a file
+with the "\fB\-a\fR" option; however, it's having some
+trouble opening that file.  Probably a permissions issue;
+the specific error message printed will tell you more.
+.TP
+.BR 15
+You've asked \fBminlib\fR to print the metadata from a pdf
+file; but pdf files are notoriously difficult to parse, and
+\fBminlib\fR has to perform some dark tricks to make it
+work.  One of these involves reading a file in a decidedly
+non-Unixy way, and requires the size of the file to do so.
+\fBminlib\fR can't find the size; better skip it.
 .SH BUGS
 None known at this time.
 .SH AUTHOR

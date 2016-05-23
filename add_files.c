@@ -46,7 +46,7 @@ int add_file(char *s)
 	return 0;
 }
 
-int dummy(const char *fpath, const struct stat *sb,
+int descend(const char *fpath, const struct stat *sb,
 	int tflag, struct FTW *ftwbuf)
 {
 	char *s;
@@ -66,7 +66,7 @@ int dummy(const char *fpath, const struct stat *sb,
 /* the following calls add_file for each file it sees */
 int add_dir(char *s)
 {
-	if (nftw(s,dummy,20,0) != 0);
+	if (nftw(s,descend,20,0) != 0);
 	return 0;
 }
 
