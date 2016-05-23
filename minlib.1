@@ -21,6 +21,19 @@ filtering, searching, and more.
 Print version and licensing information, then exit
 successfully.
 .TP
+.BR "\-a \fIfile/directory\fR"
+Asks \fBminlib\fR to explore some files and output their
+metadata in a form suitable for inclusion in a \fBminlib\fR
+database.  This will be outputted to stdout, so you can
+redirect it to a file as you will.  If you give
+\fIfilename\fR as an argument, \fBminlib\fR will output only
+the metadata for that file; if you give \fIdirectory\fR as
+an argument, \fBminlib\fR will descend recursively through
+that directory, outputting metadata for every suitable file
+it can find.  Very useful for combing your directory tree
+for files that you probably want in your library, but don't
+want to manually enter the information for.
+.TP
 .BR "\-f \fIfilename\fR"
 Use \fIfilename\fR as the source of library records.  You
 can supply a comma-separated list of source files in this

@@ -45,6 +45,7 @@ int main(int argc, char **argv)
 	int fdval = 0; /* whether we've done a command-line file */
 	int fsval = 0; /* whether we've done a command-line format */
 	int didconfigfile = 1;
+	int add_succ;
 
 	opterr = 0;
 	if ((filename = malloc((strlen(deffile)+1)*sizeof(char)))==NULL) {
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_FILENAME);
 	}
 	strcpy(filename,deffile);
-	while ((c = getopt(argc,argv,"Vf:r:c:")) != -1) {
+	while ((c = getopt(argc,argv,"Vf:r:c:a:")) != -1) {
 		switch (c) {
 		case 'V':
 			printf("minlib v0.9\n");
@@ -63,6 +64,10 @@ int main(int argc, char **argv)
 			printf("This is free software:  you are free "
 			"to change and redistribute it.  There is NO "
 			"WARRANTY, to the extent permitted by law.\n");
+			exit(ALLGOOD);
+			break;
+		case 'a':
+			add_succ = add_files(optarg);
 			exit(ALLGOOD);
 			break;
 		case 'r':
@@ -85,7 +90,8 @@ int main(int argc, char **argv)
 			didconfigfile=read_optfile(&filename,&formstring,optarg,&globopts);
 			break;
 		case '?':
-			if ((optopt == 'f') || (optopt == 'r') || (optopt == 'c')) {
+			if ((optopt == 'f') || (optopt == 'r') || (optopt == 'c')
+			|| (optopt == 'a')) {
 				fprintf(stderr,"minlib:  option \"%c\" requires "
 				"an argument\n",optopt);
 				exit(NEED_ARGUMENT_ARG);

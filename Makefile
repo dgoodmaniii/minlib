@@ -12,7 +12,7 @@ SHELL=/bin/sh
 CC=gcc
 CFLAGS=-I -Wall -g
 OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
-	gui.o full_search.o
+	gui.o full_search.o add_files.o
 SRCDIR=./
 CURSLIB=-lform -lmenu -lncurses
 prefix=/usr/local
@@ -47,6 +47,9 @@ readfile.o : readfile.c errcodes.h utility.c
 
 read_optfile.o : read_optfile.c errcodes.h utility.c options.h
 	$(CC) $(CFLAGS) -c read_optfile.c utility.c
+
+add_files.o : add_files.c utility.c
+	$(CC) $(CFLAGS) -c add_files.c utility.c
 
 utility.o : utility.c errcodes.h
 	$(CC) $(CFLAGS) -c utility.c

@@ -37,9 +37,17 @@
 #define NO_DATA_FILE 11
 /* can't open temp file */
 #define NO_TEMP_FILE 12
+/* something indescribable is wrong with added file */
+#define BAD_ADDED_FILE 13
+/* can't open the added file */
+#define ERROR_OPEN_ADDFILE 14
+/* can't determine added file's size */
+#define ERROR_SIZE_ADDFILE 15
 
 /* define length constants */
 #define MAX_ERR_LENGTH 67
+#define MAX_TITLE_LEN 257
+#define MAX_FIELD_LEN 16
 #define MAX_REGEXP_LEN 432
 #define NUM_COLORS 11
 
