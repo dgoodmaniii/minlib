@@ -15,6 +15,18 @@
 #include<errno.h>
 #include"errcodes.h"
 
+#define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+#define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
+#define BYTETOBINARY(byte) \
+	(byte & 0x80 ? 1 : 0), \
+	(byte & 0x40 ? 1 : 0), \
+	(byte & 0x20 ? 1 : 0), \
+	(byte & 0x10 ? 1 : 0), \
+	(byte & 0x08 ? 1 : 0), \
+	(byte & 0x04 ? 1 : 0), \
+	(byte & 0x02 ? 1 : 0), \
+	(byte & 0x01 ? 1 : 0)
+
 /* number of digits in integer */
 int num_digs(int num)
 {
@@ -127,9 +139,9 @@ int new_strcat(char *s, char *t, int num)
 	for (j = 0; *(s+j) != '\0'; ++j);
 	for (i = 0; (*(t+i) != '\0') && (i < num); ++i, ++j) {
 		*(s+j) = *(t+i);
-		if ((*(t+i) & 0xC0) == 0x80) {
+		if (CHECK_BIT(*(t+i),7) && !CHECK_BIT(*(t+i),6)) {
 			++num;
-			fprintf(stderr,"|%d|",*(t+i));
+			fprintf(stderr,"BYTE: "BYTETOBINARYPATTERN"\n",BYTETOBINARY(*(t+i)));
 		}
 	}
 	for (i = i; i < num; ++i, ++j)
@@ -226,3 +238,4 @@ int is_blank_line(char *s)
 		return 1;
 	return 0;
 }
+

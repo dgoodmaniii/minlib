@@ -141,8 +141,8 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_TRACK);
 	}
 	populate_recnums(recnums,numrecs+1);
-	for (i = 0; i < numrecs; ++i) {
-		*(formlist+i) = malloc(81 * sizeof(char));
+	for (i = 0; i < numrecs; ++i) { /* FIXME size of malloc */
+		*(formlist+i) = malloc(330 * sizeof(char));
 		*(*(formlist+i+0)) = '\0';
 	}
 	format_recs(ptr,formstring,formlist,numrecs,recnums);
