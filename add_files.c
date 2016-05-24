@@ -144,62 +144,71 @@ int epub_metadata(char *s)
 int pdf_metadata(char *s)
 {
 	int i, j, c;
-	int curr_byte = 0;
-	int ind = 0; int oind = 0;
-	FILE *fp;
+	char *line = NULL;
+	ssize_t read; size_t len = 0;
+	FILE *p;
+	char *ptr;
+	char *t;
 	char fhead[MAX_FIELD_LEN+1];
 	char text[MAX_TITLE_LEN+1];
 	char actpath[MAX_TITLE_LEN+1];
-	struct stat st;
-	off_t file_size;
+	int ind, oind;
 
-	if ((fp = fopen(s,"r")) == NULL) {
+	if ((t = malloc((strlen(s) + 16) * sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory to store "
+		"command necessary to extra pdf metadata\n");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
+	*t = '\0';
+	printf("%%%%\n");
+	strcat(t,"pdfinfo -meta "); strcat(t,s);
+	if ((p = popen(t,"r")) == NULL) {
 		fprintf(stderr,"minlib:  error opening file \"%s\" "
 		"with error code %d:\n\t%s\n",s,errno,strerror(errno));
 		exit(ERROR_OPEN_ADDFILE);
 	}
-	if ((fstat(fileno(fp),&st) != 0)) {
-		fprintf(stderr,"minlib:  cannot determine size of file "
-		"%s\n",s);
-		exit(ERROR_SIZE_ADDFILE);
-	}
-	file_size = st.st_size;
-	printf("%%%%\n");
-	while (curr_byte < file_size) {
-		++curr_byte;
-		c = fgetc(fp);
-		if (c == '/') {
-			while(isalpha(c = fgetc(fp)) && (ind < MAX_FIELD_LEN))
-				fhead[ind++] = c;
-			fhead[ind] = '\0';
+	fhead[0] = '\0'; text[0] = '\0';
+	while ((read = getline(&line,&len,p)) != -1) {
+		if (strstr(line,"Title:"))
+			strcpy(fhead,"TITLE");
+		if (strstr(line,"Author:"))
+			strcpy(fhead,"AUTHOR");
+		if (strstr(line,"Subject:"))
+			strcpy(fhead,"SUBJECT");
+		if (strstr(line,"Keywords:"))
+			strcpy(fhead,"KEYWORDS");
+		if (strstr(line,"Producer:"))
+			strcpy(fhead,"PRODUCER");
+		if (strstr(line,"CreationDate:"))
+			strcpy(fhead,"CREATIONDATE");
+		if (strstr(line,"ModDate:"))
+			strcpy(fhead,"MODDATE");
+		if (strstr(line,"Tagged:"))
+			strcpy(fhead,"TAGGED");
+		if (strstr(line,"Encrypted:"))
+			strcpy(fhead,"ENCRYPTED");
+		if (strstr(line,"Page size:"))
+			strcpy(fhead,"PAGESIZE");
+		if (strstr(line,"Page rot:"))
+			strcpy(fhead,"PAGEROT");
+		if (strstr(line,"PDF version:"))
+			strcpy(fhead,"PDFVERSION");
+		if (strstr(line,"Creator:"))
+			strcpy(fhead,"CREATOR");
+		if (fhead[0] != '\0') {
+			ptr = (strstr(line,":")); ++ptr;
+			while(isspace(*(ptr))) ++ptr;
 			ind = 0;
-			if (!strcmp(fhead,"Title") || !strcmp(fhead,"Author") || 
-			!strcmp(fhead,"Subject") || !strcmp(fhead,"Keywords") ||
-			!strcmp(fhead,"Producer")) {
-				if (c != '(') {
-					while (((c = fgetc(fp)) != '(') && (c != '\n'));
-				}
-				if (c != '(')
-					break;
-				while (oind < MAX_TITLE_LEN) {
-					if ((c = fgetc(fp)) == '\\') {
-						text[oind++] = fgetc(fp);
-					} else if (c == ')') {
-						break;
-					} else {
-						text[oind++] = c;
-					}
-				}
-				text[oind] = '\0';
-				for (j = 0; fhead[j] != '\0'; ++j)
-					printf("%c",toupper(fhead[j]));
-				printf(":\t%s\n",text);
-				ind = 0; oind = 0;
-				fhead[0] = '\0'; text[0] = '\0';
-			}
+			for (i = 0; ptr[i] != '\n' && ptr[i] != '\0' 
+			&& ind < MAX_TITLE_LEN; ++i)
+				text[ind++] = ptr[i];
+			text[ind] = '\0';
+			printf("%s:\t%s\n",fhead,text);
+			fhead[0] = '\0'; text[0] = '\0';
 		}
 	}
 	printf("PATH:\t%s\n",realpath(s,actpath));
-	fclose(fp);
+	free(line);
+	pclose(p);
 	return 0;
 }

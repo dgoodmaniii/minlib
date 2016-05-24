@@ -25,7 +25,7 @@ int fill_db(char **ptr, char *filename)
 	char *token;
 	int lineno = 0;
 
-	if ((token = malloc(12 * sizeof(char))) == NULL) {
+	if ((token = malloc(24 * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory for an"
 		"internal function\n");
 		exit(INSUFF_INTERNAL_MEMORY);
