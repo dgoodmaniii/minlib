@@ -39,6 +39,7 @@ int add_files(char *dirname)
 
 int add_file(char *s)
 {
+	fprintf(stderr,"Currently adding %s...\n",s);
 	if (strstr(s,".pdf"))
 		pdf_metadata(s);
 	if (strstr(s,".epub"))
@@ -175,8 +176,11 @@ int pdf_metadata(char *s)
 			if (!strcmp(fhead,"Title") || !strcmp(fhead,"Author") || 
 			!strcmp(fhead,"Subject") || !strcmp(fhead,"Keywords") ||
 			!strcmp(fhead,"Producer")) {
+				if (c != '(') {
+					while (((c = fgetc(fp)) != '(') && (c != '\n'));
+				}
 				if (c != '(')
-					while ((c = fgetc(fp)) != '(');
+					break;
 				while (oind < MAX_TITLE_LEN) {
 					if ((c = fgetc(fp)) == '\\') {
 						text[oind++] = fgetc(fp);
