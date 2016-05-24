@@ -14,7 +14,7 @@ CFLAGS=-I -Wall -g
 OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
 	gui.o full_search.o add_files.o
 SRCDIR=./
-CURSLIB=-lform -lmenu -lncurses
+CURSLIB=-lform -lmenuw -lncursesw
 prefix=/usr/local
 exec_prefix=$(prefix)
 bindir=$(prefix)/bin

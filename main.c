@@ -13,6 +13,8 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include<locale.h>
+#include<langinfo.h>
 #include"errcodes.h"
 #include"options.h"
 
@@ -20,6 +22,8 @@ struct options *globopts;
 
 int main(int argc, char **argv)
 {
+	char *locale;
+	locale = setlocale(LC_ALL,"");
 	globopts = malloc(NUM_COLORS * sizeof(struct options));
 	assign_to_opts(TOP_FORE_COLOR);
 	assign_to_opts(TOP_BACK_COLOR);

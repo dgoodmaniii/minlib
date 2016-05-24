@@ -125,8 +125,13 @@ int new_strcat(char *s, char *t, int num)
 	int i, j;
 
 	for (j = 0; *(s+j) != '\0'; ++j);
-	for (i = 0; (*(t+i) != '\0') && (i < num); ++i, ++j)
+	for (i = 0; (*(t+i) != '\0') && (i < num); ++i, ++j) {
 		*(s+j) = *(t+i);
+		if ((*(t+i) & 0xC0) == 0x80) {
+			++num;
+			fprintf(stderr,"|%d|",*(t+i));
+		}
+	}
 	for (i = i; i < num; ++i, ++j)
 		*(s+j) = ' ';
 	*(s+j) = '\0';
