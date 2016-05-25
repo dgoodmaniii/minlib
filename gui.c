@@ -240,23 +240,25 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			j += (wrapped + 1);
 			k = 0;
 		}
-		lines_rec = j - 2;
-		prefresh(sel_item_win,3,1,3,2,row-4,col-1);
+		lines_rec = j - row + 4;
+		prefresh(sel_item_win,1,1,1,2,row-4,col-1);
 	}
-	i = 0;
+	i = 1;
 	while ((d = wgetch(sel_item_win)) != 'q') {
 		switch(d) {
 		case KEY_DOWN: case 'j':
-			--i;
+			if (i < lines_rec)
+				++i;
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
-			prefresh(sel_item_win,3+i,1,3,2,row-4,col-1);
+			prefresh(sel_item_win,i,1,1,2,row-4,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
 		case KEY_UP: case 'k':
-			++i;
+			if (i > 1)
+				--i;
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
-			prefresh(sel_item_win,3+i,1,3,2,row-4,col-1);
+			prefresh(sel_item_win,i,1,1,2,row-4,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
@@ -464,7 +466,7 @@ int wrap_print(WINDOW *win,char *s, int cols, int row)
 	char *ptr;
 
 	len = strlen(s);
-	left = cols - 12 - 1;
+	left = cols - 12 - 2;
 	if (len < left) {
 		mvwprintw(win,row,12,"%s",s);
 		return 0;
