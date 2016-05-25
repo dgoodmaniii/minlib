@@ -212,16 +212,18 @@ int open_app(char **ptr,int sel_rec,struct options *globopts,int *recnums)
 int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 {
 	WINDOW *sel_item_win;
+	WINDOW *detail_win;
+	WINDOW *detail_pad;
 	int i; int j;
 	int k = 0; /* track whether it's a field title or not */
 	int d;
 	int wrapped = 0;
+	int lines_rec;
 
+	werase(stdscr);
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
-	sel_item_win = newwin(row-3,col,1,0);
-	scrollok(sel_item_win,TRUE);
-	wsetscrreg(sel_item_win,2,row-3);
+	sel_item_win = newpad((2*row),col);
 	keypad(sel_item_win,TRUE);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
 	box(sel_item_win,0,0);
@@ -238,17 +240,23 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			j += (wrapped + 1);
 			k = 0;
 		}
-		wrefresh(sel_item_win);
+		lines_rec = j - 2;
+		prefresh(sel_item_win,3,1,3,2,row-4,col-1);
 	}
+	i = 0;
 	while ((d = wgetch(sel_item_win)) != 'q') {
 		switch(d) {
 		case KEY_DOWN: case 'j':
-			wscrl(sel_item_win,1);
+			--i;
+			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
+			prefresh(sel_item_win,3+i,1,3,2,row-4,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
 		case KEY_UP: case 'k':
-			wscrl(sel_item_win,-1);
+			++i;
+			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
+			prefresh(sel_item_win,3+i,1,3,2,row-4,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
