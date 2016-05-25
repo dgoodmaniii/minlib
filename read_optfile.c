@@ -42,6 +42,7 @@ struct options **globopts)
 		errno,strerror(errno));
 		free(newconfname);
 		fill_def_colors(globopts);
+		fill_def_apps(globopts);
 		return 1;
 	}
 	while ((read = getline(&line,&len,fp)) != -1) {
@@ -91,12 +92,60 @@ struct options **globopts)
 			get_color(line,DET_TXT_BACK_COLOR,globopts);
 		} if (strstr(line,"DET_BACK_COLOR:")) {
 			get_color(line,DET_BACK_COLOR,globopts);
+		} if (strstr(line,"DEF_PDF_VIEWER:")) {
+			get_app(line,PDF_VIEWER,globopts);
+		} if (strstr(line,"DEF_HTML_VIEWER:")) {
+			get_app(line,HTML_VIEWER,globopts);
+		} if (strstr(line,"DEF_EPUB_VIEWER:")) {
+			get_app(line,EPUB_VIEWER,globopts);
+		} if (strstr(line,"DEF_OGT_VIEWER:")) {
+			get_app(line,OGT_VIEWER,globopts);
+		} if (strstr(line,"DEF_OGV_VIEWER:")) {
+			get_app(line,OGV_VIEWER,globopts);
 		}
 	}
 	fill_def_colors(globopts);
+	fill_def_apps(globopts);
 	free(newconfname);
 	free(line);
 	return 0;
+}
+
+int fill_def_apps(struct options **globopts)
+{
+	int i = NUM_COLORS;
+
+	if (!strcmp((*globopts+NUM_COLORS)->optval,""))
+		get_app("DEFAULT:  xpdf ",NUM_COLORS,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+1))->optval,""))
+		get_app("DEFAULT:  w3m ",NUM_COLORS+1,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+2))->optval,""))
+		get_app("DEFAULT:  fbreader ",NUM_COLORS+2,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+3))->optval,""))
+		get_app("DEFAULT:  vlc ",NUM_COLORS+3,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+4))->optval,""))
+		get_app("DEFAULT:  ogg123 ",NUM_COLORS+4,globopts);
+	for (i = NUM_COLORS; i < (NUM_COLORS + NUM_APPS); ++i)
+		fprintf(stderr,"APP: %s\n",(*globopts+i)->optval);
+	return 0;
+}
+
+int get_app(char *s, int ind,struct options **globopts)
+{
+	char *ptr;
+	int optlen;
+
+	ptr = strchr(s,':'); ++ptr;
+	while (isspace(*ptr)) ++ptr;
+	optlen = strlen(ptr);
+	if (((*globopts+ind)->optval = malloc((optlen+1) *
+	sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory "
+		"to store requested custom color name\n");
+	} else {
+		strcpy((*globopts+ind)->optval,ptr);
+		chomp((*globopts+ind)->optval);
+	}
 }
 
 int fill_def_colors(struct options **globopts)
@@ -104,11 +153,11 @@ int fill_def_colors(struct options **globopts)
 	int i;
 
 	for (i = 0; i < NUM_COLORS; ++i)
-	if (!strcmp((*globopts+i)->optval,""))
-		if (((i % 2) == 1) || (i == 10))
-			get_color("DEFAULT:  COLOR_BLACK",i,globopts);
-		else
-			get_color("DEFAULT:  COLOR_WHITE",i,globopts);
+		if (!strcmp((*globopts+i)->optval,""))
+			if (((i % 2) == 1) || (i == 10))
+				get_color("DEFAULT:  COLOR_BLACK",i,globopts);
+			else
+				get_color("DEFAULT:  COLOR_WHITE",i,globopts);
 	return 0;
 }
 

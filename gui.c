@@ -128,6 +128,9 @@ struct options *globopts)
 				set_search_line(row, col, regexperror, matchnum);
 			}
 			break;
+		case 'o':
+			open_app(ptr,item_index(current_item(lib_menu)),globopts,recnums);
+			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
 			unpost_menu(lib_menu);
@@ -150,6 +153,62 @@ struct options *globopts)
 	return 0;
 }
 
+int execute(int c, char **ptr, int sel_rec, struct options *globopts,
+		int *recnums)
+{
+	char *t;
+	int num;
+	int i;
+	char *path = NULL;
+
+	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
+	for (i=i+1; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i) {
+		if (!strcmp(*(ptr+i),"PATH")) {
+			if (strstr(*(ptr+(i+1)),".pdf")) {
+				path = *(ptr+(i+1));
+			}
+		}
+	}
+	if (path == NULL) {
+		fprintf(stderr,"minlib:  No pdf file for this record\n");
+		return 1;
+	}
+	if (c == 'p')
+		num = PDF_VIEWER;
+	else if (c == 'h')
+		num = HTML_VIEWER;
+	else if (c == 'e')
+		num = EPUB_VIEWER;
+	else if (c == 't')
+		num = OGT_VIEWER;
+	else if (c == 'v')
+		num = OGV_VIEWER;
+	if ((t = malloc((strlen((globopts+num)->optval)
+	+ strlen(path) + 4) * sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory to "
+		"store the command line for opening this file\n");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
+	t[0] = '\0';
+	strcat(t,(globopts+num)->optval); strcat(t," ");
+	strcat(t,path);
+	fprintf(stderr,"PATH:  |%s|\n",t);
+	free(t);
+	return 0;
+}
+
+int open_app(char **ptr,int sel_rec,struct options *globopts,int *recnums)
+{
+	int c;
+
+	c = getch();
+	if (c == 'q')
+		return 0;
+	else
+		execute(c,ptr,sel_rec,globopts,recnums);
+	return 0;
+}
+
 int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 {
 	WINDOW *sel_item_win;
@@ -161,6 +220,8 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
 	sel_item_win = newwin(row-3,col,1,0);
+	scrollok(sel_item_win,TRUE);
+	wsetscrreg(sel_item_win,2,row-3);
 	keypad(sel_item_win,TRUE);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
 	box(sel_item_win,0,0);
@@ -179,7 +240,20 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 		}
 		wrefresh(sel_item_win);
 	}
-	while ((d = wgetch(sel_item_win)) != 'q');
+	while ((d = wgetch(sel_item_win)) != 'q') {
+		switch(d) {
+		case KEY_DOWN: case 'j':
+			wscrl(sel_item_win,1);
+			wrefresh(sel_item_win);
+			refresh();
+			break;
+		case KEY_UP: case 'k':
+			wscrl(sel_item_win,-1);
+			wrefresh(sel_item_win);
+			refresh();
+			break;
+		}
+	}
 	werase(sel_item_win);
 	wrefresh(sel_item_win);
 	delwin(sel_item_win);

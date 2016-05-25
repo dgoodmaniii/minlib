@@ -50,6 +50,7 @@
 #define MAX_FIELD_LEN 16
 #define MAX_REGEXP_LEN 432
 #define NUM_COLORS 11
+#define NUM_APPS 5
 
 /* define option identifiers */
 #define TOP_FORE_COLOR 0
