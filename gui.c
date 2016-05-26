@@ -161,32 +161,38 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	int num;
 	int i;
 	char *path = NULL;
+	char filetype[8] = "";
 
+	if (c == 'p') {
+		num = PDF_VIEWER;
+		strcpy(filetype,".pdf");
+	} else if (c == 'h') {
+		num = HTML_VIEWER;
+		strcpy(filetype,".html");
+	} else if (c == 'e') {
+		num = EPUB_VIEWER;
+		strcpy(filetype,".epub");
+	} else if (c == 't') {
+		num = OGT_VIEWER;
+		strcpy(filetype,".ogt");
+	} else if (c == 'v') {
+		num = OGV_VIEWER;
+		strcpy(filetype,".ogv");
+	} else {
+		return 1;
+	}
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
 	for (i=i+1; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i) {
 		if (!strcmp(*(ptr+i),"PATH")) {
-			if (strstr(*(ptr+(i+1)),".pdf")) {
+			if (strstr(*(ptr+(i+1)),filetype)) {
 				path = *(ptr+(i+1));
 			}
 		}
 	}
 	if (path == NULL) {
-		fprintf(stderr,"minlib:  No pdf file for this record\n");
+		print_bottom_message(filetype);
 		return 1;
 	}
-	if (c == 'p')
-		num = PDF_VIEWER;
-	else if (c == 'h')
-		num = HTML_VIEWER;
-	else if (c == 'e')
-		num = EPUB_VIEWER;
-	else if (c == 't')
-		num = OGT_VIEWER;
-	else if (c == 'v')
-		num = OGV_VIEWER;
-	else
-		return 1;
-	fprintf(stderr,"PATH: %d\n",strlen((globopts+num)->optval));
 	if ((t = malloc((strlen((globopts+num)->optval)
 	+ strlen(path) + 6) * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory to "
@@ -271,7 +277,7 @@ int col,struct options *globopts)
 			refresh();
 			break;
 		case 'o':
-			open_app(ptr,*(recnums+sel_rec)+1,globopts,recnums);
+			open_app(ptr,sel_rec,globopts,recnums);
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 		}
 	}
@@ -439,6 +445,15 @@ int print_top_line(WINDOW *win, int row, int col, int numrecs)
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(1));
 	free(heading);
+	return 0;
+}
+
+int print_bottom_message(char *s)
+{
+	int row, col;
+
+	getmaxyx(stdscr,row,col);
+	mvprintw(row-1,0,"Error:  no %s-type file found",s);
 	return 0;
 }
 
