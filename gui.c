@@ -29,7 +29,6 @@ struct options *globopts)
 	ITEM *cur_item;
 	MENU *lib_menu;
 	WINDOW *lib_menu_win;
-	WINDOW *sel_item_win;
 	int row, col;
 	char buf[12] = "";
 	char pattern[MAX_REGEXP_LEN+1];
@@ -226,7 +225,6 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 	sel_item_win = newpad((2*row),col);
 	keypad(sel_item_win,TRUE);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
-	box(sel_item_win,0,0);
 	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,j) {
 		if (k == 0) {
 			++k;
@@ -241,16 +239,16 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			k = 0;
 		}
 		lines_rec = j - row + 4;
-		prefresh(sel_item_win,1,1,1,2,row-4,col-1);
+		prefresh(sel_item_win,0,0,1,0,row-3,col-1);
 	}
-	i = 1;
+	i = 0;
 	while ((d = wgetch(sel_item_win)) != 'q') {
 		switch(d) {
 		case KEY_DOWN: case 'j':
 			if (i < lines_rec)
 				++i;
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
-			prefresh(sel_item_win,i,1,1,2,row-4,col-1);
+			prefresh(sel_item_win,i,0,1,0,row-3,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
@@ -258,7 +256,7 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			if (i > 1)
 				--i;
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
-			prefresh(sel_item_win,i,1,1,2,row-4,col-1);
+			prefresh(sel_item_win,i,0,1,0,row-3,col-1);
 			wrefresh(sel_item_win);
 			refresh();
 			break;
@@ -273,10 +271,12 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 int clean_bottom_line(int row, int col)
 {
 	int i;
+	attron(COLOR_PAIR(84));
 	for (i = 0; i < col; ++i) {
 		mvprintw(row-1,i," ");
 		refresh();
 	}
+	attroff(COLOR_PAIR(84));
 	return 0;
 }
 
@@ -500,6 +500,7 @@ int initialize_colors(struct options *globopts)
 		get_col_int((globopts+DET_TXT_BACK_COLOR)->optval));
 	init_pair(6,get_col_int((globopts+DET_BACK_COLOR)->optval),
 		get_col_int((globopts+DET_BACK_COLOR)->optval));
+	init_pair(84,COLOR_WHITE,COLOR_BLACK);
 	return 0;
 }
 
