@@ -135,7 +135,7 @@ struct options *globopts)
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
 			unpost_menu(lib_menu);
-			display_details(ptr,recnums,sel_rec,row,col);
+			display_details(ptr,recnums,sel_rec,row,col,globopts);
 			frame_main_screen(numrecs, row, col);
 			post_menu(lib_menu);
 			wrefresh(lib_menu_win);
@@ -186,6 +186,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		num = OGV_VIEWER;
 	else
 		return 1;
+	fprintf(stderr,"PATH: %d\n",strlen((globopts+num)->optval));
 	if ((t = malloc((strlen((globopts+num)->optval)
 	+ strlen(path) + 6) * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory to "
@@ -216,7 +217,8 @@ int open_app(char **ptr,int sel_rec,struct options *globopts,int *recnums)
 	return 0;
 }
 
-int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
+int display_details(char **ptr,int *recnums,int sel_rec,int row,
+int col,struct options *globopts)
 {
 	WINDOW *sel_item_win;
 	WINDOW *detail_win;
@@ -268,6 +270,9 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 			wrefresh(sel_item_win);
 			refresh();
 			break;
+		case 'o':
+			open_app(ptr,*(recnums+sel_rec)+1,globopts,recnums);
+			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 		}
 	}
 	werase(sel_item_win);
