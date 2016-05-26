@@ -152,12 +152,32 @@ int fill_def_colors(struct options **globopts)
 {
 	int i;
 
-	for (i = 0; i < NUM_COLORS; ++i)
-		if (!strcmp((*globopts+i)->optval,""))
-			if (((i % 2) == 1) || (i == 10))
-				get_color("DEFAULT:  COLOR_BLACK",i,globopts);
-			else
-				get_color("DEFAULT:  COLOR_WHITE",i,globopts);
+	for (i = 0; i < NUM_COLORS; ++i) {
+		if (!strcmp((*globopts+i)->optval,"")) {
+			if (i == TOP_FORE_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",TOP_FORE_COLOR,globopts);
+			if (i == TOP_BACK_COLOR)
+				get_color("DEFAULT: COLOR_WHITE",TOP_BACK_COLOR,globopts);
+			if (i == BOT_FORE_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",BOT_FORE_COLOR,globopts);
+			if (i == BOT_BACK_COLOR)
+				get_color("DEFAULT: COLOR_WHITE",BOT_BACK_COLOR,globopts);
+			if (i == MEN_FORE_COLOR)
+				get_color("DEFAULT: COLOR_WHITE",MEN_FORE_COLOR,globopts);
+			if (i == MEN_BACK_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",MEN_BACK_COLOR,globopts);
+			if (i == DET_FIELD_FORE_COLOR)
+				get_color("DEFAULT: COLOR_WHITE",DET_FIELD_FORE_COLOR,globopts);
+			if (i == DET_FIELD_BACK_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",DET_FIELD_BACK_COLOR,globopts);
+			if (i == DET_TXT_FORE_COLOR)
+				get_color("DEFAULT: COLOR_WHITE",DET_TXT_FORE_COLOR,globopts);
+			if (i == DET_TXT_BACK_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",DET_TXT_BACK_COLOR,globopts);
+			if (i == DET_BACK_COLOR)
+				get_color("DEFAULT: COLOR_BLACK",DET_BACK_COLOR,globopts);
+		}
+	}
 	return 0;
 }
 

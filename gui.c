@@ -373,7 +373,9 @@ int frame_detail_screen(int row, int col, int recordnum)
 int frame_main_screen(int numrecs, int row, int col)
 {
 	print_top_line(stdscr, row, col, numrecs);
+	refresh();
 	print_bot_line(stdscr, row, col);
+	refresh();
 	return 0;
 }
 
@@ -511,8 +513,8 @@ int initialize_colors(struct options *globopts)
 		get_col_int((globopts+TOP_FORE_COLOR)->optval));
 	init_pair(2,get_col_int((globopts+BOT_BACK_COLOR)->optval),
 		get_col_int((globopts+BOT_FORE_COLOR)->optval));
-	init_pair(3,get_col_int((globopts+MEN_BACK_COLOR)->optval),
-		get_col_int((globopts+MEN_FORE_COLOR)->optval));
+	init_pair(3,get_col_int((globopts+MEN_FORE_COLOR)->optval),
+		get_col_int((globopts+MEN_BACK_COLOR)->optval));
 	init_pair(4,get_col_int((globopts+DET_FIELD_FORE_COLOR)->optval),
 		get_col_int((globopts+DET_FIELD_BACK_COLOR)->optval));
 	init_pair(5,get_col_int((globopts+DET_TXT_FORE_COLOR)->optval),
