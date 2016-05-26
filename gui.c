@@ -129,6 +129,8 @@ struct options *globopts)
 			break;
 		case 'o':
 			open_app(ptr,item_index(current_item(lib_menu)),globopts,recnums);
+			frame_main_screen(numrecs, row, col);
+			refresh();
 			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
@@ -182,16 +184,18 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		num = OGT_VIEWER;
 	else if (c == 'v')
 		num = OGV_VIEWER;
+	else
+		return 1;
 	if ((t = malloc((strlen((globopts+num)->optval)
-	+ strlen(path) + 4) * sizeof(char))) == NULL) {
+	+ strlen(path) + 6) * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory to "
 		"store the command line for opening this file\n");
 		exit(INSUFF_INTERNAL_MEMORY);
 	}
 	t[0] = '\0';
-	strcat(t,(globopts+num)->optval); strcat(t," ");
-	strcat(t,path);
-	fprintf(stderr,"PATH:  |%s|\n",t);
+	sprintf(t,(globopts+num)->optval,path);
+	strcat(t," &");
+	system(t);
 	free(t);
 	return 0;
 }
@@ -199,7 +203,11 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 int open_app(char **ptr,int sel_rec,struct options *globopts,int *recnums)
 {
 	int c;
+	int row, col;
 
+	getmaxyx(stdscr,row,col);
+	highlight_line(stdscr,row-2,col);
+	set_comm_open(row, col);
 	c = getch();
 	if (c == 'q')
 		return 0;
@@ -271,12 +279,10 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,int col)
 int clean_bottom_line(int row, int col)
 {
 	int i;
-	attron(COLOR_PAIR(84));
 	for (i = 0; i < col; ++i) {
 		mvprintw(row-1,i," ");
 		refresh();
 	}
-	attroff(COLOR_PAIR(84));
 	return 0;
 }
 
@@ -298,6 +304,19 @@ int set_search_line(int row, int col, char *s, int matchnum)
 		mvwprintw(stdscr,row-1,0,"error:  %s",s);
 		attroff(A_BOLD);
 	}
+	refresh();
+	return 0;
+}
+
+int set_comm_open(int row, int col)
+{
+	attron(A_REVERSE | A_BOLD);
+	attron(COLOR_PAIR(2));
+	clean_bottom_line(row-1,col); refresh();
+	mvwprintw(stdscr,row-2,0,"OPEN:  ");
+	mvwprintw(stdscr,row-2,6,"p:pdf  e:epub  h:html  t:theora  v:vorbis");
+	attroff(COLOR_PAIR(2));
+	attroff(A_REVERSE | A_BOLD);
 	refresh();
 	return 0;
 }
@@ -488,19 +507,18 @@ int wrap_print(WINDOW *win,char *s, int cols, int row)
 int initialize_colors(struct options *globopts)
 {
 	start_color();
-	init_pair(1,get_col_int((globopts+TOP_FORE_COLOR)->optval),
-		get_col_int((globopts+TOP_BACK_COLOR)->optval));
-	init_pair(2,get_col_int((globopts+BOT_FORE_COLOR)->optval),
-		get_col_int((globopts+BOT_BACK_COLOR)->optval));
-	init_pair(3,get_col_int((globopts+MEN_FORE_COLOR)->optval),
-		get_col_int((globopts+MEN_BACK_COLOR)->optval));
+	init_pair(1,get_col_int((globopts+TOP_BACK_COLOR)->optval),
+		get_col_int((globopts+TOP_FORE_COLOR)->optval));
+	init_pair(2,get_col_int((globopts+BOT_BACK_COLOR)->optval),
+		get_col_int((globopts+BOT_FORE_COLOR)->optval));
+	init_pair(3,get_col_int((globopts+MEN_BACK_COLOR)->optval),
+		get_col_int((globopts+MEN_FORE_COLOR)->optval));
 	init_pair(4,get_col_int((globopts+DET_FIELD_FORE_COLOR)->optval),
 		get_col_int((globopts+DET_FIELD_BACK_COLOR)->optval));
 	init_pair(5,get_col_int((globopts+DET_TXT_FORE_COLOR)->optval),
 		get_col_int((globopts+DET_TXT_BACK_COLOR)->optval));
 	init_pair(6,get_col_int((globopts+DET_BACK_COLOR)->optval),
 		get_col_int((globopts+DET_BACK_COLOR)->optval));
-	init_pair(84,COLOR_WHITE,COLOR_BLACK);
 	return 0;
 }
 
