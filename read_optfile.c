@@ -98,10 +98,10 @@ struct options **globopts)
 			get_app(line,HTML_VIEWER,globopts);
 		} if (strstr(line,"DEF_EPUB_VIEWER:")) {
 			get_app(line,EPUB_VIEWER,globopts);
-		} if (strstr(line,"DEF_OGT_VIEWER:")) {
-			get_app(line,OGT_VIEWER,globopts);
 		} if (strstr(line,"DEF_OGV_VIEWER:")) {
 			get_app(line,OGV_VIEWER,globopts);
+		} if (strstr(line,"DEF_OGG_VIEWER:")) {
+			get_app(line,OGG_VIEWER,globopts);
 		}
 	}
 	fill_def_colors(globopts);

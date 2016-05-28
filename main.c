@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 	assign_to_opts(PDF_VIEWER);
 	assign_to_opts(HTML_VIEWER);
 	assign_to_opts(EPUB_VIEWER);
-	assign_to_opts(OGT_VIEWER);
 	assign_to_opts(OGV_VIEWER);
+	assign_to_opts(OGG_VIEWER);
 	char **ptr; char **formlist; int *recnums;
 	int numlines = 0;
 	int numrecs = 0;

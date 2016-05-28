@@ -41,8 +41,6 @@
 #define BAD_ADDED_FILE 13
 /* can't open the added file */
 #define ERROR_OPEN_ADDFILE 14
-/* can't determine added file's size */
-#define ERROR_SIZE_ADDFILE 15
 
 /* define length constants */
 #define MAX_ERR_LENGTH 67
@@ -67,5 +65,5 @@
 #define PDF_VIEWER 11
 #define HTML_VIEWER 12
 #define EPUB_VIEWER 13
-#define OGT_VIEWER 14
-#define OGV_VIEWER 15
+#define OGV_VIEWER 14
+#define OGG_VIEWER 15

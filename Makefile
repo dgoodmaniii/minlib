@@ -15,6 +15,7 @@ OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
 	gui.o full_search.o add_files.o
 SRCDIR=./
 CURSLIB=-lform -lmenuw -lncursesw
+EXTLIB=-lextractor
 prefix=/usr/local
 exec_prefix=$(prefix)
 bindir=$(prefix)/bin
@@ -28,7 +29,7 @@ mandir=$(datarootdir)/man
 all : minlib
 
 minlib :	main.c $(OBJ) errcodes.h options.h
-	$(CC) $(CFLAGS) -o minlib main.c $(OBJ) $(CURSLIB)
+	$(CC) $(CFLAGS) -o minlib main.c $(OBJ) $(CURSLIB) $(EXTLIB)
 
 gui.o : gui.c errcodes.h
 	$(CC) $(CFLAGS) -c gui.c $(CURSLIB)
@@ -49,7 +50,7 @@ read_optfile.o : read_optfile.c errcodes.h utility.c options.h
 	$(CC) $(CFLAGS) -c read_optfile.c utility.c
 
 add_files.o : add_files.c utility.c
-	$(CC) $(CFLAGS) -c add_files.c utility.c
+	$(CC) $(CFLAGS) -c add_files.c utility.c $(EXTLIB)
 
 utility.o : utility.c errcodes.h
 	$(CC) $(CFLAGS) -c utility.c

@@ -218,7 +218,7 @@ int validate_line(char *s)
 	chomp(s);
 	if (!strcmp(s,"%%"))
 		return 1;
-	while (isupper(s[i]) && (s[i] != '\0'))
+	while ((isupper(s[i]) || isspace(s[i])) && (s[i] != '\0'))
 		++i;
 	if (i == 0)
 		return 0;

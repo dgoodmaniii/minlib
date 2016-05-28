@@ -16,7 +16,14 @@
 #include<unistd.h>
 #include<limits.h>
 #include<sys/stat.h>
+#include<extractor.h>
 #include"errcodes.h"
+
+/* function that libextractor passes its data to */
+int print_metadata(void *cls,const char *plugin_name, enum
+	EXTRACTOR_MetaType type, enum EXTRACTOR_MetaFormat format,
+	const char *data_mime_type,const char *data, size_t
+	data_len);
 
 /* returns 0 on success, 1 on failure */
 int add_files(char *dirname)
@@ -39,11 +46,27 @@ int add_files(char *dirname)
 
 int add_file(char *s)
 {
-	fprintf(stderr,"Currently adding %s...\n",s);
-	if (strstr(s,".pdf"))
+	if (strstr(s,".pdf")) {
+		fprintf(stderr,"Processing %s...\n",s);
 		pdf_metadata(s);
-	if (strstr(s,".epub"))
+	} else if (strstr(s,".epub")) {
+		fprintf(stderr,"Processing %s...\n",s);
 		epub_metadata(s);
+	} else if (strstr(s,".dvi") || strstr(s,".flac") ||
+	strstr(s,".html") || strstr(s,".midi") ||
+	strstr(s,".mpeg") || strstr(s,".odf") || strstr(s,".ogg")
+	|| strstr(s,".ps") || strstr(s,".riff") ||
+	strstr(s,".wav") || strstr(s,".doc") || strstr(s,".xls")
+	|| strstr(s,".ppt") || strstr(s,".sxw") ||
+	strstr(s,".mp3") || strstr(s,".s3m") || strstr(s,".nsf")
+	|| strstr(s,".sid") || strstr(s,".real") ||
+	strstr(s,".flv") || strstr(s,".avi") || strstr(s,".qt")
+	|| strstr(s,".asf") || strstr(s,".ogv") || strstr(s,".ogt")) {
+		fprintf(stderr,"Processing %s...\n",s);
+		multi_metadata(s);
+	} else {
+		fprintf(stderr,"%s not a minlib format; skipping...\n",s);
+	}
 	return 0;
 }
 
@@ -110,10 +133,58 @@ int epub_metadata(char *s)
 			if (!strcmp(fhead,"contributor")) {
 				if (strstr(line,"edt"))
 					strcpy(fhead,"EDITOR");
-			}
-			if (!strcmp(fhead,"contributor")) {
-				if (strstr(line,"trl"))
+				else if (strstr(line,"trl"))
 					strcpy(fhead,"TRANS");
+				else if (strstr(line,"adp"))
+					strcpy(fhead,"ADAPTER");
+				else if (strstr(line,"arr"))
+					strcpy(fhead,"ARRANGER");
+				else if (strstr(line,"art"))
+					strcpy(fhead,"ARTIST");
+				else if (strstr(line,"aqt"))
+					strcpy(fhead,"QUOTEAUTH");
+				else if (strstr(line,"aft"))
+					strcpy(fhead,"AFTERWORD");
+				else if (strstr(line,"aui"))
+					strcpy(fhead,"INTRO");
+				else if (strstr(line,"ant"))
+					strcpy(fhead,"ANTEC.");
+				else if (strstr(line,"bkp"))
+					strcpy(fhead,"PRODUCER");
+				else if (strstr(line,"clb"))
+					strcpy(fhead,"COLLAB.");
+				else if (strstr(line,"cmm"))
+					strcpy(fhead,"COMM.OR");
+				else if (strstr(line,"dsr"))
+					strcpy(fhead,"DESIGNER");
+				else if (strstr(line,"ill"))
+					strcpy(fhead,"ILLUS.OR");
+				else if (strstr(line,"lyr"))
+					strcpy(fhead,"LYRICIST");
+				else if (strstr(line,"mus"))
+					strcpy(fhead,"MUSICIAN");
+				else if (strstr(line,"nar"))
+					strcpy(fhead,"NARRATOR");
+				else if (strstr(line,"pht"))
+					strcpy(fhead,"PHOTO.ER");
+				else if (strstr(line,"prt"))
+					strcpy(fhead,"PRINTER");
+				else if (strstr(line,"red"))
+					strcpy(fhead,"REDACTOR");
+				else if (strstr(line,"rev"))
+					strcpy(fhead,"REVIEWER");
+				else if (strstr(line,"spn"))
+					strcpy(fhead,"SPONSOR");
+				else if (strstr(line,"ths"))
+					strcpy(fhead,"ADVISOR");
+				else if (strstr(line,"trc"))
+					strcpy(fhead,"TRANSCR.ER");
+				else
+					strcpy(fhead,"OTHER");
+			}
+			if (!strcmp(fhead,"identifier")) {
+				if (strstr(line,"ISBN"))
+					strcpy(fhead,"ISBN");
 			}
 			if (!strcmp(fhead,"creator"))
 				strcpy(fhead,"AUTHOR");
@@ -121,7 +192,23 @@ int epub_metadata(char *s)
 			|| !strcmp(fhead,"language") || !strcmp(fhead,"subject")
 			|| !strcmp(fhead,"rights") || !strcmp(fhead,"contributor")
 			|| !strcmp(fhead,"EDITOR") ||  !strcmp(fhead,"source")
-			|| !strcmp(fhead,"TRANS")) {
+			|| !strcmp(fhead,"TRANS") || !strcmp(fhead,"ISBN")
+			|| !strcmp(fhead,"description") || !strcmp(fhead,"publisher")
+			|| !strcmp(fhead,"ADAPTER") || !strcmp(fhead,"ARRANGER")
+			|| !strcmp(fhead,"ARTIST") || !strcmp(fhead,"QUOTEAUTH")
+			|| !strcmp(fhead,"AFTERWORD") || !strcmp(fhead,"INTRO")
+			|| !strcmp(fhead,"ANTEC.") || !strcmp(fhead,"PRODUCER")
+			|| !strcmp(fhead,"COLLAB.") || !strcmp(fhead,"COMM.OR")
+			|| !strcmp(fhead,"DESIGNER") || !strcmp(fhead,"ILLUS.OR")
+			|| !strcmp(fhead,"LYRICIST") || !strcmp(fhead,"MUSICIAN")
+			|| !strcmp(fhead,"NARRATOR") || !strcmp(fhead,"PHOTO.ER")
+			|| !strcmp(fhead,"PRINTER") || !strcmp(fhead,"REDACTOR")
+			|| !strcmp(fhead,"REVIEWER") || !strcmp(fhead,"SPONSOR")
+			|| !strcmp(fhead,"ADVISOR") || !strcmp(fhead,"TRANSCR.ER")
+			|| !strcmp(fhead,"OTHER") || !strcmp(fhead,"TRANSCR.ER")
+			|| !strcmp(fhead,"date") || !strcmp(fhead,"type")
+			|| !strcmp(fhead,"format") || !strcmp(fhead,"relation")
+			|| !strcmp(fhead,"coverage")) {
 				while(line[i++] != '>');
 				oind = 0;
 				while((line[i] != '<') && (line[i] != '\0'))
@@ -210,5 +297,36 @@ int pdf_metadata(char *s)
 	printf("PATH:\t%s\n",realpath(s,actpath));
 	free(line);
 	pclose(p);
+	return 0;
+}
+
+int multi_metadata(char *s)
+{
+	char actpath[MAX_TITLE_LEN+1];
+	struct EXTRACTOR_PluginList *plugins =
+		EXTRACTOR_plugin_add_defaults (EXTRACTOR_OPTION_DEFAULT_POLICY);
+	printf("%%%%\n");
+	EXTRACTOR_extract (plugins, s,
+		NULL,0,&print_metadata,stdout);
+	EXTRACTOR_plugin_remove_all(plugins);
+	printf("PATH:\t%s\n",realpath(s,actpath));
+	return 0;
+}
+
+int print_metadata(void *cls,const char *plugin_name, enum
+EXTRACTOR_MetaType type, enum EXTRACTOR_MetaFormat format,
+const char *data_mime_type,const char *data, size_t
+data_len)
+{
+	int i;
+
+	for (i = 0; EXTRACTOR_metatype_to_string(type)[i] != '\0'; ++i) {
+		printf("%c",toupper(EXTRACTOR_metatype_to_string(type)[i]));
+	}
+	printf(":  ");
+	for (i = 0; data[i] != '\0'; ++i)
+		if (data[i] != '\n')
+		printf("%c",data[i]);
+	printf("\n");
 	return 0;
 }

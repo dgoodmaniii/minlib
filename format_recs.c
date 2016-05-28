@@ -76,14 +76,16 @@ int populate(char **raw, int stind, char letter)
 			if (!strcmp(*(raw+stind),"TITLE"))
 				return stind+1;
 		} else if (letter == 'a') {
-			if (!strcmp(*(raw+stind),"AUTHOR"))
+			if ((!strcmp(*(raw+stind),"AUTHOR")) ||
+			(!strcmp(*(raw+stind),"ARTIST")))
 				return stind+1;
 		} else if (letter == 'y') {
 			if (!strcmp(*(raw+stind),"YEAR"))
 				return stind+1;
 		} else if (letter == 'l') {
 			if ((!strcmp(*(raw+stind),"LANG")) ||
-			(!strcmp(*(raw+stind),"LANGONE")))
+			(!strcmp(*(raw+stind),"LANGONE")) ||
+			(!strcmp(*(raw+stind),"LANGUAGE")))
 				return stind+1;
 		} else if (letter == 's') { /* secondary language */
 			if (!strcmp(*(raw+stind),"LANGTWO"))

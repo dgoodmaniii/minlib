@@ -173,11 +173,11 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		num = EPUB_VIEWER;
 		strcpy(filetype,".epub");
 	} else if (c == 't') {
-		num = OGT_VIEWER;
-		strcpy(filetype,".ogt");
-	} else if (c == 'v') {
 		num = OGV_VIEWER;
 		strcpy(filetype,".ogv");
+	} else if (c == 'v') {
+		num = OGG_VIEWER;
+		strcpy(filetype,".ogg");
 	} else {
 		return 1;
 	}
@@ -238,7 +238,7 @@ int col,struct options *globopts)
 	werase(stdscr);
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
-	sel_item_win = newpad((2*row),col);
+	sel_item_win = newpad((3*row),col);
 	keypad(sel_item_win,TRUE);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
 	for (i=i+1,j=2; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i,j) {
@@ -505,11 +505,12 @@ int wrap_print(WINDOW *win,char *s, int cols, int row)
 	int len; int left; int numchars;
 	char t[cols];
 	char *ptr;
+	int numline = 0;
 
 	len = strlen(s);
-	left = cols - 12 - 2;
+	left = cols - 24 - 2;
 	if (len < left) {
-		mvwprintw(win,row,12,"%s",s);
+		mvwprintw(win,row,24,"%s",s);
 		return 0;
 	}
 	if (len >= left) {
@@ -520,7 +521,8 @@ int wrap_print(WINDOW *win,char *s, int cols, int row)
 			t[left] = '\0';
 			ptr += left;
 			numchars -= left;
-			mvwprintw(win,row++,12,"%s",t);
+			mvwprintw(win,row++,24,"%s",t);
+			numline++;
 		}
 		return (int) len / left;
 	}
