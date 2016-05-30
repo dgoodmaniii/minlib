@@ -121,6 +121,9 @@ int populate(char **raw, int stind, char letter)
 		} else if (letter == 'd') {
 			if (!strcmp(*(raw+stind),"DIRECTOR"))
 				return stind+1;
+		} else if (letter == 'i') {
+			if (!strcmp(*(raw+stind),"ILLUS.OR"))
+				return stind+1;
 		}
 	}
 	return 0;

@@ -218,12 +218,26 @@ int validate_line(char *s)
 	chomp(s);
 	if (!strcmp(s,"%%"))
 		return 1;
-	while ((isupper(s[i]) || isspace(s[i])) && (s[i] != '\0'))
+	while ((isupper(s[i]) || isspace(s[i]) || s[i] == '.') && (s[i] != '\0'))
 		++i;
 	if (i == 0)
 		return 0;
 	if (s[i] != ':')
 		return 0;
+	return 1;
+}
+
+/* return 0 if found, 1 if not */
+int include_substr(char *s, char *t)
+{
+	char *token;
+
+	token = strtok(t,",");
+	while (token != NULL) {
+		if (strstr(s,token))
+			return 0;
+		token = strtok(NULL,",");
+	}
 	return 1;
 }
 

@@ -175,7 +175,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	int num;
 	int i, j;
 	char *path = NULL;
-	char filetype[8] = "";
+	char filetype[60] = "";
 
 	if (c == 'p') {
 		num = PDF_VIEWER;
@@ -198,13 +198,16 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	} else if (c == 'P') {
 		num = PS_VIEWER;
 		strcpy(filetype,".ps");
+	} else if (c == 'o') {
+		num = OFFICE_VIEWER;
+		strcpy(filetype,".doc,.ppt,.xls,.docx,.pptx,.xlsx");
 	} else {
 		return 1;
 	}
 	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
 	for (i=i+1; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i) {
 		if (!strcmp(*(ptr+i),"PATH")) {
-			if (strstr(*(ptr+(i+1)),filetype)) {
+			if (include_substr(*(ptr+(i+1)),filetype) == 0) {
 				path = *(ptr+(i+1));
 			}
 		}
@@ -349,7 +352,7 @@ int set_comm_open(int row, int col)
 	clean_bottom_line(row-1,col); refresh();
 	mvwprintw(stdscr,row-2,0,"OPEN:  ");
 	mvwprintw(stdscr,row-2,6,"p:pdf  e:epub  h:html  t:theora  v:vorbis"
-	"  P:ps  d:dvi");
+	"  P:ps  d:dvi o:office");
 	attroff(COLOR_PAIR(2));
 	attroff(A_REVERSE | A_BOLD);
 	refresh();

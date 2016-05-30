@@ -106,6 +106,8 @@ struct options **globopts)
 			get_app(line,DVI_VIEWER,globopts);
 		} if (strstr(line,"DEF_PS_VIEWER:")) {
 			get_app(line,PS_VIEWER,globopts);
+		} if (strstr(line,"DEF_OFFICE_VIEWER:")) {
+			get_app(line,OFFICE_VIEWER,globopts);
 		}
 	}
 	fill_def_colors(globopts);
@@ -122,7 +124,7 @@ int fill_def_apps(struct options **globopts)
 	if (!strcmp((*globopts+NUM_COLORS)->optval,""))
 		get_app("DEFAULT:  xpdf \"%s\"",NUM_COLORS,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+1))->optval,""))
-		get_app("DEFAULT:  w3m \"%s\"",NUM_COLORS+1,globopts);
+		get_app("DEFAULT:  firefox \"%s\"",NUM_COLORS+1,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+2))->optval,""))
 		get_app("DEFAULT:  fbreader \"%s\"",NUM_COLORS+2,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+3))->optval,""))
@@ -133,6 +135,8 @@ int fill_def_apps(struct options **globopts)
 		get_app("DEFAULT:  xdvi \"%s\"",NUM_COLORS+5,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+6))->optval,""))
 		get_app("DEFAULT:  gs \"%s\"",NUM_COLORS+6,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+7))->optval,""))
+		get_app("DEFAULT:  libreoffice \"%s\"",NUM_COLORS+7,globopts);
 	for (i = NUM_COLORS; i < (NUM_COLORS + NUM_APPS); ++i)
 		fprintf(stderr,"APP: \"%s\"\n",(*globopts+i)->optval);
 	return 0;

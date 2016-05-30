@@ -48,7 +48,7 @@
 #define MAX_FIELD_LEN 16
 #define MAX_REGEXP_LEN 432
 #define NUM_COLORS 11
-#define NUM_APPS 7
+#define NUM_APPS 8
 
 /* define option identifiers */
 #define TOP_FORE_COLOR 0
@@ -69,3 +69,4 @@
 #define OGG_VIEWER 15
 #define DVI_VIEWER 16
 #define PS_VIEWER 17
+#define OFFICE_VIEWER 18

@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 	assign_to_opts(OGG_VIEWER);
 	assign_to_opts(DVI_VIEWER);
 	assign_to_opts(PS_VIEWER);
+	assign_to_opts(OFFICE_VIEWER);
 	char **ptr; char **formlist; int *recnums;
 	int numlines = 0;
 	int numrecs = 0;
