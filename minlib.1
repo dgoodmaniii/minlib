@@ -215,7 +215,7 @@ the value of that option.  Whitespace on the line is
 ignored.  So, for example:
 .PP
 .RS
-PDF_VIEWER:  xpdf -cont "%s"
+DEF_PDF_VIEWER:  xpdf -cont "%s"
 .br
 TOP_FORE_COLOR:  COLOR_BLUE
 .br
@@ -231,26 +231,34 @@ filenames with special characters in them, including spaces.
 .PP
 The non-color settings available are:
 .TP
-.BR PDF_VIEWER
+.BR DEF_PDF_VIEWER
 Obviously, the pdf viewer that you'd like \fBminlib\fR to
 call when you try to open a pdf file.  Default is \fIxpdf
 "%s"\fR.
 .TP
-.BR EPUB_VIEWER
+.BR DEF_EPUB_VIEWER
 The viewer for opening epub files.  Default is \fIfbreader
 "%s"\fR.
 .TP
-.BR HTML_VIEWER
+.BR DEF_HTML_VIEWER
 The viewer for opening HTML files.  Default is \fIw3m
 "%s"\fR.
 .TP
-.BR OGV_VIEWER
+.BR DEF_OGV_VIEWER
 The viewer for opening OGG videos; that is, Theora videos.
 Default is \fIvlc "%s"\fR.
 .TP
-.BR OGG_VIEWER
+.BR DEF_OGG_VIEWER
 The viewer for opening OGG audio; that is, Ogg Vorbis.
 Default is \fIogg123 "%s"\fR.
+.TP
+.BR DEF_DVI_VIEWER
+The viewer for opening DVI documents; that is, old-style TeX
+output files.  Default is \fIxdvi "%s"\fR.
+.TP
+.BR DEF_PS_VIEWER
+The viewer for opening Postscript documents; default is
+\fIgs "%s"\fR.
 .PP
 .BR Colors
 .PP

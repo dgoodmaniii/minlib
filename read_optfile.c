@@ -102,6 +102,10 @@ struct options **globopts)
 			get_app(line,OGV_VIEWER,globopts);
 		} if (strstr(line,"DEF_OGG_VIEWER:")) {
 			get_app(line,OGG_VIEWER,globopts);
+		} if (strstr(line,"DEF_DVI_VIEWER:")) {
+			get_app(line,DVI_VIEWER,globopts);
+		} if (strstr(line,"DEF_PS_VIEWER:")) {
+			get_app(line,PS_VIEWER,globopts);
 		}
 	}
 	fill_def_colors(globopts);
@@ -125,6 +129,10 @@ int fill_def_apps(struct options **globopts)
 		get_app("DEFAULT:  vlc \"%s\"",NUM_COLORS+3,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+4))->optval,""))
 		get_app("DEFAULT:  ogg123 \"%s\"",NUM_COLORS+4,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+5))->optval,""))
+		get_app("DEFAULT:  xdvi \"%s\"",NUM_COLORS+5,globopts);
+	if (!strcmp((*globopts+(NUM_COLORS+6))->optval,""))
+		get_app("DEFAULT:  gs \"%s\"",NUM_COLORS+6,globopts);
 	for (i = NUM_COLORS; i < (NUM_COLORS + NUM_APPS); ++i)
 		fprintf(stderr,"APP: \"%s\"\n",(*globopts+i)->optval);
 	return 0;

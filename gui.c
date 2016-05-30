@@ -133,6 +133,9 @@ struct options *globopts)
 			frame_main_screen(numrecs, row, col);
 			refresh();
 			break;
+		case ':':
+			shell_out();
+			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
 			unpost_menu(lib_menu);
@@ -152,6 +155,16 @@ struct options *globopts)
 	free(lib_list);
 	free(matched);
 	endwin();
+	return 0;
+}
+
+int shell_out()
+{
+	def_prog_mode();
+	endwin();
+	system("/bin/sh");
+	reset_prog_mode();
+	refresh();
 	return 0;
 }
 
@@ -179,6 +192,12 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	} else if (c == 'v') {
 		num = OGG_VIEWER;
 		strcpy(filetype,".ogg");
+	} else if (c == 'd') {
+		num = DVI_VIEWER;
+		strcpy(filetype,".dvi");
+	} else if (c == 'P') {
+		num = PS_VIEWER;
+		strcpy(filetype,".ps");
 	} else {
 		return 1;
 	}
@@ -205,6 +224,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	strcat(t," > /dev/null 2>&1 &");
 	system(t);
 	free(t);
+	print_bottom_open(path);
 	return 0;
 }
 
@@ -228,8 +248,6 @@ int display_details(char **ptr,int *recnums,int sel_rec,int row,
 int col,struct options *globopts)
 {
 	WINDOW *sel_item_win;
-	WINDOW *detail_win;
-	WINDOW *detail_pad;
 	int i; int j;
 	int k = 0; /* track whether it's a field title or not */
 	int d;
@@ -280,6 +298,10 @@ int col,struct options *globopts)
 		case 'o':
 			open_app(ptr,sel_rec,globopts,recnums);
 			frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
+			break;
+		case ':':
+			shell_out();
+			break;
 		}
 	}
 	werase(sel_item_win);
@@ -326,7 +348,8 @@ int set_comm_open(int row, int col)
 	attron(COLOR_PAIR(2));
 	clean_bottom_line(row-1,col); refresh();
 	mvwprintw(stdscr,row-2,0,"OPEN:  ");
-	mvwprintw(stdscr,row-2,6,"p:pdf  e:epub  h:html  t:theora  v:vorbis");
+	mvwprintw(stdscr,row-2,6,"p:pdf  e:epub  h:html  t:theora  v:vorbis"
+	"  P:ps  d:dvi");
 	attroff(COLOR_PAIR(2));
 	attroff(A_REVERSE | A_BOLD);
 	refresh();
@@ -449,11 +472,22 @@ int print_top_line(WINDOW *win, int row, int col, int numrecs)
 	return 0;
 }
 
+int print_bottom_open(char *s)
+{
+	int row, col;
+
+	getmaxyx(stdscr,row,col);
+	clean_bottom_line(row, col);
+	mvprintw(row-1,0,"Opening %s...",s);
+	return 0;
+}
+
 int print_bottom_message(char *s)
 {
 	int row, col;
 
 	getmaxyx(stdscr,row,col);
+	clean_bottom_line(row, col);
 	mvprintw(row-1,0,"Error:  no %s-type file found",s);
 	return 0;
 }
