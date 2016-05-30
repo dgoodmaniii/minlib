@@ -182,6 +182,11 @@ For fields that \fBminlib\fR knows, see the section on the
 It's important to note that options given on the command
 line take precedence over conflicting options in the config
 file.
+.PP
+If there is a digital file available, \fBminlib\fR knows one
+magic field name:  PATH.  \fBminlib\fR will use the value of
+the PATH field to open the file with the appropriate
+application.
 .SS Run-Control File (Config File)
 The run-control file ("rc" or "config" file) contains the
 configurable options for \fBminlib\fR to use.  Note that
@@ -210,7 +215,7 @@ the value of that option.  Whitespace on the line is
 ignored.  So, for example:
 .PP
 .RS
-PDF_VIEWER:  xpdf -cont %s
+PDF_VIEWER:  xpdf -cont "%s"
 .br
 TOP_FORE_COLOR:  COLOR_BLUE
 .br
@@ -219,6 +224,34 @@ TOP_BACK_COLOR:  COLOR_YELLOW
 .PP
 A \fBminlib\fR rc-file is essentially just a list of lines
 of this type.
+.PP
+Remember to put quotations around the "%s" in your config
+file; otherwise, your application will likely choke on
+filenames with special characters in them, including spaces.
+.PP
+The non-color settings available are:
+.TP
+.BR PDF_VIEWER
+Obviously, the pdf viewer that you'd like \fBminlib\fR to
+call when you try to open a pdf file.  Default is \fIxpdf
+"%s"\fR.
+.TP
+.BR EPUB_VIEWER
+The viewer for opening epub files.  Default is \fIfbreader
+"%s"\fR.
+.TP
+.BR HTML_VIEWER
+The viewer for opening HTML files.  Default is \fIw3m
+"%s"\fR.
+.TP
+.BR OGV_VIEWER
+The viewer for opening OGG videos; that is, Theora videos.
+Default is \fIvlc "%s"\fR.
+.TP
+.BR OGG_VIEWER
+The viewer for opening OGG audio; that is, Ogg Vorbis.
+Default is \fIogg123 "%s"\fR.
+.PP
 .BR Colors
 .PP
 \fBminlib\fR allows you to set the colors for pretty much
