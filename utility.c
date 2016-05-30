@@ -231,13 +231,23 @@ int validate_line(char *s)
 int include_substr(char *s, char *t)
 {
 	char *token;
+	char *copy;
 
-	token = strtok(t,",");
+	if ((copy = malloc((strlen(t) + 1) * sizeof(char))) == NULL) {
+		fprintf(stderr,"minlib:  insufficient memory for "
+		"storing the filetype string\n");
+		exit(INSUFF_INTERNAL_MEMORY);
+	}
+	strcpy(copy,t);
+	token = strtok(copy,",");
 	while (token != NULL) {
-		if (strstr(s,token))
+		if (strstr(s,token)) {
+			free(copy);
 			return 0;
+		}
 		token = strtok(NULL,",");
 	}
+	free(copy);
 	return 1;
 }
 
