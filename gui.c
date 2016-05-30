@@ -16,6 +16,7 @@
 #include<string.h>
 #include<ncurses.h>
 #include<menu.h>
+#include<unistd.h>
 #include"errcodes.h"
 #include"options.h"
 
@@ -159,7 +160,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 {
 	char *t;
 	int num;
-	int i;
+	int i, j;
 	char *path = NULL;
 	char filetype[8] = "";
 
@@ -194,14 +195,14 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		return 1;
 	}
 	if ((t = malloc((strlen((globopts+num)->optval)
-	+ strlen(path) + 6) * sizeof(char))) == NULL) {
+	+ strlen(path) + 28) * sizeof(char))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory to "
 		"store the command line for opening this file\n");
 		exit(INSUFF_INTERNAL_MEMORY);
 	}
 	t[0] = '\0';
 	sprintf(t,(globopts+num)->optval,path);
-	strcat(t," &");
+	strcat(t," > /dev/null 2>&1 &");
 	system(t);
 	free(t);
 	return 0;

@@ -116,17 +116,17 @@ int fill_def_apps(struct options **globopts)
 	int i = NUM_COLORS;
 
 	if (!strcmp((*globopts+NUM_COLORS)->optval,""))
-		get_app("DEFAULT:  xpdf %s",NUM_COLORS,globopts);
+		get_app("DEFAULT:  xpdf \"%s\"",NUM_COLORS,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+1))->optval,""))
-		get_app("DEFAULT:  w3m %s",NUM_COLORS+1,globopts);
+		get_app("DEFAULT:  w3m \"%s\"",NUM_COLORS+1,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+2))->optval,""))
-		get_app("DEFAULT:  fbreader %s",NUM_COLORS+2,globopts);
+		get_app("DEFAULT:  fbreader \"%s\"",NUM_COLORS+2,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+3))->optval,""))
-		get_app("DEFAULT:  vlc %s",NUM_COLORS+3,globopts);
+		get_app("DEFAULT:  vlc \"%s\"",NUM_COLORS+3,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+4))->optval,""))
-		get_app("DEFAULT:  ogg123 %s",NUM_COLORS+4,globopts);
+		get_app("DEFAULT:  ogg123 \"%s\"",NUM_COLORS+4,globopts);
 	for (i = NUM_COLORS; i < (NUM_COLORS + NUM_APPS); ++i)
-		fprintf(stderr,"APP: %s\n",(*globopts+i)->optval);
+		fprintf(stderr,"APP: \"%s\"\n",(*globopts+i)->optval);
 	return 0;
 }
 
