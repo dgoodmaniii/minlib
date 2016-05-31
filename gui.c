@@ -160,9 +160,13 @@ struct options *globopts)
 
 int shell_out()
 {
+	const char *name = "SHELL";
+	char *shname;
+
 	def_prog_mode();
 	endwin();
-	system("/bin/sh");
+	shname = getenv(name);
+	system(shname);
 	reset_prog_mode();
 	refresh();
 	return 0;
@@ -204,7 +208,12 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	} else {
 		return 1;
 	}
-	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
+	for (i = 0; *(ptr+i) != NULL; ++i) {
+		if ((atoi(*(ptr+i)) == (*(recnums+sel_rec)+1)) &&
+			strstr(*(ptr+i),"%%")) {
+			break;
+		}
+	}
 	for (i=i+1; *(ptr+i) != NULL && !strstr(*(ptr+i),"%%"); ++i) {
 		if (!strcmp(*(ptr+i),"PATH")) {
 			if (include_substr(*(ptr+(i+1)),filetype) == 0) {
@@ -259,7 +268,12 @@ int col,struct options *globopts)
 
 	werase(stdscr);
 	frame_detail_screen(row, col, *(recnums+sel_rec)+1); refresh();
-	for (i = 0; atoi(*(ptr+i)) != *(recnums+sel_rec) + 1; ++i);
+	for (i = 0; *(ptr+i) != NULL; ++i) {
+		if ((atoi(*(ptr+i)) == (*(recnums+sel_rec)+1)) &&
+			strstr(*(ptr+i),"%%")) {
+			break;
+		}
+	}
 	sel_item_win = newpad((3*row),col);
 	keypad(sel_item_win,TRUE);
 	wbkgd(sel_item_win,COLOR_PAIR(6));
