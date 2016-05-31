@@ -56,7 +56,7 @@ utility.o : utility.c errcodes.h
 	$(CC) $(CFLAGS) -c utility.c
 
 doc :
-	groff -man -Tascii minlib.1 > minlib_man.txt;
+	groff -man -Tascii -a minlib.1 > minlib_man.txt;
 	groff -man -Thtml minlib.1 > minlib_man.html;
 
 .PHONY : clean
