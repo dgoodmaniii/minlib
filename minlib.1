@@ -6,6 +6,8 @@
 minlib \- a text-based library management program
 .SH SYNOPSIS
 .B minlib
+[\fB\-a\fR \fIfile or directory\fR]
+[\fB\-c\fR \fIrcfile\fR]
 [\fB\-r\fR \fIformatstring\fR]
 [\fB\-f\fR \fIinputfile[,...]\fR]
 .SH DESCRIPTION
@@ -57,6 +59,12 @@ Mobi and other Kindle-type formats will work with
 metadata from them; they're just too locked-down for me to
 figure out.
 .RE
+.TP
+.BR "\-c \fIrcfile\fR"
+Use \fIrcfile\fR as the configuration file for this run.
+The rcfile may contain things like colors, data files, and
+format strings; its syntax is very simple and is described
+below.
 .TP
 .BR "\-f \fIfilename\fR"
 Use \fIfilename\fR as the source of library records.  You
@@ -423,7 +431,10 @@ otherwise, it will start the viewer with which you can view
 that file.  You can kill \fBminlib\fR while viewing your
 file; neither \fBminlib\fR nor your file viewer should care.
 .PP
-
+Hit ':' to \fIshell out\fR; that is, to have access to the
+default shell on your system.  This uses the value of the
+SHELL environmental variable; if there is no such variable,
+\fBminlib\fR simply tries to run /bin/sh.
 .SH EXIT STATUS
 \fBminlib\fR returns 0 if successful, non-zero if it fails
 for some reason.  See the \fBERRORS\fR section for possible
