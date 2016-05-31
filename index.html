@@ -29,11 +29,9 @@ AMDG</a><br />
 
 <nav class="toolbar">
 <ul>
-<li><a title="minlib:  Books" href="books.html">Books</a>&nbsp;|</li>
-<li><a title="minlib:  Our Publishing Philosophy" href="nphilos.html">Philosophy</a>&nbsp;|</li>
+<li><a title="minlib:  Documentation" href="ml_docs.html">Documentation</a>&nbsp;|</li>
 <li><a title="minlib:  Our Copyright" href="copyleft.html">Copyright</a>&nbsp;|</li>
-<li><a title="minlib:  Our Tools" href="tools.html">Our Tools</a>&nbsp;|</li>
-<li><a title="minlib:  Contact Us" href="contact.html">Contact Us</a>&nbsp;|</li>
+<li><a title="minlib:  Screenshots" href="screenshots.html">Screenshots</a>&nbsp;|</li>
 <li><a title="minlib:  Change Log" href="changes.html">Change Log</a></li>
 </ul>
 </nav>
@@ -41,13 +39,35 @@ AMDG</a><br />
 
 <div class="mainpart">
 
-<p><span class="fl">M</span>inlib is
+<p><span class="fl">M</span>inlib is a small, fast library
+management program with broad customization features, zero
+impact on the underlying file system, Unicode awareness
+(specifically, UTF-8), automatic extraction of metadata from
+a wide array of different file types, both a command-line
+and a screen-oriented text user interface (TUI), and
+full-text regular-expression searches of the entire library
+database from within the program.</p>
 
+<p>On a more technical level, minlib is written in
+POSIX-compliant C.  It uses GNU libextractor for the
+metadata extraction, except for pdf and epub; pdf uses
+pdfinfo, assuming it is installed on the system, while the
+epub metadata extraction uses unzip and is otherwise
+home-rolled.  As a result, it is very fast and very
+small.</p>
+
+<p>Minlib strives to adhere to the general Unix philosophy
+of <em>do one thing and do it well</em>; it further goes out
+of its way to <em>never assume it knows better than the
+user</em>.  Consequently, it attempts to do its job and get
+out of the user's way.  Judgements about its success or
+failure at this must be deferred, of course, to the
+user.</p>
 
 <hr />
 <footer class="bottomstuff">
 <div class="homelink"><a href="index.html">Home</a></div>
-<a href="patron.html">Our Patroness</a> | <a href="gorfeed.rss">RSS Newsfeed</a><br />
+<a href="gorfeed.rss">RSS Newsfeed</a><br />
 <a href="webmas.html">E-Mail the Webmaster</a> | <a href="changes.html">Change Log</a><br />
 </footer>
 </div>

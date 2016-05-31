@@ -15,7 +15,7 @@ body {
 
 .topbar {
 	color: #ffd700;
-	background: green;
+	background: blue;
 	margin-top: auto;
 	font-family: serif;
 	margin-right: auto;
@@ -50,7 +50,7 @@ body {
 }
 .topbar a {
 	text-decoration: none;
-	color: green;
+	color: blue;
 }
 
 /******************************************/
@@ -95,7 +95,7 @@ body {
 	border-bottom-right-radius:  20px;
 }
 a {
-	color: green;
+	color: blue;
 	text-decoration: underline;
 }
 a:hover {
@@ -104,12 +104,12 @@ a:hover {
 	border-top: solid;
 	border-bottom-width: 1px;
 	border-top-width: 1px;
-	background-color: green;
+	background-color: blue;
 	border-color: black;
 	text-decoration: none;
 }
 .mainpart a:active {
-	color: green;
+	color: blue;
 	background-color: #ffd700;
 	border-bottom: solid;
 	border-top: solid;
@@ -134,7 +134,7 @@ a:hover {
 
 .dedic {
 	text-align: center;
-	background-color: green;
+	background-color: blue;
 	color: #ffd700;
 	font-size: 0.7em;
 	border-top-width: 3px;
@@ -158,12 +158,12 @@ a:hover {
 	border-top-right-radius:  20px;
 }
 .dedic a {
-	background-color: green;
+	background-color: blue;
 	color: #ffd700;
 	text-decoration: none;
 }
 .dedic a:hover {
-	background-color: green;
+	background-color: blue;
 	color: #ffd700;
 	text-decoration: none;
 	border-style:  none;
@@ -190,7 +190,7 @@ a:hover {
 	margin-top: 0pt;
 }
 .toolbar a {
-	color: green;
+	color: blue;
 	background-color: #ffd700;
 	text-decoration: none;
 	white-space: nowrap;
@@ -205,7 +205,7 @@ a:hover {
 	border-top: solid;
 	border-bottom-width: 1px;
 	border-top-width: 1px;
-	background-color: green;
+	background-color: blue;
 	border-color: #ffd700;
 	padding-top:  2px;
 	padding-bottom:  2px;
@@ -255,13 +255,13 @@ a:hover {
 /******************************************/
 
 .changes h3 {
-	color: green;
+	color: blue;
 	font-size: 2em;
 	font-weight: bold;
 	font-style: italic;
 }
 .changes a {
-	color: green;
+	color: blue;
 	text-decoration: underline;
 	font-style: italic;
 	font-weight: normal;
@@ -272,11 +272,11 @@ a:hover {
 	border-top: solid;
 	border-bottom-width: 1px;
 	border-top-width: 1px;
-	background-color: green;
+	background-color: blue;
 	border-color: black;
 }
 .changes a:active {
-	color: green;
+	color: blue;
 	background-color: #ffd700;
 	border-bottom: solid;
 	border-top: solid;
@@ -290,7 +290,7 @@ a:hover {
 /******************************************/
 
 .fl {
-	color: green;
+	color: blue;
 	font-size: 3em;
 	line-height: 0.7em;
 }
