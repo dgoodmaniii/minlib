@@ -162,10 +162,19 @@ int shell_out()
 {
 	const char *name = "SHELL";
 	char *shname;
+	char *defshell = "/bin/sh";
 
 	def_prog_mode();
 	endwin();
 	shname = getenv(name);
+	if (shname == NULL) {
+		if ((shname = malloc((strlen(defshell)+1) * sizeof(char))) == NULL) {
+			fprintf(stderr,"minlib:  insufficient memory to "
+			"store the name of the default shell, \"%s\"\n",defshell);
+			exit(INSUFF_INTERNAL_MEMORY);
+		}
+		strcat(shname,defshell);
+	}
 	system(shname);
 	reset_prog_mode();
 	refresh();
@@ -460,7 +469,7 @@ int print_bot_details(WINDOW *win, int row, int col)
 	attron(A_BOLD);
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE);
-	mvwprintw(win,row-2,0,"q:back  o:open");
+	mvwprintw(win,row-2,0,"q:back  o:open  :=shell");
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(2));
 	return 0;
@@ -515,7 +524,7 @@ int print_bot_line(WINDOW *win, int row, int col)
 	attron(A_BOLD);
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
-	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open");
+	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open :=shell");
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(2));
 	return 0;

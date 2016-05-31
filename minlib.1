@@ -434,7 +434,12 @@ file; neither \fBminlib\fR nor your file viewer should care.
 Hit ':' to \fIshell out\fR; that is, to have access to the
 default shell on your system.  This uses the value of the
 SHELL environmental variable; if there is no such variable,
-\fBminlib\fR simply tries to run /bin/sh.
+\fBminlib\fR simply tries to run /bin/sh.  This is useful
+especially when in detail view trying to open a file of some
+unusual format, or with a non-default application (e.g.,
+your default pdf viewer is xpdf, but you wish to use okular
+for some reason); shell out and open the file manually with
+whatever viewer you desire.
 .SH EXIT STATUS
 \fBminlib\fR returns 0 if successful, non-zero if it fails
 for some reason.  See the \fBERRORS\fR section for possible
