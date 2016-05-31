@@ -175,7 +175,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 	int num;
 	int i, j;
 	char *path = NULL;
-	char filetype[60] = "";
+	char filetype[120] = "";
 
 	if (c == 'p') {
 		num = PDF_VIEWER;
@@ -191,7 +191,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		strcpy(filetype,".ogv");
 	} else if (c == 'v') {
 		num = OGG_VIEWER;
-		strcpy(filetype,".ogg");
+		strcpy(filetype,".ogg,.spx");
 	} else if (c == 'd') {
 		num = DVI_VIEWER;
 		strcpy(filetype,".dvi");
@@ -200,7 +200,7 @@ int execute(int c, char **ptr, int sel_rec, struct options *globopts,
 		strcpy(filetype,".ps");
 	} else if (c == 'o') {
 		num = OFFICE_VIEWER;
-		strcpy(filetype,".doc,.ppt,.xls,.docx,.pptx,.xlsx");
+		strcpy(filetype,".doc,.ppt,.xls,.docx,.pptx,.xlsx,.odt,.odf,.ods,.odp");
 	} else {
 		return 1;
 	}

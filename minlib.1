@@ -42,6 +42,20 @@ with the "when you must fail, fail as soon and as noisily
 as possible" principle.  You may have to move the
 troublesome file from the tree if you can't resolve the
 issue.
+.PP
+Supported file types for automatically extracting metadata
+are pdf, epub, html, ps, dvi, doc(x), xls(x), ppt(x), ogv,
+ogg, mp3, man, sxw, sdw, flac, wav, s3m, xm, it, nsf(e),
+sid, exiv2, jpeg, gif, png, tiff, deb, rpm, tar(.gz), lzh,
+lha, rar, zip, cab, 7-zip, ar, mtree, pax, cpio, iso9660,
+share, raw, xar flv, real, riff (avi), mpeg, qt, and asf.
+Other than pdf and epub, GNU libextractor governs this
+extraction; pdf uses pdfinfo, and epub is done internally.
+.PP
+Mobi and other Kindle-type formats will work with
+\fBminlib\fR in general, but \fBminlib\fR cannot extract
+metadata from them; they're just too locked-down for me to
+figure out.
 .RE
 .TP
 .BR "\-f \fIfilename\fR"
@@ -109,6 +123,9 @@ TRANSLATOR.
 .TP
 %d
 Director of the work; matched with field heading DIRECTOR.
+.TP
+%i
+Illustrator of the work; matched with field heading ILLUS.OR.
 .PP
 An unknown sequence won't bother \fBminlib\fR; it will just fill
 up that field with spaces.
@@ -249,8 +266,9 @@ The viewer for opening OGG videos; that is, Theora videos.
 Default is \fIvlc "%s"\fR.
 .TP
 .BR DEF_OGG_VIEWER
-The viewer for opening OGG audio; that is, Ogg Vorbis.
-Default is \fIogg123 "%s"\fR.
+The viewer for opening OGG audio; that is, Ogg Vorbis.  Also
+applies to Speex (.spx), a codec designed specifically for
+human voices.  Default is \fIogg123 "%s"\fR.
 .TP
 .BR DEF_DVI_VIEWER
 The viewer for opening DVI documents; that is, old-style TeX
@@ -259,6 +277,10 @@ output files.  Default is \fIxdvi "%s"\fR.
 .BR DEF_PS_VIEWER
 The viewer for opening Postscript documents; default is
 \fIgs "%s"\fR.
+.TP
+.BR DEF_OFFICE_VIEWER
+The viewer for opening .doc(x), .xls(x), .ppt(x), and their
+LibreOffice equivalents.  Default is \fIlibreoffice "%s"\fR.
 .PP
 .BR Colors
 .PP
@@ -334,6 +356,74 @@ of the text) for the field values in detail view.
 .TP
 .BR DET_BACK_COLOR
 The background color for the whole window in detail view.
+.SH INTERACTIVE MODE
+\fBminlib\fR is likely to be used interactively most of the
+time.  Fortunately, this interactive use is extremely
+simple.  \fBminlib\fR's interface focuses on two views:
+"Menu View" and "Detail View."  Most operations the user
+will be likely to want are available to the user in the same
+way in both views.
+.PP
+Which view you are currently using, either menu or detail,
+will be noted in the top right corner of the screen.  In
+menu view, the top center will show how many records are in
+your database; in detail view, the top center will show
+which record you're currently viewing the details of.
+.PP
+\fBMenu view\fR is the default view, and is what you'll be
+looking at when you start \fBminlib\fR.  It is, as the name
+implies, simply a large menu, with one item for each of the
+records in your data file(s).
+.PP
+\fIScroll down\fR with the down arrow or with 'j'; \fIscroll
+up\fR with the up arrow or with 'k'.
+.PP
+\fISearching\fR can be done in one of two ways.  The
+simplest way is termed \fImatching\fR; this simply matches
+the first characters from the record.  Hit 'm', then enter
+the first few characters you're looking for.  \fBminlib\fR
+will then take you to the first record matching those first
+few characters.  Hit 'p' for the next matching record, and
+hit 'P' for the previous matching record.
+.PP
+Matching is limited, though, in that it can only match the
+first few characters in the record; \fIfull search\fR is
+much more powerful.  With full search, you can search the
+entirety of your records, not merely the portions visible in
+menu view; also, rather than merely character-for-character
+matching, you have the full power of regular expressions
+available.  Hit '/' to search; \fBminlib\fR will tell you
+whether you've found any matches, and if so, how many.  It
+will also skip you forward to the first match it finds.  Now
+hit 'n' for the next match and 'N' for the previous match.
+.PP
+When you arrive at the record you're looking for, hit
+\fIenter\fR; this will take you to \fIdetail view\fR.
+Detail view is your entire record for that entry; it will
+display all the fields you've assigned for that entry in
+your data file.  If this is too much information for a
+single screen, fear not; use the down arrow or 'j' to scroll
+down, and use the up arrow or 'k' to scroll up, precisely as
+you did in menu view.
+.PP
+In either menu or detail view, you may want to \fIopen a
+file\fR.  If this is a physical item record (e.g., the data
+about a book on your shelf), you obviously won't be able to
+do this (though trying won't hurt; \fBminlib\fR will
+innocently tell you that it can't find a file for that
+item); but if it's a digital item, \fBminlib\fR will do its
+best to take care of that for you.
+.PP
+Hit 'o' in either menu or detail view, and the bar at the
+bottom of the screen will present you with some options.
+Hit the key corresponding to the format you want to open;
+e.g., hit 'p' to open a pdf.  If \fBminlib\fR can't find a
+file of that format for the record, it will tell you so;
+otherwise, it will start the viewer with which you can view
+that file.  You can kill \fBminlib\fR while viewing your
+file; neither \fBminlib\fR nor your file viewer should care.
+.PP
+
 .SH EXIT STATUS
 \fBminlib\fR returns 0 if successful, non-zero if it fails
 for some reason.  See the \fBERRORS\fR section for possible
