@@ -171,10 +171,69 @@ to keep them all in one, if you wish); now try running:</p>
 $> minlib -f library_file
 </pre>
 
-<p>Now, minlib will start up, looking something like
-this:</p>
+And we'll see what happens then in our next section.
+
+<h2>Running Minlib</h2>
+
+<p>Having run the last-listed command above, minlib will
+start itself up and show you the listings of your library.
+By default, it looks something like this:</p>
 
 <img class="sshot" src="initial_shot.png" />
+
+<p>(We say "by default" because the colors and format are
+extremely customizable, about which we'll see more later.
+But the above is what minlib does unless you tell it to do
+otherwise.)</p>
+
+<p>Let's look at that image above for a moment.  The line at
+the very bottom, with blue text, is immaterial; it is simply
+a function of the author's totally unrelated configuration
+of GNU screen.  But we can see several important parts of
+the screen that minlib presents to you above, each of which
+serves a different function.</p>
+
+<img class="sshot" src="labelled_diagram.png" />
+
+<p>The <em>top bar</em> provides you the name and version of
+the program; the total number of records that minlib
+currently has loaded; and identifies that you are in
+<em>menu view</em> (as opposed to <em>detail view</em>,
+which is reached by hitting "enter" on one of the menu
+options).  The <em>bottom bar</em> lists your options for
+actions, and is relatively self-explanatory.  Then there are
+the <em>menu options</em>, which is the list of records in
+your library; scroll up or down to see more.  Finally, there
+is the <em>cursor</em>, which highlights the
+currently-selected item; in this case, Orwell's
+<em>1984</em>.</p>
+
+<p>You can move around in menu view in the following
+ways:</p>
+
+<ul>
+<li><em>Scroll up and down</em>:  use either your up and
+down arrow keys, or use 'j' for down and 'k' for up.</li>
+<li><em>Page up and down</em>:  use the "Page Up" and "Page
+Down" keys to scroll up and down by a page at a time.</li>
+<li><em>Menu up and down</em>:  you can skip straight to the
+top or bottom of the menu view by using the "Home" and "End"
+keys on your keyboard.</li>
+<li><em>Match</em>:  you can do a quick and simple matching
+of records.  In the default view, for example, you can find
+<em>1984</em> easily by simply typing 'm', then entering the
+first few characters in the title.  There may be more than
+one match; if that's so, use 'p' to find the next match, or
+'P' (capital 'p') to find the previous one.</li>
+<li><em>Search</em>:  you can do full record searches of
+your entire library.  Hit '/' (forward slash), then type in
+the text you want to find.  You can enter any
+POSIX-compliant regular expression here; if you don't know
+what that means, don't worry about it, and just know that
+you can match text anywhere in the library.  There may be
+more than one match; if that's so, use 'n' to find the next
+match, or 'N' (capital 'n') to find the previous one.</li>
+</ul>
 
 
 <hr />
