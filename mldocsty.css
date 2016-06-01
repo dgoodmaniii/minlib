@@ -419,3 +419,13 @@ td {
 	text-decoration:  none;
 	background-color: #fafafa;
 }
+
+/******************************************/
+/* The command line examples              */
+/******************************************/
+
+.demo {
+	color:  green;
+	background-color:  black;
+	padding:  6px;
+}
