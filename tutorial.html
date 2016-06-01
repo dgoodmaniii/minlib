@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- +AMDG -->
+
+<head>
+<title>minlib | Documentation</title>
+<meta charset="UTF-8" />
+<meta name="description" content="minlib, a powerful, fast,
+simple library management program with a text user interface
+(TUI) and powerful customization features" />
+<link rel="stylesheet" type="text/css" href="mldocsty.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="alternate" type="application/rss+xml"
+	title="minlib RSS feed" href="minlib.rss" />
+<link rel="license" 
+	href="https://creativecommons.org/licenses/by-sa/2.0/" />
+</head>
+<body>
+
+<div class="dedic">
+<a href="amdg.html">+<br />
+AMDG</a><br />
+</div>
+
+<header class="topbar">
+<h1><a class="imglink" href="index.html"><img src="txt_logo.png" alt="minlib Logo" /></a>minlib</h1>
+
+<nav class="toolbar">
+<ul>
+<li><a title="minlib:  Documentation" href="ml_docs.html">Documentation</a>&nbsp;|</li>
+<li><a title="minlib:  Our Copyright" href="gpl-3.0-standalone.html">Copyright</a>&nbsp;|</li>
+<li><a title="minlib:  Screenshots" href="screenshots.html">Screenshots</a>&nbsp;|</li>
+<li><a title="minlib:  Change Log" href="changes.html">Change Log</a></li>
+</ul>
+</nav>
+</header>
+
+<div class="mainpart">
+
+<h1>Minlib Tutorial</h1>
+
+<p><span class="fl">A</span>s with any piece of unfamiliar
+software, it takes some time to get used to minlib.
+However, despite its power as a library management program,
+it's pretty simple to operate, and it won't take very long
+to be using it with ease.</p>
+
+<p>To get started, you'll need to have at your disposal a
+command line.  While minlib doesn't require you to work with
+it on the command line (that's what its text user interface,
+or TUI, is for), the command line is the normal way to start
+it up.  We will use 
+
+<pre class="demo">$></pre>
+
+to show the command prompt, and the following line (if any)
+will be the output that minlib produces.  You are supposed
+to type what appears on the line after the prompt.
+
+<h2>Getting Started</h2>
+
+<p>To get started using minlib, you'll really only need one
+thing:  a <em>data file</em>.  This is the file that minlib
+uses to form its list of your library, making all the useful
+features of minlib possible.  It's so important, in fact,
+that minlib is entirely useless without one, and if you
+don't provide it with one, minlib will simply let you know
+that it doesn't have anything to work with, and will
+quit:</p>
+
+<pre class="demo">
+$>  minlib
+minlib:  no input file specified
+</pre>
+
+<p>So you need to give minlib something to work with; you
+need to give it your data file.  You can do this in one of
+two ways.  Let's take a common use case:  you're trying to
+convert your library over from calibre.  Unlike calibre,
+minlib does not force you to store your files in a
+particular way; so converting your calibre use to minlib is
+a simple matter:  use the "<strong>-a</strong>" option.
+Take note of whatever directory you told calibre to use for
+storing your books.  Then enter the following:
+
+<pre class="demo">
+$>  minlib -a /your/book/directory > library_file
+metadata.db not a minlib format; skipping...
+Processing mybook.pdf...
+Processing mybook.epub...
+Processing mybook_1.html...
+Processing mybook_2.html...
+Processing mybook_3.html...
+....
+</pre>
+
+And so on.  Depending on the size of your library, this may
+take a while to run; but minlib will provide you plenty of
+output to let you know what it's doing.  All of that
+feedback about what minlib is doing will be output to
+"stderr," so you'll be able to watch what minlib is doing;
+but the actual metadata from your files is written to
+"stdout," so once minlib is finished, you'll find your data
+file in "<strong>library_file</strong>.</p>
+
+<p>If you open <strong>library_file</strong>, it will look
+something like this:</p>
+
+<pre class="demo">
+%%
+TITLE:	Lawrence Lessig: - Free Culture - How Big Media Uses Technology and the Law to Lock Down Culture and Control Creativity
+SUBJECT:	law
+KEYWORDS:	law
+AUTHOR:	LM-sisu-scribe
+CREATOR:	LaTeX with hyperref package
+PRODUCER:	xdvipdfmx (0.7.8)
+CREATIONDATE:	Fri Mar 11 09:41:37 2011
+TAGGED:	no
+ENCRYPTED:	no
+PAGESIZE:	612 x 792 pts (letter)
+PAGEROT:	0
+PDFVERSION:	1.4
+PATH:	/your/book/directory/lessig_free_culture.pdf
+%%
+TITLE:	Choregraphie, ou, L'art de décrire la dance, par caracteres, figures, et signes démonstratifs : avec lesquels on apprend facilement de soy-même toutes sortes de dances : ouvrage tres-utile aux maîtres à dancer & à toutes les personnes qui s'appliquent à la dance
+KEYWORDS:	http://www.archive.org/details/choregraphieoula00feui
+AUTHOR:	Feuillet, Raoul-Auger, 1659 or 60-1710
+CREATOR:	Digitized by the Internet Archive
+PRODUCER:	Recoded by LuraDocument PDF v2.28
+CREATIONDATE:	Sat Mar 20 01:00:45 2010
+MODDATE:	Sat Mar 20 01:22:31 2010
+TAGGED:	no
+ENCRYPTED:	no
+PAGESIZE:	350 x 498 pts
+PAGEROT:	0
+PDFVERSION:	1.5
+PATH:	/your/book/directory/choregraphieoula00feui.pdf
+....
+</pre>
+
+<p>Depicted above are two <em>records</em>, each of which
+lists the metadata for one book.  All of this information,
+except the line labelled "<strong>PATH</strong>", comes
+directly from the files themselves; the
+<strong>PATH</strong> line is supplied by minlib.  Of
+course, minlib will traverse the entire directory tree and
+do this for all the files in formats it recognizes; other
+files it will simply ignore.</p>
+
+<p>Each record is separated from the ones above and below it
+by a line containing "<strong>%%</strong>"; even the first
+record must begin with this line, but the last record does
+not need to be followed by it.  Each line consists of a
+<em>field name</em>, which is a series of all-caps (and
+optionally periods) closed by a colon, followed by either
+nothing or any amount of whitespace, followed by the
+<em>field data</em>, which is arbitrary information which
+consists of the rest of the line.  The field data can be of
+any length; our second record shows an abnormally long title
+(beginning with "Choregraphie"), but the field data has no
+length limit at all.</p>
+
+<p>In any case, now you have your data file (at least one;
+it's likely you'll wind up with several as time goes on,
+each containing different types of media; but you may choose
+to keep them all in one, if you wish); now try running:</p>
+
+<pre class="demo">
+$> minlib -f library_file
+</pre>
+
+<p>Now, minlib will start up, looking something like
+this:</p>
+
+<img class="sshot" src="initial_shot.png" />
+
+
+<hr />
+<footer class="bottomstuff">
+<div class="homelink"><a href="index.html">Home</a></div>
+<a href="gorfeed.rss">RSS Newsfeed</a><br />
+<a href="webmas.html">E-Mail the Webmaster</a> | <a href="changes.html">Change Log</a><br />
+</footer>
+</div>
+</body>
+</html>

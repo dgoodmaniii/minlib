@@ -429,3 +429,9 @@ td {
 	background-color:  black;
 	padding:  6px;
 }
+
+.sshot {
+	margin-left:  auto;
+	margin-right:  auto;
+	display:  block;
+}
