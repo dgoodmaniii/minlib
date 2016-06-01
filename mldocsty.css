@@ -127,6 +127,17 @@ a:hover {
 	margin:  auto;
 	padding: 6pt;
 }
+.mainpart h1 {
+	font-size:  200%;
+	font-weight:  bold;
+	color:  blue;
+}
+.mainpart h2 {
+	font-size:  125%;
+	font-weight:  bold;
+	font-style:  italic;
+	color:  blue;
+}
 
 /******************************************/
 /* Format the AMDG div                    */
@@ -369,4 +380,31 @@ tr {
 td {
 	padding-left: 7px;
 	padding-right: 7px;
+}
+
+/******************************************/
+/* List heading formatting                */
+/******************************************/
+
+.artlist li {
+	margin-top:  6px;
+}
+.artlink {
+	font-weight:  bold;
+	border: 1px;
+	border-style:  solid;
+	text-decoration:  none;
+}
+.artlink a {
+	font-weight:  bold;
+	color:  black;
+	border: 1px;
+	text-decoration:  none;
+}
+.artlink a:hover {
+	font-weight:  bold;
+	color:  black;
+	border: 1px;
+	text-decoration:  none;
+	background-color: #fafafa;
 }
