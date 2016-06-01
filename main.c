@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	int i = 0;
 	char c;
 	char deffile[] = "";
-	char defform[] = "%30t | %20a | %4l | %10q";
+	char defform[] = "%30t | %24a | %8l | %10g";
 	char *formstring = NULL;
 	char *filename;
 	char template[] = "mlibtmpXXXXXX";
