@@ -133,13 +133,21 @@ a:hover {
 .mainpart h1 {
 	font-size:  200%;
 	font-weight:  bold;
+	font-variant:  small-caps;
 	color:  blue;
 }
 .mainpart h2 {
 	font-size:  125%;
 	font-weight:  bold;
 	font-style:  italic;
+	font-variant:  small-caps;
 	color:  blue;
+}
+.mainpart h3 {
+	font-size:  125%;
+	color:  blue;
+	font-variant:  small-caps;
+	font-weight:  bold;
 }
 
 /******************************************/
