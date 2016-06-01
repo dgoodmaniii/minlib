@@ -45,11 +45,14 @@ body {
 	vertical-align: middle;
 	border: none;
 	padding: 1%;
-	width:  84px;
-/*	width:  7.5%;*/
 }
 .topbar a {
 	text-decoration: none;
+	color: blue;
+}
+.topbar a:hover {
+	text-decoration: none;
+	border:  0pt;
 	color: blue;
 }
 

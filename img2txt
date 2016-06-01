@@ -1,0 +1,1 @@
+cat txt_logo.txt | convert -background green -density 196 -resample 72 -unsharp 0x.5 -font Courier -fill yellow text:- -trim +repage -bordercolor white -border 0 txt_logo.png
