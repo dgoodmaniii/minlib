@@ -53,7 +53,7 @@ it on the command line (that's what its text user interface,
 or TUI, is for), the command line is the normal way to start
 it up.  We will use 
 
-<pre class="demo">$></pre>
+<pre class="demo">$&gt;</pre>
 
 to show the command prompt, and the following line (if any)
 will be the output that minlib produces.  You are supposed
@@ -71,7 +71,7 @@ that it doesn't have anything to work with, and will
 quit:</p>
 
 <pre class="demo">
-$>  minlib
+$&gt;  minlib
 minlib:  no input file specified
 </pre>
 
@@ -86,7 +86,7 @@ Take note of whatever directory you told calibre to use for
 storing your books.  Then enter the following:
 
 <pre class="demo">
-$>  minlib -a /your/book/directory > library_file
+$&gt;  minlib -a /your/book/directory > library_file
 metadata.db not a minlib format; skipping...
 Processing mybook.pdf...
 Processing mybook.epub...
@@ -168,7 +168,7 @@ each containing different types of media; but you may choose
 to keep them all in one, if you wish); now try running:</p>
 
 <pre class="demo">
-$> minlib -f library_file
+$&gt; minlib -f library_file
 </pre>
 
 And we'll see what happens then in our next section.
@@ -284,9 +284,91 @@ key or 'k', just as you do in menu view.</li>
 This is the record number as it appears in your data file;
 it is <em>not</em> the order in which tye appear in menu
 view.</li>
-
 </ul>
 
+<p>In both views, two options are always available:
+<em>open</em> and <em>shell</em>.  Hit 'o' to open; the
+bottom bar will then give you options of which type of file
+you'd like to open, along with the keys you press to open
+them.  E.g., 'p' will open a pdf, while 'P' (capital 'p')
+will open a Postscript file, and 'e' will open epub.
+Because of this, you can have multiple file types of the
+same work in the same record, and minlib will open the one
+you'd like.</p>
+
+<p>Hit ':' for the shell.  This will call the default shell
+on your system, as expressed by the environment variable
+"SHELL"; if this does not exist, it simply calls the POSIX
+shell, "<strong>/bin/sh</strong>".  This is especially
+useful in two primary cases:</p>
+
+<ol>
+<li>You have a file in a record which is in a format which
+minlib doesn't know.  By pulling that record up in detail
+view, you can have the path to the file displayed on your
+screen, then shell out with ':' and open it with the
+application of your choice from there.  This is also useful
+for opening files in a different application than normal.
+Perhaps your default pdf viewer is xpdf, but you'd like to
+open this particular file in okular.  Shell out with ':',
+type "okular" followed by the name of the file, and put it
+in the background by closing your command with "&amp;".
+E.g.:
+
+<pre class="demo">
+: $&gt; okular  /your/library/directory/great_file.pdf &amp;
+</pre>
+</li>
+
+<li>You want to convert your file to another format.
+Minlib does one thing---manage your digital library---and
+does it well.  It's not a file-format converter, and it
+doesn't want to be; but it does want to make it easy for you
+to run one.  Say you have an old Postscript file you want to
+convert to pdf.  Minlib doesn't do this for you (and it
+shouldn't; that's not what minlib is), but you can still do
+it easily:
+
+<pre class="demo">
+: $&gt; ps2pdf /your/library/directory/old_file.ps
+</pre>
+
+And it's converted.  You can add the new file to your
+database as a new record by itself:
+
+<pre class="demo">
+: $&gt; minlib -a /your/library/directory/old_file.pdf &gt;&gt; library_file
+</pre>
+
+(Make sure you use <em>two</em> "&gt;", not one, or it will
+overwrite your library file!  Two will simply append it to
+the end.)  Or you can edit your library file and add an
+extra path command to that record.</li>
+</li>
+</ol>
+
+<p>And that's more or less all there is to running minlib.
+Now let's look at some of the ways you can control the way
+minlib looks and behaves.</p>
+
+<h2>Configuring Minlib</h2>
+
+<p>When you start minlib, it goes out hunting for an <em>rc
+file</em>, also called a <em>config file</em>.  By default,
+that file is <strong>$HOME/.minlibrc</strong>, but it can be
+anywhere; just let minlib know with the
+"<strong>-c</strong>" command line option:</p>
+
+<pre class="demo">
+$&gt; minlib -c rcfile -f library_file
+</pre>
+
+<p>If you give minlib a config file on the command line in
+this way, minlib will respect that file and ignore
+<strong>$HOME/.minlibrc</strong>, even if it exists.  If you
+neither give minlib a config file on the command line nor
+have a <strong>$HOME/.minlibrc</strong>, minlib will simply
+start with default options, which we saw above.</p>
 
 <hr />
 <footer class="bottomstuff">
