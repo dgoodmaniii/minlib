@@ -601,7 +601,7 @@ int print_bot_line(WINDOW *win, int row, int col)
 	attron(A_BOLD);
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
-	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open "
+	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open  "
 	":=shell");
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(2));
