@@ -208,6 +208,12 @@ is the <em>cursor</em>, which highlights the
 currently-selected item; in this case, Orwell's
 <em>1984</em>.</p>
 
+<p>Finally, there is the line just below the bottom bar,
+which prints messages for the user.  Most of the time it
+will be empty; however, it will often contain important
+information for the user.  We will call this the <em>status
+line</em>.</p>
+
 <p>You can move around in menu view in the following
 ways:</p>
 
@@ -224,7 +230,8 @@ of records.  In the default view, for example, you can find
 <em>1984</em> easily by simply typing 'm', then entering the
 first few characters in the title.  There may be more than
 one match; if that's so, use 'p' to find the next match, or
-'P' (capital 'p') to find the previous one.</li>
+'P' (capital 'p') to find the previous one.  The status line
+will print whether a match was found or not.</li>
 <li><em>Search</em>:  you can do full record searches of
 your entire library.  Hit '/' (forward slash), then type in
 the text you want to find.  You can enter any
@@ -232,7 +239,52 @@ POSIX-compliant regular expression here; if you don't know
 what that means, don't worry about it, and just know that
 you can match text anywhere in the library.  There may be
 more than one match; if that's so, use 'n' to find the next
-match, or 'N' (capital 'n') to find the previous one.</li>
+match, or 'N' (capital 'n') to find the previous one.  The
+status line will print whether a match was found, and if so,
+how many.  It will also inform you if there was an error in
+the regular expression you entered, if any.</li>
+</ul>
+
+<p>So consider the following screen:</p>
+
+<img class="sshot" src="regexp_error.png" />
+
+<p>Note the status line; it reads "<strong>error:  Trailing
+backslash</strong>".  This indicates that the user tried to
+search with a regular expression, but he accidentally left a
+trailing backslash, which caused an error.  He should try
+again.  The status line can also contain more pleasant
+information:</p>
+
+<img class="sshot" src="regexp_matches.png" />
+
+<p>If you find a work you're interested in viewing more
+information about, you should go to its <em>detail
+view</em>; this is done simply by hitting the
+"<strong>enter</strong>" key when you have your cursor on
+the record you want.  You will be faced with something like
+this:</p>
+
+<img class="sshot" src="detail_view.png" />
+
+<p>As noted above, all of this information except for the
+"<strong>PATH</strong>" field was derived automatically from
+the pdf file; the PATH field was added by minlib.  We can
+see a few things about detail view from this screenshot:</p>
+
+<ul>
+<li>Word wrapping is basic and na&iuml;ve; lines are wrapped
+simply at whatever character happens to fall at the end of
+the line.</li>
+<li>Sometimes the metadata will exceed the available space
+on the screen.  No worries; <em>scroll down</em> with the
+down-arrow key or 'j'; <em>scroll up</em> with the up-arrow
+key or 'k', just as you do in menu view.</li>
+<li>A record number is centered at the top of the screen.
+This is the record number as it appears in your data file;
+it is <em>not</em> the order in which tye appear in menu
+view.</li>
+
 </ul>
 
 
