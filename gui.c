@@ -158,6 +158,50 @@ struct options *globopts)
 	return 0;
 }
 
+int menu_help_scr()
+{
+	WINDOW *menu_help_win;
+	int row, col;
+
+	getmaxyx(stdscr,row,col);
+	werase(stdscr); refresh();
+	frame_menu_help(row, col); refresh();
+	menu_help_win = newwin(row-3,col,1,0);
+	wrefresh(menu_help_win); refresh();
+	keypad(menu_help_win,TRUE);
+	wbkgd(menu_help_win,COLOR_PAIR(6));
+	wattron(menu_help_win,COLOR_PAIR(4));
+	mvwprintw(menu_help_win,4,2,"m\t");
+	wattroff(menu_help_win,COLOR_PAIR(4));
+	wattron(menu_help_win,COLOR_PAIR(5));
+	mvwprintw(menu_help_win,4,2+8,"match");
+	wattroff(menu_help_win,COLOR_PAIR(5));
+	wattron(menu_help_win,COLOR_PAIR(4));
+	mvwprintw(menu_help_win,6,2,"/\t");
+	wattroff(menu_help_win,COLOR_PAIR(4));
+	wattron(menu_help_win,COLOR_PAIR(5));
+	mvwprintw(menu_help_win,6,2+8,"full search (POSIX regexps)");
+	wattroff(menu_help_win,COLOR_PAIR(5));
+	wattron(menu_help_win,COLOR_PAIR(4));
+	mvwprintw(menu_help_win,8,2,":\t");
+	wattroff(menu_help_win,COLOR_PAIR(4));
+	wattron(menu_help_win,COLOR_PAIR(5));
+	mvwprintw(menu_help_win,8,2+8,"access to system shell");
+	wattroff(menu_help_win,COLOR_PAIR(5));
+	wattron(menu_help_win,COLOR_PAIR(4));
+	mvwprintw(menu_help_win,10,2,"o\t");
+	wattroff(menu_help_win,COLOR_PAIR(4));
+	wattron(menu_help_win,COLOR_PAIR(5));
+	mvwprintw(menu_help_win,10,2+8,"open file");
+	wattroff(menu_help_win,COLOR_PAIR(5));
+	wrefresh(menu_help_win); refresh();
+	wgetch(menu_help_win);
+	werase(menu_help_win);
+	wrefresh(menu_help_win);
+	delwin(menu_help_win);
+	return 0;
+}
+
 int shell_out()
 {
 	const char *name = "SHELL";
@@ -424,6 +468,13 @@ int set_pattern_buffer(MENU *lib_menu,char *s, int row, int col)
 	return 0;
 }
 
+int frame_menu_help(int row, int col)
+{
+	print_top_menu_help(stdscr,row,col);
+	print_bot_menu_help(stdscr,row,col);
+	return 0;
+}
+
 int frame_detail_screen(int row, int col, int recordnum)
 {
 	print_top_details(stdscr,row,col,recordnum);
@@ -437,6 +488,32 @@ int frame_main_screen(int numrecs, int row, int col)
 	refresh();
 	print_bot_line(stdscr, row, col);
 	refresh();
+	return 0;
+}
+
+int print_top_menu_help(WINDOW *win, int row, int col)
+{
+	attron(A_BOLD);
+	attron(COLOR_PAIR(1));
+	highlight_line(win,0,col);
+	attron(A_REVERSE);
+	mvwprintw(win,0,0,"--minlib, v0.9");
+	print_center(win,0,"Menu View Help");
+	print_right(win,0,"Menu View--");
+	wmove(win,row,col-1);
+	attroff(COLOR_PAIR(1));
+	attroff(A_REVERSE | A_BOLD);
+	return 0;
+}
+
+int print_bot_menu_help(WINDOW *win, int row, int col)
+{
+	attron(COLOR_PAIR(2));
+	highlight_line(win,row-2,col);
+	attron(A_REVERSE | A_BOLD);
+	mvwprintw(win,row-2,0,"q:back");
+	attroff(A_REVERSE | A_BOLD);
+	attroff(COLOR_PAIR(2));
 	return 0;
 }
 
@@ -524,7 +601,8 @@ int print_bot_line(WINDOW *win, int row, int col)
 	attron(A_BOLD);
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
-	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open :=shell");
+	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open "
+	":=shell");
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(2));
 	return 0;
