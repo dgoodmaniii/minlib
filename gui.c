@@ -38,6 +38,7 @@ struct options *globopts)
 	int matchnum;
 	int currmatch = 0;
 	int *matched;
+	int doreload = 0;
 
 	if ((matched = malloc(1 * sizeof(int))) == NULL) {
 		fprintf(stderr,"minlib:  insufficient memory to store "
@@ -136,6 +137,10 @@ struct options *globopts)
 		case ':':
 			shell_out();
 			break;
+		case 'r':
+			doreload = 1;
+			goto cleanup;
+			break;
 		case 10: /* enter */
 			sel_rec = item_index(current_item(lib_menu));
 			unpost_menu(lib_menu);
@@ -148,6 +153,7 @@ struct options *globopts)
 		}
 		wrefresh(lib_menu_win);
 	}
+	cleanup:
 	unpost_menu(lib_menu);
 	free_menu(lib_menu);
 	for (i = 0; i <= numrecs; ++i)
@@ -155,6 +161,8 @@ struct options *globopts)
 	free(lib_list);
 	free(matched);
 	endwin();
+	if (doreload == 1)
+		return 1;
 	return 0;
 }
 
@@ -602,7 +610,7 @@ int print_bot_line(WINDOW *win, int row, int col)
 	highlight_line(win,row-2,col);
 	attron(A_REVERSE | A_BOLD);
 	mvwprintw(win,row-2,0,"q:quit  m:match  /:search  o:open  "
-	":=shell");
+	":=shell  r:reload");
 	attroff(A_REVERSE | A_BOLD);
 	attroff(COLOR_PAIR(2));
 	return 0;

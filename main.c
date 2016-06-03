@@ -58,7 +58,9 @@ int main(int argc, char **argv)
 	int fsval = 0; /* whether we've done a command-line format */
 	int didconfigfile = 1;
 	int add_succ;
+	char **args;
 
+	args = argv;
 	opterr = 0;
 	if ((filename = malloc((strlen(deffile)+1)*sizeof(char)))==NULL) {
 		fprintf(stderr,"minlib:  insufficient memory for "
@@ -154,12 +156,14 @@ int main(int argc, char **argv)
 		*(*(formlist+i+0)) = '\0';
 	}
 	format_recs(ptr,formstring,formlist,numrecs,recnums);
-/*	for (i = 0; i < ((numlines)*2-count_recs_file(filename)); ++i) {
-		printf("%s",*(ptr+i));
-	}*/
-	for (i = 0; i < numrecs; ++i)
-		printf("%3d: %s\n",*(recnums+i),*(formlist+i));
-	load_gui(ptr,formlist,recnums,numrecs,globopts);
+/*	for (i = 0; i < numrecs; ++i)
+		printf("%3d: %s\n",*(recnums+i),*(formlist+i));*/
+	if (load_gui(ptr,formlist,recnums,numrecs,globopts) == 1) {
+		fprintf(stderr,"ONE:  %s\n",args[0]);
+		for (i = 0; i < argc; ++i)
+			printf("\t%s\n",args[i]);
+		execv(args[0],args);
+	}
 	free_db(ptr,numlines*2-count_recs_file(filename));
 	free(ptr);
 	for (i=0; i <= numrecs; ++i)
