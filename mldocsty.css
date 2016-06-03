@@ -137,7 +137,7 @@ a:hover {
 	color:  blue;
 }
 .mainpart h2 {
-	font-size:  125%;
+	font-size:  150%;
 	font-weight:  bold;
 	font-style:  italic;
 	font-variant:  small-caps;
@@ -365,7 +365,6 @@ a:hover {
 	border-left-width: 1px;
 	border-right-width: 1px;
 	margin-left: 10px;
-	float: right;
 	border-bottom-color: black;
 	border-top-color: black;
 	border-right-color: black;
@@ -378,6 +377,7 @@ th {
 	border-bottom: solid;
 	border-bottom-width: 1px;
 	text-align: center;
+	font-variant:  small-caps;
 	border-color: black;
 }
 tr {
@@ -391,6 +391,7 @@ tr {
 td {
 	padding-left: 7px;
 	padding-right: 7px;
+	vertical-align:  top;
 }
 
 /******************************************/

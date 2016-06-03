@@ -124,7 +124,7 @@ PAGEROT:	0
 PDFVERSION:	1.4
 PATH:	/your/book/directory/lessig_free_culture.pdf
 %%
-TITLE:	Choregraphie, ou, L'art de décrire la dance, par caracteres, figures, et signes démonstratifs : avec lesquels on apprend facilement de soy-même toutes sortes de dances : ouvrage tres-utile aux maîtres à dancer & à toutes les personnes qui s'appliquent à la dance
+TITLE:	Choregraphie, ou, L'art de décrire la dance, par caracteres, ...
 KEYWORDS:	http://www.archive.org/details/choregraphieoula00feui
 AUTHOR:	Feuillet, Raoul-Auger, 1659 or 60-1710
 CREATOR:	Digitized by the Internet Archive
@@ -384,9 +384,126 @@ have a <strong>$HOME/.minlibrc</strong>, minlib will simply
 start with default options, which we saw above.</p>
 
 <p>You can customize minlib's formatting of your records,
-the colors of the different parts of the screen, and the 
+the colors of the different parts of the screen, and the
+programs that minlib will call when you ask it to open a
+file.  This can produce nice-looking, sober examples:</p>
 
+<img class="sshot" src="pers_colors.png" />
 
+<p>Or some true monstrosities:</p>
+
+<img class="sshot" src="crazy_conf.png" />
+<img class="sshot" src="crazy_details.png" />
+
+<p>How you do it is up to you; the sky's the limit.</p>
+
+<p>All minlib configuration options are of the same format:
+a configuration option in all caps, followed by a colon,
+followed by an arbitrary amount (or lack) of whitespace,
+followed by the option text.  E.g.:</p>
+
+<pre class="demo">
+TOP_FORE_COLOR:  COLOR_YELLOW
+TOP_BACK_COLOR:  COLOR_BLUE
+DEF_PDF_VIEWER:	xpdf "%s"
+</pre>
+
+<p>Couldn't be simpler.  Now, on to the actually
+configuration options!</p>
+
+<h3>Color Configurations</h3>
+
+<p>We saw above what we call the various parts of the minlib
+screen; each of those parts is colored by a separate
+<em>color pair</em>, the first color of which forms the
+foreground (the color of the text), and the second color of
+which forms the background.  Minlib accepts standard ncurses
+colors; these are entered in all-caps and consist of
+<strong>COLOR_BLACK</strong>, <strong>COLOR_RED</strong>,
+<strong>COLOR_GREEN</strong>, <strong>COLOR_YELLOW</strong>,
+<strong>COLOR_BLUE</strong>, <strong>COLOR_MAGENTA</strong>,
+<strong>COLOR_CYAN</strong>, or
+<strong>COLOR_WHITE</strong>.  They can be assigned to the
+various parts of the minlib screen as follows: </p>
+
+<table class="realtable">
+	<tr>
+		<th>Field</th><th>Description</th><th>Default</th>
+	</tr>
+	<tr>
+		<td>TOP_FORE_COLOR</td>
+		<td>The text in the top bar, both in menu and detail
+		view.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+	<tr>
+		<td>TOP_BACK_COLOR</td>
+		<td>The background of the top bar, both in menu and detail
+		view.</td>
+		<td>COLOR_WHITE</td>
+	</tr>
+	<tr>
+		<td>BOT_FORE_COLOR</td>
+		<td>The text in the bottom bar, both in menu and detail
+		view.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+	<tr>
+		<td>BOT_BACK_COLOR</td>
+		<td>The background of the bottom bar, both in menu and detail
+		view.</td>
+		<td>COLOR_WHITE</td>
+	</tr>
+	<tr>
+		<td>MEN_FORE_COLOR</td>
+		<td>The foreground color in the menu.  This means that
+		it is the text color in those menu items which are not
+		currently selected, and the background color of the
+		line which currently has the cursor.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+	<tr>
+		<td>MEN_BACK_COLOR</td>
+		<td>The background color in the menu.  This means that
+		it is the background color of those menu items which
+		are not currently selected, and the text color of the
+		line which currently has the cursor.</td>
+		<td>COLOR_WHITE</td>
+	</tr>
+	<tr>
+		<td>DET_BACK_COLOR</td>
+		<td>The background color for detail view.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+	<tr>
+		<td>DET_FIELD_FORE_COLOR</td>
+		<td>The text color for the field names in detail
+		view.</td>
+		<td>COLOR_WHITE</td>
+	</tr>
+	<tr>
+		<td>DET_FIELD_BACK_COLOR</td>
+		<td>The background color for the field names in detail
+		view.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+	<tr>
+		<td>DET_TXT_FORE_COLOR</td>
+		<td>The text color for the field values in detail
+		view.</td>
+		<td>COLOR_WHITE</td>
+	</tr>
+	<tr>
+		<td>DET_TXT_BACK_COLOR</td>
+		<td>The background color for the field values in detail
+		view.</td>
+		<td>COLOR_BLACK</td>
+	</tr>
+</table>
+
+<p>So find a color scheme you like and put it in your
+<strong>.minlibrc</strong> file; it can help make minlib
+even more of a pleasure to use.</p>
 
 <hr />
 <footer class="bottomstuff">
