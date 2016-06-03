@@ -557,31 +557,19 @@ and the default for each.</p>
 </tr>
 <tr>
 	<td>DEF_OFFICE_VIEWER</td>
-	<td>"Office suite" files; ods, od</td>
-	<td><pre>gs "%s"</pre></td>
+	<td>"Office suite" files; odt, odf, ods, odp, doc, ppt,
+	xls, docx, pptx, xlsx</td>
+	<td><pre>libreoffice "%s"</pre></td>
 </tr>
-DEF_OFFICE_VIEWER
 </table>
 
-
-<hr />
-<footer class="bottomstuff">
-<div class="homelink"><a href="index.html">Home</a></div>
-<a href="gorfeed.rss">RSS Newsfeed</a><br />
-<a href="webmas.html">E-Mail the Webmaster</a> | <a href="changes.html">Change Log</a><br />
-</footer>
-</div>
-</body>
-</html>
-DEF_EPUB_VIEWER
-DEF_HTML_VIEWER
-DEF_OGV_VIEWER
-DEF_OGG_VIEWER
-DEF_DVI_VIEWER
-DEF_PS_VIEWER
-DEF_OFFICE_VIEWER
-</table>
-
+<p>Note the "%s" in every default string; this is necessary
+for minlib to determine what exact command to call when you
+ask it to open something for you.  The "%s" will be replaced
+with the <strong>PATH</strong> field corresponding to your
+file type.  There can be only one "%s" in your call; but you
+can use as complex a command line as you like, as long as
+"%s" is in it.</p>
 
 <hr />
 <footer class="bottomstuff">
