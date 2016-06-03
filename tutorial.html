@@ -505,6 +505,84 @@ various parts of the minlib screen as follows: </p>
 <strong>.minlibrc</strong> file; it can help make minlib
 even more of a pleasure to use.</p>
 
+<h3>Applications</h3>
+
+<p>Most of the files in your library are going to require
+some application to view.  Below find the field strings for
+configuring these applications, along with a brief
+description of the file extensions they're expected to open,
+and the default for each.</p>
+
+<table class="realtable">
+<tr>
+	<th>Field</th>
+	<th>Description</th>
+	<th>Default</th>
+</tr>
+<tr>
+	<td>DEF_PDF_VIEWER</td>
+	<td>pdf files</td>
+	<td><pre>xpdf "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_EPUB_VIEWER</td>
+	<td>epub files</td>
+	<td><pre>fbreader "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_HTML_VIEWER</td>
+	<td>HTML files</td>
+	<td><pre>w3m "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_OGV_VIEWER</td>
+	<td>Ogg Theora (video) files</td>
+	<td><pre>vlc "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_OGG_VIEWER</td>
+	<td>Ogg Vorbis (audio) files</td>
+	<td><pre>ogg123 "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_DVI_VIEWER</td>
+	<td>dvi files; old-school TeX output, rarely encountered
+	in the wild</td>
+	<td><pre>xdvi "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_PS_VIEWER</td>
+	<td>Postscript files</td>
+	<td><pre>gs "%s"</pre></td>
+</tr>
+<tr>
+	<td>DEF_OFFICE_VIEWER</td>
+	<td>"Office suite" files; ods, od</td>
+	<td><pre>gs "%s"</pre></td>
+</tr>
+DEF_OFFICE_VIEWER
+</table>
+
+
+<hr />
+<footer class="bottomstuff">
+<div class="homelink"><a href="index.html">Home</a></div>
+<a href="gorfeed.rss">RSS Newsfeed</a><br />
+<a href="webmas.html">E-Mail the Webmaster</a> | <a href="changes.html">Change Log</a><br />
+</footer>
+</div>
+</body>
+</html>
+DEF_EPUB_VIEWER
+DEF_HTML_VIEWER
+DEF_OGV_VIEWER
+DEF_OGG_VIEWER
+DEF_DVI_VIEWER
+DEF_PS_VIEWER
+DEF_OFFICE_VIEWER
+</table>
+
+
 <hr />
 <footer class="bottomstuff">
 <div class="homelink"><a href="index.html">Home</a></div>
