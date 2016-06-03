@@ -72,6 +72,12 @@ can supply a comma-separated list of source files in this
 argument, and \fBminlib\fR will do the right thing and use
 them all, by dumping them all into a temporary file and then
 inputting that.
+.RS
+.PP
+If you're using \fB\-f\fR to override a data file
+specification in your config file, make sure you put
+\fB\-f\fR \fIafter\fR your \fB\-c\fR.
+.RE
 .TP
 .BR "\-r \fIrecord-format\fR"
 Use \fIrecord-format\fR as the format for each individual

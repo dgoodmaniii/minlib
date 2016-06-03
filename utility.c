@@ -52,7 +52,7 @@ int count_lines_file(char *s)
 
 	if ((fp = fopen(s,"r")) == NULL) {
 		fprintf(stderr,"minlib:  error opening file %s, "
-		"with the following error:\n\t%d:  %s",s,errno,
+		"with the following error:\n\t%d:  %s\n",s,errno,
 		strerror(errno));
 		exit(BAD_INPUT_FILE);
 	}
@@ -76,7 +76,7 @@ int count_recs_file(char *s)
 
 	if ((fp = fopen(s,"r")) == NULL) {
 		fprintf(stderr,"minlib:  error opening file %s, "
-		"with the following error:\n\t%d:  %s",s,errno,
+		"with the following error:\n\t%d:  %s\n",s,errno,
 		strerror(errno));
 		exit(BAD_INPUT_FILE);
 	}
