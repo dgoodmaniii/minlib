@@ -68,7 +68,6 @@ struct options **globopts)
 			}
 			strcpy(*formstring,ptr);
 			chomp(*formstring);
-			fprintf(stderr,"RECORDFORM:  |%s|\n",*formstring);
 		}
 		if (strstr(line,"TOP_FORE_COLOR:")) {
 			get_color(line,TOP_FORE_COLOR,globopts);
@@ -137,8 +136,6 @@ int fill_def_apps(struct options **globopts)
 		get_app("DEFAULT:  gs \"%s\"",NUM_COLORS+6,globopts);
 	if (!strcmp((*globopts+(NUM_COLORS+7))->optval,""))
 		get_app("DEFAULT:  libreoffice \"%s\"",NUM_COLORS+7,globopts);
-	for (i = NUM_COLORS; i < (NUM_COLORS + NUM_APPS); ++i)
-		fprintf(stderr,"APP: \"%s\"\n",(*globopts+i)->optval);
 	return 0;
 }
 
@@ -213,7 +210,6 @@ int get_color(char *s, int ind,struct options **globopts)
 		} else {
 			strcpy((*globopts+ind)->optval,ptr);
 			chomp((*globopts+ind)->optval);
-			fprintf(stderr,"COLOR: %s\n",(*globopts+ind)->optval);
 		}
 	}
 }
