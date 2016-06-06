@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>minlib RSS Feed</title>
+		<description>
+		Updates, particularly software updates, about the
+		minlib text-interface personal library management software.
+		</description>
+		<link>http://dgoodmaniii.github.io/minlib/</link>
+		<item>
+			<title>v0.9 Released</title>
+			<description>
+			v0.9 is the first production version of minlib.  It
+			includes full extraction of metadata from a
+			library; writing to a library file; customizable
+			format strings; detail view; opening of files; and
+			full-text search of entries.
+			</description>
+			<link>http://dgoodmaniii.github.io/minlib/changes.html</link>
+			<pubDate>20160612</pubDate>
+	</channel>
+</rss>
