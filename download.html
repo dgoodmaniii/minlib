@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- +AMDG -->
+
+<head>
+<title>minlib | Download and Installation</title>
+<meta charset="UTF-8" />
+<meta name="description" content="minlib, a powerful, fast,
+simple library management program with a text user interface
+(TUI) and powerful customization features" />
+<link rel="stylesheet" type="text/css" href="mldocsty.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="alternate" type="application/rss+xml"
+	title="minlib RSS feed" href="mlfeed.rss" />
+<link rel="license" 
+	href="https://creativecommons.org/licenses/by-sa/2.0/" />
+</head>
+<body>
+
+<div class="dedic">
+<a href="amdg.html">+<br />
+AMDG</a><br />
+</div>
+
+<header class="topbar">
+<h1><a class="imglink" href="index.html"><img src="txt_logo.png" alt="minlib Logo" /></a>minlib</h1>
+
+<nav class="toolbar">
+<ul>
+<li><a title="minlib:  Download and Install" href="download.html">Download</a>&nbsp;|</li>
+<li><a title="minlib:  Documentation" href="ml_docs.html">Documentation</a>&nbsp;|</li>
+<li><a title="minlib:  Our Copyright" href="gpl-3.0-standalone.html">Copyright</a>&nbsp;|</li>
+<li><a title="minlib:  Screenshots" href="screenshots.html">Screenshots</a>&nbsp;|</li>
+<li><a title="minlib:  Change Log" href="changes.html">Change Log</a></li>
+</ul>
+</nav>
+</header>
+
+<div class="mainpart">
+
+<h1>Downloading and Installing Minlib</h1>
+
+<p><span class="fl">D</span>ownloading and installing minlib
+is a pretty straightforward process; the program was
+designed to be easily built and installed.  So presuming
+that you don't have a prebuilt version for your
+distribution, you can read through this page.</p>
+
+<h2>Downloading Minlib</h2>
+
+<p>The minlib source is all available at Github:</p>
+
+<center>
+<a href="https://www.github.com/dgoodmaniii/minlib/">Minlib
+Source</a>
+</center>
+
+<p>Github is pretty daunting for people who don't know <a
+href="https://git-scm.com">git</a>, so a little explanation
+of this page is in order.  If all you want to do is download
+the program to install, head to the "<strong>Clone or
+download</strong>" button on the right, which will give you
+the option of downloading a zip archive:</p>
+
+<center>
+<a
+href="https://github.com/dgoodmaniii/minlib/archive/master.zip">zip
+of minlib</a>
+</center>
+
+<p>If you <em>do</em> happen to know <a
+href="https://git-scm.com">git</a>, then go ahead and work
+your magic; clone that repository to your heart's
+content.</p>
+
+<h2>Installing Minlib</h2>
+
+<p>This should also be pretty simple, even simpler than
+usual, since minlib does not include the usual "./configure"
+step that most source downloads do.  I'll be assuming here
+that you're working with the zip archive, since anyone who
+knows enough <a href="https://git-scm.com">git</a> to clone
+the repository will be able to figure out the rest for
+themselves.</p>
+
+<ol>
+<li>Find the directory you want to put minlib into, and go
+to it.</li>
+<li>Unzip the archive:
+<pre class="demo">
+unzip master.zip
+</pre>
+</li>
+<li>Go to the directory that said unzipping created.  It
+will be immediately beneath the directory that you
+created.</li>
+<li>Build the source:
+<pre class="demo">
+make
+</pre>
+</li>
+<li>You now have a working minlib in this directory.
+Probably, however, you want more than that:  you want to be
+able to run minlib from any directory, read the manpage when
+you need to, and so forth.  So become root however you
+normally would (<strong>sudo</strong>, or <strong>su
+-</strong>, or whatever), and run the following:
+<pre class="demo">
+make install
+</pre>
+That should cover it; you've now got minlib running on your
+computer.</li>
+</ol>
+
+<p>If you need help learning to run minlib, visit the <a
+href="ml_docs.html">documentation</a> page, especially the
+<a href="tutorial.html">tutorial</a>.  And then, happy
+managing!</p>
+
+<hr />
+<footer class="bottomstuff">
+<div class="homelink"><a href="index.html">Home</a></div>
+<a href="mlfeed.rss">RSS Newsfeed</a><br />
+<a href="webmas.html">E-Mail the Webmaster</a> | <a href="changes.html">Change Log</a><br />
+</footer>
+</div>
+</body>
+</html>
