@@ -23,10 +23,12 @@ includedir=$(prefix)/include
 datarootdir=$(prefix)/share
 datadir=$(datarootdir)
 docdir=$(datarootdir)/doc/minlib
-htmldir=$(docdir)
 mandir=$(datarootdir)/man
+binfiles=minlib
+manfiles=minlib.1
+othdocs=minlib_man.html
 
-all : minlib
+all : minlib doc
 
 minlib :	main.c $(OBJ) errcodes.h options.h
 	$(CC) $(CFLAGS) -o minlib main.c $(OBJ) $(CURSLIB) $(EXTLIB)
@@ -54,6 +56,17 @@ add_files.o : add_files.c utility.c
 
 utility.o : utility.c errcodes.h
 	$(CC) $(CFLAGS) -c utility.c
+
+install :
+	cp $(binfiles) $(bindir)
+	cp $(manfiles) $(mandir)/man1
+	test -d $(docdir) || mkdir -p $(docdir)
+	cp $(othdocs) $(docdir)
+
+uninstall :
+	rm $(bindir)/$(binfiles)
+	rm $(mandir)/man1/$(manfiles)
+	rm -R $(docdir)
 
 doc :
 	groff -man -Tascii -a minlib.1 > minlib_man.txt;
