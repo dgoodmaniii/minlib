@@ -715,6 +715,11 @@ list a "genre"; minlib provides options for both.</p>
 	<td>The title of the work.</td>
 </tr>
 <tr>
+	<td>%a</td>
+	<td>AUTHOR, ARTIST</td>
+	<td>The author of the work.</td>
+</tr>
+<tr>
 	<td>%L</td>
 	<td>AUTHLAST</td>
 	<td>Author's last name.</td>
@@ -730,8 +735,94 @@ list a "genre"; minlib provides options for both.</p>
 	<td>Author's first name.</td>
 </tr>
 <tr>
+	<td>%p</td>
+	<td>PUBLISHER</td>
+	<td>The publisher of the work.  Perhaps this would
+	correspond to the studio which produces a film, or the
+	film's producer.</td>
+</tr>
+<tr>
 	<td>%l</td>
-	<td>LANG or LANGONE</td>
+	<td>LANG, LANGUAGE, LANGONE</td>
+	<td>The primary language of the work.  This may not be
+	the only language.</td>
+</tr>
+<tr>
+	<td>%s</td>
+	<td>LANGTWO</td>
+	<td>The secondary language.  E.g., perhaps you have a
+	German grammar which is written primarily in English, but
+	still has a substantial amount of German text.  German
+	might be the secondary language of that work.</td>
+</tr>
+<tr>
+	<td>%g</td>
+	<td>GENRE, TYPE</td>
+	<td>The genre, or type, of the work.  E.g.,
+	science-fiction, biography, etc.</td>
+</tr>
+<tr>
+	<td>%y</td>
+	<td>YEAR</td>
+	<td>Year of the work; whether year of publication, year
+	of authorship, etc.</td>
+</tr>
+<tr>
+	<td>%m</td>
+	<td>MEDIUM</td>
+	<td>The medium of the work; perhaps "book", "film",
+	"magazine", or "journal" would be appropriate values.</td>
+</tr>
+<tr>
+	<td>%P</td>
+	<td>PLACE, LOCATION</td>
+	<td>The location, or place, where the work is situated.
+	If the work is in your physical library, perhaps you'd
+	say "shelf" or "storage"; if it's in your digital
+	library, perhaps you'd say "digital", "hard drive", or
+	"disk sleeve".</td>
+</tr>
+<tr>
+	<td>%e</td>
+	<td>EDITOR</td>
+	<td>The editor; perhaps of an anthology of short stories,
+	or of a magazine volume.</td>
+</tr>
+<tr>
+	<td>%T</td>
+	<td>TRANSLATOR</td>
+	<td>The translator of the work.</td>
+</tr>
+<tr>
+	<td>%d</td>
+	<td>DIRECTOR</td>
+	<td>The director of the work.  Appropriate for movie
+	entries especially, but perhaps also plays which have
+	been publicly performed.</td>
+</tr>
+<tr>
+	<td>%i</td>
+	<td>ILLUS.OR</td>
+	<td>The illustrator of the work.  Graphic novels as well
+	as children's books might have this as a field.</td>
+</tr>
+</table>
+
+<p>Please keep in mind that minlib certainly does not limit
+the names or types of field that you put in your records; if
+you want a field in your records called "JABBERWOCK",
+nothing stops you from using it.  Minlib won't be able to
+include it in your formatted strings; but it will be
+perfectly happy to store it, display it in detail view, and
+allow you to search it.</p>
+
+<p>The above table merely lists the possibilities for
+formatting the strings of your records in menu view; it does
+<em>not</em> in any way limit the contents of your
+records.</p>
+
+<p>Minlib will sort your records by the formatted string;
+practically, this means by the first field.</p>
 
 
 
