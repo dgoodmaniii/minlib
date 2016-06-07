@@ -1,0 +1,377 @@
+<beginning of page>
+x X tty: sgr 0
+minlib(1) minlib minlib(1)
+NAME 
+ minlib <-> a text-based library management program
+SYNOPSIS 
+ minlib [<->a file or directory] [<->c rcfile] [<->r formatstring] [<->f input<hy>
+ file[,...]]
+DESCRIPTION 
+ minlib A text-based library management program, designed to do one
+ thing---manage your library, physical and digital---and do it well.
+ Customizable formatting, usable with books, files, movies, music or any
+ other media. Features include filtering, searching, and more.
+OPTIONS 
+ <->V
+ Print version and licensing information, then exit successfully.
+ <->a file/directory
+ Asks minlib to explore some files and output their metadata in a
+ form suitable for inclusion in a minlib database. This will be
+ outputted to stdout, so you can redirect it to a file as you
+ will. If you give filename as an argument, minlib will output
+ only the metadata for that file; if you give directory as an
+ argument, minlib will descend recursively through that direc<hy>
+ tory, outputting metadata for every suitable file it can find.
+ Very useful for combing your directory tree for files that you
+ probably want in your library, but don't want to manually enter
+ the information for. Works for pdf and epub files.
+ Be aware that an error on any one file while traveling the tree
+ will stop minlib entirely; this is in keeping with the "when you
+ must fail, fail as soon and as noisily as possible" principle.
+ You may have to move the troublesome file from the tree if you
+ can't resolve the issue.
+ Supported file types for automatically extracting metadata are
+ pdf, epub, html, ps, dvi, doc(x), xls(x), ppt(x), ogv, ogg, mp3,
+ man, sxw, sdw, flac, wav, s3m, xm, it, nsf(e), sid, exiv2, jpeg,
+ gif, png, tiff, deb, rpm, tar(.gz), lzh, lha, rar, zip, cab,
+ 7-zip, ar, mtree, pax, cpio, iso9660, share, raw, xar flv, real,
+ riff (avi), mpeg, qt, and asf. Other than pdf and epub, GNU
+ libextractor governs this extraction; pdf uses pdfinfo, and epub
+ is done internally.
+ Mobi and other Kindle-type formats will work with minlib in gen<hy>
+ eral, but minlib cannot extract metadata from them; they're just
+ too locked-down for me to figure out.
+ <->c rcfile
+ Use rcfile as the configuration file for this run. The rcfile
+ may contain things like colors, data files, and format strings;
+ its syntax is very simple and is described below.
+ <->f filename
+ Use filename as the source of library records. You can supply a
+ comma-separated list of source files in this argument, and min<hy>
+ lib will do the right thing and use them all, by dumping them
+ all into a temporary file and then inputting that.
+ If you're using <->f to override a data file specification in your
+ config file, make sure you put <->f after your <->c.
+ <->r record-format
+ Use record-format as the format for each individual record out<hy>
+ putted by minlib. By default, this is %30t | %24a | %8l | %10g,
+<beginning of page>
+ which the astute reader will see adds to precisely the default
+ terminal width of 80 characters. The format is similar to that
+ of C's printf, in that we use a percent sign, followed by a num<hy>
+ ber, followed by a single character which specifies what to fill
+ in, but it is quite different from that of C's printf in that it
+ requires that each formatting character be accompanied by a num<hy>
+ ber of characters. Given the extreme variability of field
+ lengths, and the extreme limitation of most terminals, this
+ restriction seems reasonable.
+ Interpreted sequences are:
+ %t 
+ The title; matched with field heading TITLE.
+ %L
+ The author's last name; matched with field heading AUTH<hy>
+ LAST.
+ %M
+ The author's middle name; matched with field heading
+ AUTHMID.
+ %F
+ The author's first name; matched with field heading AUTH<hy>
+ FIRST.
+ %l
+ The language of the work; matched with field heading
+ LANG.
+ %g
+ The genre, or type, of the work; matched with field head<hy>
+ ings TYPE or GENRE.
+ %y
+ The year of the work; matched with field heading YEAR.
+ %m
+ Media of the work; e.g., book, film, etc. Matched with
+ field heading MEDIUM.
+ %P
+ Place or location of the work; e.g., shelf, storage, etc.
+ Matched with field heading PLACE or LOCATION.
+ %e
+ Editor of the work; matched with field heading EDITOR.
+ %T
+ Translator of the work; matched with field heading TRANS<hy>
+ LATOR.
+ %d
+ Director of the work; matched with field heading DIREC<hy>
+ TOR.
+ %i
+ Illustrator of the work; matched with field heading
+ ILLUS.OR.
+ An unknown sequence won't bother minlib; it will just fill up
+ that field with spaces.
+FILES 
+ minlib uses two files primarily: the data, or library file, which has
+ the actual library information in it, and a run-control, or config
+ file, which contains simple lines to control minlib's behavior.
+ The Data File
+ The data file, or library file, is a pretty simple "cookie jar" format,
+ consisting of multi-line records separated by lines containing two per<hy>
+ centage marks, or (%%). No line can contain the text "%%" except
+ record separating lines; minlib will always consider such lines to be
+ starting a new record.
+ Please note that every record requires a %% to begin it, including the
+ first in a file.
+ Between each record-separating line are the individual fields of the
+ record. These consist of a field name in all capital letters, a colon,
+<beginning of page>
+ and then the text of the field. After the colon, whitespace can be
+ inserted or deleted at will, with no change in how minlib reads the
+ line. Each field must be contained entirely on one line, however.
+ An example record:
+ %%
+ TITLE: My Very Favorite Book
+ AUTHLAST: Publick
+ AUTHMID: Q
+ AUTHFIRST: John
+ GENRE: Scifi
+ LANGUAGE: English
+ YEAR: 1998
+ MEDIA: book
+ You then repeat this as many times as you need to to build your library
+ database.
+ Because minlib accepts multiple files at the same time, you can divide
+ your library files however you wish, and minlib will accept whichever
+ files you specify, sort them all together, and display them to you. So
+ you can have one file with your books, one with your movies, one with
+ your music, and one with your vintage 8-tracks of original Swedish ABBA
+ and still get them all at once if you want.
+ There are no artificial limits on the fields you can include; if you
+ particular library database requires "FOO" as a field, just put it in
+ there. minlib will not be able to sort your records by fields it
+ doesn't know; however, it will be able to search for such fields, and
+ it will be able to display such fields in its detail view, when you
+ select a record.
+ For fields that minlib knows, see the section on the <->r option above.
+ It's important to note that options given on the command line take
+ precedence over conflicting options in the config file.
+ If there is a digital file available, minlib knows one magic field
+ name: PATH. minlib will use the value of the PATH field to open the
+ file with the appropriate application.
+ Run-Control File (Config File)
+ The run-control file ("rc" or "config" file) contains the configurable
+ options for minlib to use. Note that when options specified on the
+ command line conflict with those in the config file, the options on the
+ command line will take precedence.
+ Locations
+ minlib will take a config file wherever you want it to, provided that
+ you have read access to that file. If you don't provide it a config
+ file, it will attempt to read from "$HOME/.minlibrc", which, of course,
+ may not exist. If it can't find that, it will give up and assume you
+ don't want it to consider a config file.
+ Options
+ minlib allows you to set defaults for many different configuration
+ options in your config file. Most importantly, these are input files;
+ record format strings; and default viewers for digital files. Like the
+ input file we discussed above, the format is simple: an all-caps
+ string which says what option you're trying to set, and then the value
+ of that option. Whitespace on the line is ignored. So, for example:
+ DEF_PDF_VIEWER: xpdf -cont "%s"
+ TOP_FORE_COLOR: COLOR_BLUE
+ TOP_BACK_COLOR: COLOR_YELLOW
+ A minlib rc-file is essentially just a list of lines of this type.
+<beginning of page>
+ Remember to put quotations around the "%s" in your config file; other<hy>
+ wise, your application will likely choke on filenames with special
+ characters in them, including spaces.
+ The non-color settings available are:
+ DEF_PDF_VIEWER
+ Obviously, the pdf viewer that you'd like minlib to call when
+ you try to open a pdf file. Default is xpdf "%s".
+ DEF_EPUB_VIEWER
+ The viewer for opening epub files. Default is fbreader "%s".
+ DEF_HTML_VIEWER
+ The viewer for opening HTML files. Default is w3m "%s".
+ DEF_OGV_VIEWER
+ The viewer for opening OGG videos; that is, Theora videos.
+ Default is vlc "%s".
+ DEF_OGG_VIEWER
+ The viewer for opening OGG audio; that is, Ogg Vorbis. Also
+ applies to Speex (.spx), a codec designed specifically for human
+ voices. Default is ogg123 "%s".
+ DEF_DVI_VIEWER
+ The viewer for opening DVI documents; that is, old-style TeX
+ output files. Default is xdvi "%s".
+ DEF_PS_VIEWER
+ The viewer for opening Postscript documents; default is gs "%s".
+ DEF_OFFICE_VIEWER
+ The viewer for opening .doc(x), .xls(x), .ppt(x), and their
+ LibreOffice equivalents. Default is libreoffice "%s".
+ Colors
+ minlib allows you to set the colors for pretty much everything in the
+ program. Normal ncurses colors will be accepted by minlib. These are
+ COLOR_BLACK, COLOR_RED, COLOR_GREEN, COLOR_YELLOW, COLOR_BLUE,
+ COLOR_MAGENTA, COLOR_CYAN, or COLOR_WHITE.
+ If you do not set a particular color, minlib will select a reasonable
+ default for you. The algorithm for this is simple: foreground colors
+ will be set to COLOR_WHITE and background colors to COLOR_BLACK. Be
+ aware that, if you set some foreground colors without setting the cor<hy>
+ responding background colors, these defaults might make your color
+ scheme illegible.
+ The colors that can be set are:
+ TOP_FORE_COLOR
+ The foreground color (that is, the color for the text) in the
+ top bar. This is the top bar in both menu view and detail view.
+ TOP_BACK_COLOR
+ The background color (that is, the color for the background of
+ the text) in the top bar. This is the top bar in both menu view
+ and detail view.
+ BOT_FORE_COLOR
+ The foreground color (that is, the color for the text) in the
+ bottom bar. This is the bottom bar in both menu view and detail
+ view.
+ BOT_BACK_COLOR
+ The background color (that is, the color for the background of
+ the text) in the bottom bar. This is the bottom bar in both
+<beginning of page>
+ menu view and detail view.
+ MEN_FORE_COLOR
+ The foreground color (that is, the color for the text) in the
+ menu; this will also be the background color of the currently
+ active item on the menu. That is, inactive items (items the
+ cursor is not on) will have this as the text color; the active
+ item (the item the cursor is on) will have this as the back<hy>
+ ground color.
+ MEN_BACK_COLOR
+ The background color (that is, the color for the background of
+ the text) in the menu; this will also be the text color of the
+ currently active item on the menu. That is, inactive items
+ (items the cursor is not on) will have this as the background
+ color; the active item (the item the cursor is on) will have
+ this as the text color.
+ DET_FIELD_FORE_COLOR
+ The foreground color (that is, the color for the text) for the
+ field names in detail view.
+ DET_FIELD_BACK_COLOR
+ The background color (that is, the color for the background of
+ the text) for the field names in detail view.
+ DET_TXT_FORE_COLOR
+ The foreground color (that is, the color for the text) for the
+ field values in detail view.
+ DET_TXT_BACK_COLOR
+ The background color (that is, the color for the background of
+ the text) for the field values in detail view.
+ DET_BACK_COLOR
+ The background color for the whole window in detail view.
+INTERACTIVE MODE 
+ minlib is likely to be used interactively most of the time. Fortu<hy>
+ nately, this interactive use is extremely simple. minlib's interface
+ focuses on two views: "Menu View" and "Detail View." Most operations
+ the user will be likely to want are available to the user in the same
+ way in both views.
+ Which view you are currently using, either menu or detail, will be
+ noted in the top right corner of the screen. In menu view, the top
+ center will show how many records are in your database; in detail view,
+ the top center will show which record you're currently viewing the
+ details of.
+ Menu view is the default view, and is what you'll be looking at when
+ you start minlib. It is, as the name implies, simply a large menu,
+ with one item for each of the records in your data file(s).
+ Scroll down with the down arrow or with 'j'; scroll up with the up
+ arrow or with 'k'.
+ Searching can be done in one of two ways. The simplest way is termed
+ matching; this simply matches the first characters from the record.
+ Hit 'm', then enter the first few characters you're looking for. min<hy>
+ lib will then take you to the first record matching those first few
+ characters. Hit 'p' for the next matching record, and hit 'P' for the
+ previous matching record.
+ Matching is limited, though, in that it can only match the first few
+ characters in the record; full search is much more powerful. With full
+ search, you can search the entirety of your records, not merely the
+ portions visible in menu view; also, rather than merely character-for-
+ character matching, you have the full power of regular expressions
+ available. Hit '/' to search; minlib will tell you whether you've
+<beginning of page>
+ found any matches, and if so, how many. It will also skip you forward
+ to the first match it finds. Now hit 'n' for the next match and 'N'
+ for the previous match.
+ When you arrive at the record you're looking for, hit enter; this will
+ take you to detail view. Detail view is your entire record for that
+ entry; it will display all the fields you've assigned for that entry in
+ your data file. If this is too much information for a single screen,
+ fear not; use the down arrow or 'j' to scroll down, and use the up
+ arrow or 'k' to scroll up, precisely as you did in menu view.
+ In either menu or detail view, you may want to open a file. If this is
+ a physical item record (e.g., the data about a book on your shelf), you
+ obviously won't be able to do this (though trying won't hurt; minlib
+ will innocently tell you that it can't find a file for that item); but
+ if it's a digital item, minlib will do its best to take care of that
+ for you.
+ Hit 'o' in either menu or detail view, and the bar at the bottom of the
+ screen will present you with some options. Hit the key corresponding
+ to the format you want to open; e.g., hit 'p' to open a pdf. If minlib
+ can't find a file of that format for the record, it will tell you so;
+ otherwise, it will start the viewer with which you can view that file.
+ You can kill minlib while viewing your file; neither minlib nor your
+ file viewer should care.
+ Hit ':' to shell out; that is, to have access to the default shell on
+ your system. This uses the value of the SHELL environmental variable;
+ if there is no such variable, minlib simply tries to run /bin/sh. This
+ is useful especially when in detail view trying to open a file of some
+ unusual format, or with a non-default application (e.g., your default
+ pdf viewer is xpdf, but you wish to use okular for some reason); shell
+ out and open the file manually with whatever viewer you desire.
+EXIT STATUS 
+ minlib returns 0 if successful, non-zero if it fails for some reason.
+ See the ERRORS section for possible failure exit statuses.
+ERRORS 
+ minlib can, like all programs, go wrong in a huge number of ways; but
+ fortunately, most of those are extremely unlikely. Still, minlib tries
+ hard to give precise failure information, even for those situations
+ that basically never happen.
+ So upon failure, minlib prints both an error message to stderr and
+ exits with a particular status. Error codes are as follows:
+ 1
+ You gave minlib an option that it doesn't recognize.
+ 2
+ You supplied minlib an option which requires an argument, but
+ didn't send it an argument. E.g., you said <->r, but didn't say
+ what you wanted the formatting string to be.
+ 3,4,5,6,7,9
+ Insufficient memory errors; this are only thrown when the oper<hy>
+ ating system can't provide enough memory for minlib to do its
+ thing. Since minlib doesn't require much memory, these errors
+ are exceedingly unlikely. 3 means it couldn't load the data
+ file; 4 means means that it couldn't load the data file into
+ formatted lines; 5 means that it couldn't load the array used to
+ track the formatted lines; 6 means that it couldn't get enough
+ memory for the format string; 7 indicates insufficient memory
+ for a variety of minor internal tasks; 9 means there is insuffi<hy>
+ cient memory for the filename string.
+ 8
+ A problem opening the data file. A message printed to stderr
+ will give the name of the file and the error number.
+ 10
+ A problem opening the config file. A message printed to stderr
+ will give the name of the file and the error number.
+<beginning of page>
+ 11
+ minlib has checked in all the usual places (a config file and
+ the command line), but hasn't found an input file (that is, a
+ database or library file). As such, it has nothing to do and
+ quites.
+ 12
+ minlib uses temporary files to process multiple input files.
+ However, it's been unable to construct such a temporary file.
+ Check your permissions to resolve this.
+ 13
+ You've asked minlib to print the metadata of a file with the
+ "<->a" option; however, it's having some trouble getting informa<hy>
+ tion about that file. The specific error message printed will
+ tell you more.
+ 14
+ You've asked minlib to print the metadata of a file with the
+ "<->a" option; however, it's having some trouble opening that
+ file. Probably a permissions issue; the specific error message
+ printed will tell you more.
+BUGS 
+ None known at this time.
+AUTHOR 
+ Donald P. Goodman III <dgoodmaniii at gmail dot com>
+SEE ALSO 
+ pdfinfo
+dgoodmaniii June 2016 minlib(1)
