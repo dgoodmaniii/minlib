@@ -671,13 +671,14 @@ title, put different numbers in:</p>
 <p>A few things to remember here:</p>
 
 <ul>
-<li>There is technically no limit to the length of formatted
-strings[*]; however, keep in mind that your formatted strings
-should fit on the screen.  If the length of your formatted
-strings is longer than your screen, they won't look very
-good.  The default terminal width is eighty (80) characters;
-the astute reader will notice that the default setting adds
-up to precisely eighty characters.</li>
+<li>There is no limit to the length of formatted strings[<a
+name="fnsrc" href="#fn">*</a>]; however, keep in mind that
+your formatted strings should fit on the screen.  If the
+length of your formatted strings is longer than your screen,
+they won't look very good.  The default terminal width is
+eighty (80) characters; the astute reader will notice that
+the default setting adds up to precisely eighty
+characters.</li>
 <li>Minlib <em>is</em> Unicode (well, UTF-8) aware, and will
 print your formatted strings by character, not by byte.  (If
 you don't know what this means, don't worry; it just means
@@ -688,9 +689,59 @@ the character is <em>required</em>.</li>
 <li>If you use a character which does not match up to a real
 field type (e.g., "q"), minlib will simply print
 spaces.</li>
+<li>If there are multiple fields of that type (e.g., your
+work has multiple authors, each listed separately with the
+"AUTHOR" field heading), minlib will use the first for its
+formatted string.</li>
 </ul>
 
-*<a name="fn">This isn't technically true; the limit is 
+<p>A lot of how you want to format your records depends on
+how they are stored, so minlib tries to give you as much
+flexibility as possible with this.  For example, perhaps
+your authors are stored all as one name, or perhaps with
+last, first, and middle separately; minlib gives you options
+for both.  Perhaps your records list a "type," perhaps they
+list a "genre"; minlib provides options for both.</p>
+
+<table class="realtable">
+<tr>
+	<th>Sequence</th>
+	<th>Field Heading</th>
+	<th>Meaning</th>
+</tr>
+<tr>
+	<td>%t</td>
+	<td>TITLE</td>
+	<td>The title of the work.</td>
+</tr>
+<tr>
+	<td>%L</td>
+	<td>AUTHLAST</td>
+	<td>Author's last name.</td>
+</tr>
+<tr>
+	<td>%M</td>
+	<td>AUTHMID</td>
+	<td>Author's middle name.</td>
+</tr>
+<tr>
+	<td>%F</td>
+	<td>AUTHFIRST</td>
+	<td>Author's first name.</td>
+</tr>
+<tr>
+	<td>%l</td>
+	<td>LANG or LANGONE</td>
+
+
+
+
+
+<p>
+<a name="fn" href="#fnsrc">*</a>This isn't technically true;
+the limit is six hundred and thirty bytes (which, in UTF-8,
+may or may not match up with characters).  But this is far
+more than you're ever likely to need.  </p>
 
 <hr />
 <footer class="bottomstuff">
