@@ -82,16 +82,16 @@ specification in your config file, make sure you put
 .BR "\-r \fIrecord-format\fR"
 Use \fIrecord-format\fR as the format for each individual
 record outputted by \fBminlib\fR.  By default, this is
-\fB%29t | %20L | %10F | %4l | %4g\fR, which the astute
-reader will see adds to precisely the default terminal width
-of 80 characters.  The format is similar to that of C's
-printf, in that we use a percent sign, followed by a number,
-followed by a single character which specifies what to fill
-in, but it is quite different from that of C's printf in
-that it requires that each formatting character be
-accompanied by a number of characters.  Given the extreme
-variability of field lengths, and the extreme limitation of
-most terminals, this restriction seems reasonable.
+\fB%30t | %24a | %8l | %10g\fR, which the astute reader will
+see adds to precisely the default terminal width of 80
+characters.  The format is similar to that of C's printf, in
+that we use a percent sign, followed by a number, followed
+by a single character which specifies what to fill in, but
+it is quite different from that of C's printf in that it
+requires that each formatting character be accompanied by a
+number of characters.  Given the extreme variability of
+field lengths, and the extreme limitation of most terminals,
+this restriction seems reasonable.
 .RS
 .HP
 Interpreted sequences are:
