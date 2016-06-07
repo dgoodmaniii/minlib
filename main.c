@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 	}
 	populate_recnums(recnums,numrecs+1);
 	for (i = 0; i < numrecs; ++i) { /* FIXME size of malloc */
-		*(formlist+i) = malloc(330 * sizeof(char));
+		*(formlist+i) = malloc(630 * sizeof(char));
 		*(*(formlist+i+0)) = '\0';
 	}
 	format_recs(ptr,formstring,formlist,numrecs,recnums);
