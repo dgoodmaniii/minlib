@@ -598,7 +598,99 @@ can use as complex a command line as you like, as long as
 <p><em>Formatting strings</em> is the way minlib refers to
 customizing the way that it displays your records in the
 menu view.  The examples we've seen so far have been the
-default, which is defined as the following string:
+default, which is defined as the following string:</p>
+
+<center>
+	%30t | %24a | %8l | %10g
+</center>
+
+<p>This probably looks cryptic, at least if you're not
+familiar with the common Unix method of formatting variable
+strings; but it's really quite simple, and we'll show you
+how it works here.</p>
+
+<p>We can translate the above formatting string as
+follows:</p>
+
+<table class="realtable">
+<tr><td align="center">%30t</td><td>Print the first thirty characters of the
+title, if there is one; otherwise, print thirty spaces</td></tr>
+<tr><td align="center"> | </td><td>Print a space, followed by a pipe
+character ("|"), followed by a space, just as it
+appears.</td></tr>
+<tr><td align="center">%24a</td><td>Print the first twenty-four characters
+of the author, if there is one; otherwise, print twenty-four
+spaces.</td></tr>
+<tr><td align="center"> | </td><td>Print a space, followed by a pipe
+character ("|"), followed by a space, just as it
+appears.</td></tr>
+<tr><td align="center">%8l</td><td>Print the first eight characters of the
+language, if there is one; otherwise, print eight
+spaces.</td></tr>
+<tr><td align="center"> | </td><td>Print a space, followed by a pipe
+character ("|"), followed by a space, just as it
+appears.</td></tr>
+<tr><td align="center">%10g</td><td>Print the first ten characters of the
+genre, if there is one; otherwise, print ten
+spaces.</td></tr>
+</table>
+
+<p>This is a very direct, literal translation.  Here are the
+rules for producing it:</p>
+
+<ol>
+<li>All characters are literal (that is, mean themselves),
+unless they are part of a sequence that consists of "%", a
+number, and a single character.</li>
+<li>If you encounter a "%", keep reading characters until
+you've read a number and a single character.</li>
+<li>Take that single character and match it up with a field
+in the record.  E.g., "t" matches up with "TITLE", "a" with
+"AUTHOR", and "g" with "GENRE".</li>
+<li>If that field exists in the record, print out the first
+<em>number</em> characters of it.  If it doesn't, print
+<em>number</em> characters.</li>
+<li>Move on to the next character.</li>
+</ol>
+
+<p>This means that you can format your records with any
+characters you'd like.  If you prefer "&gt;" to "|" for a
+separator between fields, use that:</p>
+
+<center>
+	%30t &gt; %24a &gt; %8l &gt; %10g
+</center>
+
+<p>If you want to see more of the author and less of the
+title, put different numbers in:</p>
+
+<center>
+	%14t &gt; %40a &gt; %8l &gt; %10g
+</center>
+
+<p>A few things to remember here:</p>
+
+<ul>
+<li>There is technically no limit to the length of formatted
+strings[*]; however, keep in mind that your formatted strings
+should fit on the screen.  If the length of your formatted
+strings is longer than your screen, they won't look very
+good.  The default terminal width is eighty (80) characters;
+the astute reader will notice that the default setting adds
+up to precisely eighty characters.</li>
+<li>Minlib <em>is</em> Unicode (well, UTF-8) aware, and will
+print your formatted strings by character, not by byte.  (If
+you don't know what this means, don't worry; it just means
+that your international characters will appear the way
+they're supposed to.)</li>
+<li>Unlike many such schemes, the number between the "%" and
+the character is <em>required</em>.</li>
+<li>If you use a character which does not match up to a real
+field type (e.g., "q"), minlib will simply print
+spaces.</li>
+</ul>
+
+*<a name="fn">This isn't technically true; the limit is 
 
 <hr />
 <footer class="bottomstuff">
