@@ -59,6 +59,8 @@ int main(int argc, char **argv)
 	int didconfigfile = 1;
 	int add_succ;
 	char **args;
+	int printval = 0;
+	int statsval = 0;
 
 	args = argv;
 	opterr = 0;
@@ -68,7 +70,7 @@ int main(int argc, char **argv)
 		exit(INSUFF_MEMORY_FILENAME);
 	}
 	strcpy(filename,deffile);
-	while ((c = getopt(argc,argv,"Vf:r:c:a:")) != -1) {
+	while ((c = getopt(argc,argv,"Vspf:r:c:a:")) != -1) {
 		switch (c) {
 		case 'V':
 			printf("minlib v0.9\n");
@@ -85,6 +87,14 @@ int main(int argc, char **argv)
 			exit(ALLGOOD);
 			break;
 		case 'r':
+			if (formstring == NULL) {
+				if ((formstring = malloc(1*sizeof(char)))==NULL) {
+					fprintf(stderr,"minlib:  insufficient memory for "
+					"format string\n");
+					exit(INSUFF_MEMORY_FORMSTRING);
+				}
+				*formstring = '\0';
+			}
 			if (strlen(optarg) > strlen(formstring)) {
 				if ((formstring = realloc(formstring,
 				(strlen(optarg)+1)*sizeof(char)))==NULL) {
@@ -102,6 +112,12 @@ int main(int argc, char **argv)
 			break;
 		case 'c':
 			didconfigfile=read_optfile(&filename,&formstring,optarg,&globopts);
+			break;
+		case 's':
+			statsval = 1;
+			break;
+		case 'p':
+			printval = 1;
 			break;
 		case '?':
 			if ((optopt == 'f') || (optopt == 'r') || (optopt == 'c')
@@ -156,8 +172,10 @@ int main(int argc, char **argv)
 		*(*(formlist+i+0)) = '\0';
 	}
 	format_recs(ptr,formstring,formlist,numrecs,recnums);
-/*	for (i = 0; i < numrecs; ++i)
-		printf("%3d: %s\n",*(recnums+i),*(formlist+i));*/
+	if (printval == 1) {
+		stats_report(recnums,ptr,formlist,numrecs,statsval);
+		exit(ALLGOOD);
+	}
 	if (load_gui(ptr,formlist,recnums,numrecs,globopts) == 1) {
 		fprintf(stderr,"ONE:  %s\n",args[0]);
 		for (i = 0; i < argc; ++i)

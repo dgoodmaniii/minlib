@@ -12,7 +12,7 @@ SHELL=/bin/sh
 CC=gcc
 CFLAGS=-I -Wall -g
 OBJ=utility.o read_optfile.o readfile.o readlib.o format_recs.o \
-	gui.o full_search.o add_files.o
+	gui.o full_search.o add_files.o stats.o
 SRCDIR=./
 CURSLIB=-lform -lmenuw -lncursesw
 EXTLIB=-lextractor
@@ -38,6 +38,9 @@ gui.o : gui.c errcodes.h
 
 full_search.o : full_search.c errcodes.h
 	$(CC) $(CFLAGS) -c full_search.c $(CURSLIB)
+
+stats.o : stats.c errcodes.h
+	$(CC) $(CFLAGS) -c stats.c
 
 format_recs.o : format_recs.c utility.c errcodes.h
 	$(CC) $(CFLAGS) -c format_recs.c utility.c

@@ -6,6 +6,9 @@
 minlib \- a text-based library management program
 .SH SYNOPSIS
 .B minlib
+[\fB\-V\fR]
+[\fB\-p\fR]
+[\fB\-s\fR]
 [\fB\-a\fR \fIfile or directory\fR]
 [\fB\-c\fR \fIrcfile\fR]
 [\fB\-r\fR \fIformatstring\fR]
@@ -59,6 +62,17 @@ Mobi and other Kindle-type formats will work with
 metadata from them; they're just too locked-down for me to
 figure out.
 .RE
+.TP
+.BR \-p
+Printing.  This will print your library to stdout,
+respecting your record format strings and the like.  Will
+likely often be combined with the \fB\-s\fR option.
+.TP
+.BR \-s
+Statistics.  Prints some statistical facts about your
+library; e.g., the tags in your library along with the
+number of each.  Has no effect unless used in combination
+with the \fB\-p\fR option.
 .TP
 .BR "\-c \fIrcfile\fR"
 Use \fIrcfile\fR as the configuration file for this run.
