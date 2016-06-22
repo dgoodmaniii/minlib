@@ -6,6 +6,9 @@
 minlib \- a text-based library management program
 .SH SYNOPSIS
 .B minlib
+[\fB\-V\fR]
+[\fB\-p\fR]
+[\fB\-s\fR]
 [\fB\-a\fR \fIfile or directory\fR]
 [\fB\-c\fR \fIrcfile\fR]
 [\fB\-r\fR \fIformatstring\fR]
@@ -60,6 +63,17 @@ metadata from them; they're just too locked-down for me to
 figure out.
 .RE
 .TP
+.BR \-p
+Printing.  This will print your library to stdout,
+respecting your record format strings and the like.  Will
+likely often be combined with the \fB\-s\fR option.
+.TP
+.BR \-s
+Statistics.  Prints some statistical facts about your
+library; e.g., the tags in your library along with the
+number of each.  Has no effect unless used in combination
+with the \fB\-p\fR option.
+.TP
 .BR "\-c \fIrcfile\fR"
 Use \fIrcfile\fR as the configuration file for this run.
 The rcfile may contain things like colors, data files, and
@@ -72,20 +86,26 @@ can supply a comma-separated list of source files in this
 argument, and \fBminlib\fR will do the right thing and use
 them all, by dumping them all into a temporary file and then
 inputting that.
+.RS
+.PP
+If you're using \fB\-f\fR to override a data file
+specification in your config file, make sure you put
+\fB\-f\fR \fIafter\fR your \fB\-c\fR.
+.RE
 .TP
 .BR "\-r \fIrecord-format\fR"
 Use \fIrecord-format\fR as the format for each individual
 record outputted by \fBminlib\fR.  By default, this is
-\fB%29t | %20L | %10F | %4l | %4g\fR, which the astute
-reader will see adds to precisely the default terminal width
-of 80 characters.  The format is similar to that of C's
-printf, in that we use a percent sign, followed by a number,
-followed by a single character which specifies what to fill
-in, but it is quite different from that of C's printf in
-that it requires that each formatting character be
-accompanied by a number of characters.  Given the extreme
-variability of field lengths, and the extreme limitation of
-most terminals, this restriction seems reasonable.
+\fB%30t | %24a | %8l | %10g\fR, which the astute reader will
+see adds to precisely the default terminal width of 80
+characters.  The format is similar to that of C's printf, in
+that we use a percent sign, followed by a number, followed
+by a single character which specifies what to fill in, but
+it is quite different from that of C's printf in that it
+requires that each formatting character be accompanied by a
+number of characters.  Given the extreme variability of
+field lengths, and the extreme limitation of most terminals,
+this restriction seems reasonable.
 .RS
 .HP
 Interpreted sequences are:

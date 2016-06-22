@@ -4,8 +4,8 @@ minlib(1) minlib minlib(1)
 NAME 
  minlib <-> a text-based library management program
 SYNOPSIS 
- minlib [<->a file or directory] [<->c rcfile] [<->r formatstring] [<->f input<hy>
- file[,...]]
+ minlib [<->V] [<->p] [<->s] [<->a file or directory] [<->c rcfile] [<->r format<hy>
+ string] [<->f inputfile[,...]]
 DESCRIPTION 
  minlib A text-based library management program, designed to do one
  thing---manage your library, physical and digital---and do it well.
@@ -41,6 +41,14 @@ OPTIONS
  Mobi and other Kindle-type formats will work with minlib in gen<hy>
  eral, but minlib cannot extract metadata from them; they're just
  too locked-down for me to figure out.
+ <->p
+ Printing. This will print your library to stdout, respecting
+ your record format strings and the like. Will likely often be
+ combined with the <->s option.
+ <->s
+ Statistics. Prints some statistical facts about your library;
+ e.g., the tags in your library along with the number of each.
+ Has no effect unless used in combination with the <->p option.
  <->c rcfile
  Use rcfile as the configuration file for this run. The rcfile
  may contain things like colors, data files, and format strings;
@@ -48,6 +56,7 @@ OPTIONS
  <->f filename
  Use filename as the source of library records. You can supply a
  comma-separated list of source files in this argument, and min<hy>
+<beginning of page>
  lib will do the right thing and use them all, by dumping them
  all into a temporary file and then inputting that.
  If you're using <->f to override a data file specification in your
@@ -55,7 +64,6 @@ OPTIONS
  <->r record-format
  Use record-format as the format for each individual record out<hy>
  putted by minlib. By default, this is %30t | %24a | %8l | %10g,
-<beginning of page>
  which the astute reader will see adds to precisely the default
  terminal width of 80 characters. The format is similar to that
  of C's printf, in that we use a percent sign, followed by a num<hy>
@@ -111,6 +119,7 @@ FILES
  The Data File
  The data file, or library file, is a pretty simple "cookie jar" format,
  consisting of multi-line records separated by lines containing two per<hy>
+<beginning of page>
  centage marks, or (%%). No line can contain the text "%%" except
  record separating lines; minlib will always consider such lines to be
  starting a new record.
@@ -118,7 +127,6 @@ FILES
  first in a file.
  Between each record-separating line are the individual fields of the
  record. These consist of a field name in all capital letters, a colon,
-<beginning of page>
  and then the text of the field. After the colon, whitespace can be
  inserted or deleted at will, with no change in how minlib reads the
  line. Each field must be contained entirely on one line, however.
@@ -167,6 +175,7 @@ FILES
  minlib allows you to set defaults for many different configuration
  options in your config file. Most importantly, these are input files;
  record format strings; and default viewers for digital files. Like the
+<beginning of page>
  input file we discussed above, the format is simple: an all-caps
  string which says what option you're trying to set, and then the value
  of that option. Whitespace on the line is ignored. So, for example:
@@ -174,7 +183,6 @@ FILES
  TOP_FORE_COLOR: COLOR_BLUE
  TOP_BACK_COLOR: COLOR_YELLOW
  A minlib rc-file is essentially just a list of lines of this type.
-<beginning of page>
  Remember to put quotations around the "%s" in your config file; other<hy>
  wise, your application will likely choke on filenames with special
  characters in them, including spaces.
@@ -219,6 +227,7 @@ FILES
  TOP_BACK_COLOR
  The background color (that is, the color for the background of
  the text) in the top bar. This is the top bar in both menu view
+<beginning of page>
  and detail view.
  BOT_FORE_COLOR
  The foreground color (that is, the color for the text) in the
@@ -227,7 +236,6 @@ FILES
  BOT_BACK_COLOR
  The background color (that is, the color for the background of
  the text) in the bottom bar. This is the bottom bar in both
-<beginning of page>
  menu view and detail view.
  MEN_FORE_COLOR
  The foreground color (that is, the color for the text) in the
@@ -275,6 +283,7 @@ INTERACTIVE MODE
  arrow or with 'k'.
  Searching can be done in one of two ways. The simplest way is termed
  matching; this simply matches the first characters from the record.
+<beginning of page>
  Hit 'm', then enter the first few characters you're looking for. min<hy>
  lib will then take you to the first record matching those first few
  characters. Hit 'p' for the next matching record, and hit 'P' for the
@@ -285,7 +294,6 @@ INTERACTIVE MODE
  portions visible in menu view; also, rather than merely character-for-
  character matching, you have the full power of regular expressions
  available. Hit '/' to search; minlib will tell you whether you've
-<beginning of page>
  found any matches, and if so, how many. It will also skip you forward
  to the first match it finds. Now hit 'n' for the next match and 'N'
  for the previous match.
@@ -336,6 +344,7 @@ ERRORS
  ating system can't provide enough memory for minlib to do its
  thing. Since minlib doesn't require much memory, these errors
  are exceedingly unlikely. 3 means it couldn't load the data
+<beginning of page>
  file; 4 means means that it couldn't load the data file into
  formatted lines; 5 means that it couldn't load the array used to
  track the formatted lines; 6 means that it couldn't get enough
@@ -348,7 +357,6 @@ ERRORS
  10
  A problem opening the config file. A message printed to stderr
  will give the name of the file and the error number.
-<beginning of page>
  11
  minlib has checked in all the usual places (a config file and
  the command line), but hasn't found an input file (that is, a

@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.22.2 -->
-<!-- CreationDate: Tue Jun  7 14:17:53 2016 -->
+<!-- CreationDate: Wed Jun 22 10:37:14 2016 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -49,6 +49,7 @@ a text-based library management program</p>
 
 
 <p style="margin-left:11%; margin-top: 1em"><b>minlib</b>
+[<b>&minus;V</b>] [<b>&minus;p</b>] [<b>&minus;s</b>]
 [<b>&minus;a</b> <i>file or directory</i>] [<b>&minus;c</b>
 <i>rcfile</i>] [<b>&minus;r</b> <i>formatstring</i>]
 [<b>&minus;f</b> <i>inputfile[,...]</i>]</p>
@@ -125,6 +126,38 @@ pdfinfo, and epub is done internally.</p>
 Kindle-type formats will work with <b>minlib</b> in general,
 but <b>minlib</b> cannot extract metadata from them;
 they&rsquo;re just too locked-down for me to figure out.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;p</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Printing. This will print your library to stdout,
+respecting your record format strings and the like. Will
+likely often be combined with the <b>&minus;s</b>
+option.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;s</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Statistics. Prints some statistical facts about your
+library; e.g., the tags in your library along with the
+number of each. Has no effect unless used in combination
+with the <b>&minus;p</b> option.</p></td></tr>
+</table>
 
 <p style="margin-left:11%;"><b>&minus;c</b>
 <i>rcfile</i></p>
