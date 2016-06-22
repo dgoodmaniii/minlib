@@ -48,7 +48,7 @@ int print_stats(char **ptr, int numrecs)
 	datalines = malloc(numtags * sizeof(struct tags));
 	uniqlines = malloc(numtags * sizeof(struct tags));
 	datavals = malloc(numtags * sizeof(struct vals));
-	printf("TOTAL RECORDS:\t\t%4d\n",numrecs);
+	printf("TOTAL RECORDS:\t\t%6d\n",numrecs);
 	for (i = 0, j = 0; *(ptr+i) != NULL; ++i, ++j) {
 		if (strstr(*(ptr+i),"%%"))
 			--j;
@@ -66,7 +66,7 @@ int print_stats(char **ptr, int numrecs)
 				strcpy(datavals[k].tag,tag);
 				datavals[k].value = *(ptr+i+1);
 				++k;
-			} else { /* FIXME */
+			} else {
 				++(datalines[tagind].number);
 				if ((valind = in_full_db(tag,*(ptr+i+1),datavals,k)) == -1) {
 					++(uniqlines[tagind].number);
@@ -78,17 +78,13 @@ int print_stats(char **ptr, int numrecs)
 			}
 		}
 	}
-	printf("TAG STATISTICS:\n");
+	printf("TAGS\t\tNUMBER\t\tUNIQUE\n");
+	printf("----\t\t------\t\t------\n");
 	for (i = 0; i < numtags; ++i) {
-		printf("\t%s:",datalines[i].tag);
+		printf("%s:",datalines[i].tag);
 		(strlen(datalines[i].tag) < 7) ? printf("\t\t") : printf("\t");
-		printf("%4d\n",datalines[i].number);
-	}
-	printf("UNIQUE VALUES:\n");
-	for (i = 0; i < numtags; ++i) {
-		printf("\t%s:",uniqlines[i].tag);
-		(strlen(uniqlines[i].tag) < 7) ? printf("\t\t") : printf("\t");
-		printf("%4d\n",uniqlines[i].number);
+		printf("%6d\t\t",datalines[i].number);
+		printf("%6d\n",uniqlines[i].number);
 	}
 	free(datalines);
 	free(uniqlines);
