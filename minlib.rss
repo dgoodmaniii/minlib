@@ -8,6 +8,18 @@
 		</description>
 		<link>http://dgoodmaniii.github.io/minlib/</link>
 		<item>
+			<title>v0.97 Released</title>
+			<description>
+			v0.97 is an updated release of minlib.  It
+			introduces printing results to the screen, rather
+			than always using the TUI (the -p option) and
+			printing statistics about the library (the -s
+			option).
+			</description>
+			<link>http://dgoodmaniii.github.io/minlib/changes.html</link>
+			<pubDate>20160622</pubDate>
+		</item>
+		<item>
 			<title>v0.9 Released</title>
 			<description>
 			v0.9 is the first production version of minlib.  It
@@ -18,5 +30,6 @@
 			</description>
 			<link>http://dgoodmaniii.github.io/minlib/changes.html</link>
 			<pubDate>20160612</pubDate>
+		</item>
 	</channel>
 </rss>
