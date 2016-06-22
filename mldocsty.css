@@ -431,6 +431,14 @@ td {
 	padding:  6px;
 }
 
+.sdemo {
+	color:  green;
+	background-color:  black;
+	padding:  0pt;
+	padding-left:  2px;
+	padding-right:  2px;
+}
+
 .sshot {
 	margin-left:  auto;
 	margin-right:  auto;

@@ -66,7 +66,8 @@ to type what appears on the line after the prompt.
 <center>
 <a href="#getstart">Getting Started</a> |
 	<a href="#runminlib">Running Minlib</a> |
-	<a href="#confminlib">Configuring Minlib</a>
+	<a href="#confminlib">Configuring Minlib</a> |
+	<a href="#statsminlib">Getting Statistics</a>
 </center>
 
 <p>To get started using minlib, you'll really only need one
@@ -89,7 +90,7 @@ two ways.  Let's take a common use case:  you're trying to
 convert your library over from calibre.  Unlike calibre,
 minlib does not force you to store your files in a
 particular way; so converting your calibre use to minlib is
-a simple matter:  use the "<strong>-a</strong>" option.
+a simple matter:  use the <span class="sdemo">-a</span> option.
 Take note of whatever directory you told calibre to use for
 storing your books.  Then enter the following:
 
@@ -111,9 +112,9 @@ feedback about what minlib is doing will be output to
 "stderr," so you'll be able to watch what minlib is doing;
 but the actual metadata from your files is written to
 "stdout," so once minlib is finished, you'll find your data
-file in "<strong>library_file</strong>.</p>
+file in <span class="sdemo">library_file</span>.</p>
 
-<p>If you open <strong>library_file</strong>, it will look
+<p>If you open <span class="sdemo">library_file</span>, it will look
 something like this:</p>
 
 <pre class="demo">
@@ -158,7 +159,7 @@ do this for all the files in formats it recognizes; other
 files it will simply ignore.</p>
 
 <p>Each record is separated from the ones above and below it
-by a line containing "<strong>%%</strong>"; even the first
+by a line containing <span class="sdemo">%%</span>; even the first
 record must begin with this line, but the last record does
 not need to be followed by it.  Each line consists of a
 <em>field name</em>, which is a series of all-caps (and
@@ -187,7 +188,8 @@ And we'll see what happens then in our next section.
 <center>
 <a href="#getstart">Getting Started</a> |
 	<a href="#runminlib">Running Minlib</a> |
-	<a href="#confminlib">Configuring Minlib</a>
+	<a href="#confminlib">Configuring Minlib</a> |
+	<a href="#statsminlib">Getting Statistics</a>
 </center>
 
 <p>Having run the last-listed command above, minlib will
@@ -379,20 +381,21 @@ file.</p>
 Now let's look at some of the ways you can control the way
 minlib looks and behaves.</p>
 
-<a name="confminlib"</a>
+<a name="confminlib"></a>
 <h2>Configuring Minlib</h2>
 
 <center>
 <a href="#getstart">Getting Started</a> |
 	<a href="#runminlib">Running Minlib</a> |
-	<a href="#confminlib">Configuring Minlib</a>
+	<a href="#confminlib">Configuring Minlib</a> |
+	<a href="#statsminlib">Getting Statistics</a>
 </center>
 
 <p>When you start minlib, it goes out hunting for an <em>rc
 file</em>, also called a <em>config file</em>.  By default,
 that file is <strong>$HOME/.minlibrc</strong>, but it can be
 anywhere; just let minlib know with the
-"<strong>-c</strong>" command line option:</p>
+<span class="sdemo">-c</span> command line option:</p>
 
 <pre class="demo">
 $&gt; minlib -c rcfile -f library_file
@@ -430,8 +433,8 @@ TOP_BACK_COLOR:  COLOR_BLUE
 DEF_PDF_VIEWER:	xpdf "%s"
 </pre>
 
-<p>Couldn't be simpler.  Now, on to the actually
-configuration options!</p>
+<p>Couldn't be simpler.  Now, on to the actual configuration
+options!</p>
 
 <h3>Color Configurations</h3>
 
@@ -685,7 +688,8 @@ you don't know what this means, don't worry; it just means
 that your international characters will appear the way
 they're supposed to.)</li>
 <li>Unlike many such schemes, the number between the "%" and
-the character is <em>required</em>.</li>
+the character is <em>required</em>.  If you leave it out,
+minlib will just use a 0.</li>
 <li>If you use a character which does not match up to a real
 field type (e.g., "q"), minlib will simply print
 spaces.</li>
@@ -824,6 +828,90 @@ records.</p>
 <p>Minlib will sort your records by the formatted string;
 practically, this means by the first field.</p>
 
+<a name="statsminlib"></a>
+<h2>Getting Printouts and Statistics</h2>
+
+<p>While getting detailed statistics on your library files
+is really a job for a different tool, like <a
+href="http://en.wikipedia.org/wiki/AWK">awk</a> or <a
+href="http://www.cpan.org">Perl</a>, minlib does allow you
+to gather some information about your database within the
+program.</p>
+
+<p>The two command-line flags to remember here are <span
+class="sdemo">-p</span> and <span
+class="sdemo">-s</span>.</p>
+
+<p><span class="sdemo">-p</span> tells minlib to
+<em>print</em> your library listing, rather than open up the
+TUI and let you browse through it.  This is a convenient way
+to get a printable listing of the contents of your library.
+For example, here's an excerpt of my personal (physical)
+library:</p>
+
+<pre class="demo">
+Deharbe's Large Catechism      | Joseph  Deharbe          | ENGL     | THEO 
+Deharbe's Small Catechism      | Joseph  Deharbe          | ENGL     | THEO 
+Delivered from Evil:  The Saga | Robert  Leckie           | ENGL     | HIST 
+Democracy in America           | Alexis  de Tocqueville   | ENGL     | PSAE 
+Dependent Rational Animals:  W | Alasdair  MacIntyre      | ENGL     | PHIL 
+Dictionary of Ecclesiastical L | Leo F. Stelten           | LATN     | DICT 
+Dignitatis Humanae             | Paul VI                  | ENGL     | THEO 
+Dirk Gently's Holistic Detecti | Douglas  Adams           | ENGL     | FICT 
+Disclosure                     | Michael  Crichton        | ENGL     | FICT 
+Discourse on Method and Medita | Rene  Descartes          | ENGL     | PHIL 
+</pre>
+
+<p>I got this listing by running the following:</p>
+
+<pre class="demo">
+$&gt; minlib -f db_file -p
+</pre>
+
+<p>Note that listings produced with <span
+class="sdemo">-p</span> respect the record format arguments
+specified in the config file or on the command line.</p>
+
+<p><span class="sdemo">-s</span> is what produces the
+statistics; it has no effect at all unless <span
+class="sdemo">-p</span> has also been requested.  It will
+print a table (after the library printout) showing your
+total number of records; your tags; how many of each tag it
+found; and how many of each tag found are unique.  For
+example, the following is the table produced by my personal
+(physical) library database:</p>
+
+<pre class="demo">
+TOTAL RECORDS:		   759
+TAGS		NUMBER		UNIQUE
+----		------		------
+TITLE:		   759		   748
+LANGONE:	   759		    10
+LANGTWO:	   759		    10
+GENRE:		   759		    52
+TYPE:		   759		     1
+AUTHOR:		   770		   470
+COMMENT:	    26		    23
+TRANS:		    50		    40
+EDITOR:		    29		    29
+</pre>
+
+<p>This was produced by the following command:</p>
+
+<pre class="demo">
+$&gt; minlib -f db_file -p -s
+</pre>
+
+<p>These statistics give you the ability to quickly say
+that, for example, you have 759 volumes written by 470
+different authors, 40 of which are in translation (or at
+least have a named translator), in a total of ten different
+languages, and so on.</p>
+
+<p>More than this, though, will require that you resort to a
+real file-analyzing tool.  Consider those linked above, or
+another if you have a different favorite.</p>
+
 <h2>Conclusion</h2>
 
 <p>Minlib is a powerful, small, fast program that offers a
@@ -838,6 +926,13 @@ like.</p>
 the limit is six hundred and thirty bytes (which, in UTF-8,
 may or may not match up with characters).  But this is far
 more than you're ever likely to need.  </p>
+
+<center>
+<a href="#getstart">Getting Started</a> |
+	<a href="#runminlib">Running Minlib</a> |
+	<a href="#confminlib">Configuring Minlib</a> |
+	<a href="#statsminlib">Getting Statistics</a>
+</center>
 
 <hr />
 <footer class="bottomstuff">
