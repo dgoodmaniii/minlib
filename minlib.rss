@@ -8,6 +8,17 @@
 		</description>
 		<link>http://dgoodmaniii.github.io/minlib/</link>
 		<item>
+			<title>v0.98 Released</title>
+			<description>
+			v0.98 is a bugfix release of minlib.  It simply
+			resolves a few odd and unusual display issues that
+			could occasionally result from very long tags.  All
+			is otherwise unchanged.
+			</description>
+			<link>http://dgoodmaniii.github.io/minlib/changes.html</link>
+			<pubDate>20160623</pubDate>
+		</item>
+		<item>
 			<title>v0.97 Released</title>
 			<description>
 			v0.97 is an updated release of minlib.  It
