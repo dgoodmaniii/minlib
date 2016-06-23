@@ -320,7 +320,7 @@ data_len)
 {
 	int i;
 
-	for (i = 0; EXTRACTOR_metatype_to_string(type)[i] != '\0'; ++i) {
+	for (i = 0; EXTRACTOR_metatype_to_string(type)[i] != '\0' && i < 12; ++i) {
 		printf("%c",toupper(EXTRACTOR_metatype_to_string(type)[i]));
 	}
 	printf(":  ");

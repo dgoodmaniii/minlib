@@ -342,7 +342,7 @@ int col,struct options *globopts)
 		if (k == 0) {
 			++k;
 			wattron(sel_item_win,COLOR_PAIR(4));
-			mvwprintw(sel_item_win,j,2,"%s:",*(ptr+i));
+			mvwprintw(sel_item_win,j,2,"%.18s:",*(ptr+i));
 			wattroff(sel_item_win,COLOR_PAIR(4));
 		} else {
 			wattron(sel_item_win,COLOR_PAIR(5));

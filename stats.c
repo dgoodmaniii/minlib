@@ -81,7 +81,7 @@ int print_stats(char **ptr, int numrecs)
 	printf("TAGS\t\tNUMBER\t\tUNIQUE\n");
 	printf("----\t\t------\t\t------\n");
 	for (i = 0; i < numtags; ++i) {
-		printf("%s:",datalines[i].tag);
+		printf("%.12s:",datalines[i].tag);
 		(strlen(datalines[i].tag) < 7) ? printf("\t\t") : printf("\t");
 		printf("%6d\t\t",datalines[i].number);
 		printf("%6d\n",uniqlines[i].number);
