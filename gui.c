@@ -19,8 +19,43 @@
 #include<unistd.h>
 #include"errcodes.h"
 #include"options.h"
+#include"full_search.h"
+#include"utility.h"
 
 extern struct options globopts[];
+
+int initialize_colors(struct options *globopts);
+int get_col_int(char *s);
+int menu_help_scr();
+int shell_out();
+int open_app(char **ptr,int sel_rec,struct options *globopts,int *recnums);
+int execute(int c, char **ptr, int sel_rec, struct options *globopts,
+		int *recnums);
+int clean_bottom_line(int row, int col);
+int set_search_line(int row, int col, char *s, int matchnum);
+int set_comm_open(int row, int col);
+int set_bot_line_match(MENU *lib_menu, int row, int col, char *s);
+int set_fullsearch_buffer(MENU *lib_menu,char*s,int row, int col);
+int set_pattern_buffer(MENU *lib_menu,char *s, int row, int col);
+int frame_menu_help(int row, int col);
+int frame_detail_screen(int row, int col, int recordnum);
+int frame_main_screen(int numrecs, int row, int col);
+int print_top_menu_help(WINDOW *win, int row, int col);
+int print_bot_menu_help(WINDOW *win, int row, int col);
+int print_top_details(WINDOW *win, int row, int col, int recordnum);
+int print_bot_details(WINDOW *win, int row, int col);
+int print_top_line(WINDOW *win, int row, int col, int numrecs);
+int print_bottom_open(char *s);
+int print_bot_line(WINDOW *win, int row, int col);
+int print_center(WINDOW *win, int row, char *s);
+int print_right(WINDOW *win, int row, char *s);
+int highlight_line(WINDOW *win, int row, int col);
+int wrap_print(WINDOW *win,char *s, int cols, int row);
+int initialize_colors(struct options *globopts);
+int get_col_int(char *s);
+int display_details(char **ptr,int *recnums,int sel_rec,int row,
+	int col,struct options *globopts);
+int print_bottom_message(char *s);
 
 int load_gui(char **ptr, char **formlist, int *recnums, int numrecs,
 struct options *globopts)

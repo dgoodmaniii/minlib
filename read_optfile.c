@@ -9,15 +9,22 @@
  * the Sacred Heart of Jesus for His mercy.
  */
 
+/* to get getline() defined */
+#define _POSIX_C_SOURCE >= 200809L || _XOPEN_SOURCE >= 700
+#define _GNU_SOURCE
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<errno.h>
+#include<ctype.h>
 #include"errcodes.h"
 #include"options.h"
+#include"utility.h"
+#include"read_optfile.h"
 
 int read_optfile(char **filename, char **formstring, char *configname,
-struct options **globopts)
+	struct options **globopts)
 {
 	FILE *fp;
 	char *line = NULL;

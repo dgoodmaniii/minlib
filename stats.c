@@ -22,6 +22,10 @@ struct vals {
 	char *value;
 };
 
+int print_stats(char **ptr, int numrecs);
+int in_db(char *s, struct tags *datalines, int numtags);
+int in_full_db(char *s, char *t, struct vals *datavals, int totalrecs);
+
 int stats_report(int *recnums, char **ptr, char **formlist,
 					int numrecs, int statsval)
 {

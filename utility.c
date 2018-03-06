@@ -9,11 +9,18 @@
  * of Jesus for His mercy.
 */
 
+/* to get getline() defined */
+#define _POSIX_C_SOURCE >= 200809L || _XOPEN_SOURCE >= 700
+#define _GNU_SOURCE
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<errno.h>
+#include<ctype.h>
+#include<sys/types.h>
 #include"errcodes.h"
+#include"utility.h"
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 #define BYTETOBINARYPATTERN "%d%d%d%d%d%d%d%d"
@@ -172,9 +179,9 @@ int quicksort(char **formrecs, int *recnums, int len)
 	return 0;
 }
 
-int swap_str_ptrs(int *int1,int *int2,char const **arg1,char const **arg2)
+int swap_str_ptrs(int *int1,int *int2, char **arg1,char **arg2)
 {
-	const char *tmp = *arg1;
+	char *tmp = *arg1;
 	*arg1 = *arg2;
 	*arg2 = tmp;
 	int temp = *int1;

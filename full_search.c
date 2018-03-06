@@ -14,6 +14,7 @@
 #include<ncurses.h>
 #include<menu.h>
 #include"errcodes.h"
+#include"utility.h"
 
 /* stores our position in search results */
 int ind = 0;
@@ -24,8 +25,8 @@ int ind = 0;
  * made, 1 if not, 2 if the regexp didn't compile.  Takes
  * the full database; the array for matches; and the regexp
  * string. */
-int full_search(char **ptr, int **matched, char *pattern, char *err) {
-	
+int full_search(char **ptr, int **matched, char *pattern, char *err)
+{
 	regex_t comppat;
 	int errornum = 0;
 	int result;

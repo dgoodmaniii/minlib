@@ -9,16 +9,33 @@
  * His mercy.
 */
 
+#define _POSIX_SOURCE
+#define _XOPEN_SOURCE 600
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include<getopt.h>
 #include<locale.h>
 #include<langinfo.h>
-#include"errcodes.h"
 #include"options.h"
+#include"errcodes.h"
+#include"readfile.h"
+#include"read_optfile.h"
+#include"readlib.h"
+#include"gui.h"
+#include"stats.h"
+#include"utility.h"
+#include"add_files.h"
+#include"format_recs.h"
 
 struct options *globopts;
+
+int populate_recnums(int *recnums, int len);
+int assign_to_opts(int ind);
+int get_input_filename(char **ptr,char *namestr,char **filename, 
+	char *template);
 
 int main(int argc, char **argv)
 {

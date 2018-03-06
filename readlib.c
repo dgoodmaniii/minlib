@@ -9,11 +9,16 @@
  * of Jesus for His mercy.
 */
 
+/* to get getline() defined */
+#define _POSIX_C_SOURCE >= 200809L || _XOPEN_SOURCE >= 700
+#define _GNU_SOURCE
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<errno.h>
 #include"errcodes.h"
+#include"utility.h"
 
 /* fills the db from the file; allocates memory */
 int fill_db(char **ptr, char *filename)

@@ -16,8 +16,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
+#include"utility.h"
 
 int populate(char **raw, int stind, char letter);
+int make_string(char **raw, char **format, char *formstring);
 
 int format_recs(char **ptr, char *formstring, char **formed, int linenums, int *recnums)
 {

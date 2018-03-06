@@ -7,10 +7,16 @@
  * Son, and the Holy Spirit, for their mercy.
  */
 
+
+/* to get getline() defined */
+#define _POSIX_C_SOURCE >= 200809L || _XOPEN_SOURCE >= 700
+#define _GNU_SOURCE
+
 #define _XOPEN_SOURCE 500
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 #include<errno.h>
 #include<ftw.h>
 #include<unistd.h>
@@ -18,6 +24,7 @@
 #include<sys/stat.h>
 #include<extractor.h>
 #include"errcodes.h"
+#include"add_files.h"
 
 /* function that libextractor passes its data to */
 int print_metadata(void *cls,const char *plugin_name, enum
