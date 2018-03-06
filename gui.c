@@ -70,7 +70,7 @@ struct options *globopts)
 	char pattern[MAX_REGEXP_LEN+1];
 	int sel_rec;
 	char regexperror[MAX_ERR_LENGTH+1];
-	int matchnum;
+	int matchnum = 0;
 	int currmatch = 0;
 	int *matched;
 	int doreload = 0;
@@ -140,12 +140,16 @@ struct options *globopts)
 			if (matchnum > 0) {
 				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
 					numrecs,'n');
+			} else {
+				menu_driver(lib_menu, REQ_DOWN_ITEM);
 			}
 			break;
 		case 'N':
 			if (matchnum > 0) {
 				proc_fsearch(lib_menu,matchnum,lib_list,matched,recnums,
 					numrecs,'N');
+			} else {
+				menu_driver(lib_menu, REQ_UP_ITEM);
 			}
 			break;
 		case '/':
