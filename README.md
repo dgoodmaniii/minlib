@@ -1,3 +1,5 @@
+PLEASE NOTE:  This project has been migrated to Gitlab:  https://gitlab.com/dgoodmaniii/minlib/
+
 ## Synopsis
 
 Minlib is a small, fast library management system.  It
